@@ -1,6 +1,7 @@
 package org.violet.violetapp.auth.data
 
-import org.violet.violetapp.secureStorage.Vault
+import io.github.themeanimator.storage.Storage
+import kotlinx.coroutines.flow.Flow
 
 private data object SecureStorageKeys {
     const val USER_EMAIL = "user_email"
@@ -12,33 +13,33 @@ interface UserSecureStorage {
 
     suspend fun saveToken(token: String)
 
-    suspend fun getEmail(): String?
+    fun getEmail(): Flow<String?>
 
-    suspend fun getToken(): String?
+    fun getToken(): Flow<String?>
 
     suspend fun clearAll()
 }
 
 class UserSecureStorageImpl(
-    private val vault: Vault
+    private val storage: Storage,
 ) : UserSecureStorage {
     override suspend fun saveEmail(email: String) {
-        vault.saveStr(SecureStorageKeys.USER_EMAIL, email)
+        storage.setByKey(SecureStorageKeys.USER_EMAIL, email)
     }
 
     override suspend fun saveToken(token: String) {
-        vault.saveStr(SecureStorageKeys.USER_ACCESS_TOKEN, token)
+        storage.setByKey(SecureStorageKeys.USER_ACCESS_TOKEN, token)
     }
 
-    override suspend fun getEmail(): String? {
-        return vault.string(SecureStorageKeys.USER_EMAIL)
+    override fun getEmail(): Flow<String?> {
+        return storage.subscribeByKey(SecureStorageKeys.USER_EMAIL)
     }
 
-    override suspend fun getToken(): String? {
-        return vault.string(SecureStorageKeys.USER_ACCESS_TOKEN)
+    override fun getToken(): Flow<String?> {
+        return storage.subscribeByKey(SecureStorageKeys.USER_ACCESS_TOKEN)
     }
 
     override suspend fun clearAll() {
-        vault.clear()
+        storage.clearAll()
     }
 }

@@ -68,7 +68,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(projects.shared)
-            implementation(projects.secureStorage)
+            implementation(projects.storage)
             implementation(libs.ktor.client.core)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)

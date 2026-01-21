@@ -13,6 +13,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
 import org.violet.violetapp.auth.data.UserSecureStorage
 import org.violet.violetapp.common.utils.localhost
@@ -58,7 +59,7 @@ fun configureKtorClient(
     install(Auth) {
         bearer {
             loadTokens {
-                userSecureStorage.getToken()?.let {
+                userSecureStorage.getToken().firstOrNull()?.let {
                     BearerTokens(
                         accessToken = it,
                         refreshToken = ""

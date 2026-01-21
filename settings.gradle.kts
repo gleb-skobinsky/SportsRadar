@@ -24,5 +24,5 @@ include(
     ":backend",
     ":uiKit",
     ":shared",
-    ":secureStorage"
+    ":storage"
 )

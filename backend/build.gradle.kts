@@ -56,7 +56,7 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.ktor)
     testImplementation(libs.ktor.server.tests)
-    testImplementation(libs.kotlin.junit)
+    // testImplementation(libs.kotlin.junit)
 }
 
 tasks.register<OpenApiGenerationTask>("generateOpenAPIYaml")

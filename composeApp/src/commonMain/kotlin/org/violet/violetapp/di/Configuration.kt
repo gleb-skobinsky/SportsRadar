@@ -1,5 +1,7 @@
 package org.violet.violetapp.di
 
+import io.github.themeanimator.storage.Storage
+import io.github.themeanimator.storage.getThemeStorage
 import io.ktor.client.HttpClient
 import kotlinx.serialization.json.Json
 import org.koin.core.KoinApplication
@@ -12,8 +14,6 @@ import org.violet.violetapp.common.network.ApiNetworkClient
 import org.violet.violetapp.common.network.ConnectivityStatus
 import org.violet.violetapp.common.network.configureKtorClient
 import org.violet.violetapp.init.initModule
-import org.violet.violetapp.secureStorage.Vault
-import org.violet.violetapp.secureStorage.VaultImpl
 
 expect fun Scope.getConnectivityStatus(): ConnectivityStatus
 
@@ -23,7 +23,7 @@ private val coreModule = module {
             ignoreUnknownKeys = true
         }
     }
-    single<Vault> { VaultImpl() }
+    single<Storage> { getThemeStorage() }
     single<UserSecureStorage> { UserSecureStorageImpl(get()) }
     single<HttpClient> {
         configureKtorClient(get(), get(), get())
