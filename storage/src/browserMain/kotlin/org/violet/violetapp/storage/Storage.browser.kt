@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import org.koin.core.scope.Scope
 import org.w3c.dom.CustomEvent
 import org.w3c.dom.CustomEventInit
@@ -30,6 +31,7 @@ import org.w3c.dom.Storage as WebStorage
 @OptIn(ExperimentalWasmJsInterop::class)
 internal class JsStorage(
     private val useSession: Boolean,
+    override val json: Json,
 ) : Storage {
 
     private val webStorage: WebStorage by lazy {
@@ -186,7 +188,8 @@ internal class JsStorage(
 }
 
 actual fun Scope.getStorage(
+    json: Json,
     useSession: Boolean,
     preferencesFileName: String,
     jvmChildDirectory: String,
-): Storage = JsStorage(useSession)
+): Storage = JsStorage(useSession, json)

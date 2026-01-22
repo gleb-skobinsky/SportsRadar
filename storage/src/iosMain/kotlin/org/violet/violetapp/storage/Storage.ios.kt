@@ -3,18 +3,21 @@ package org.violet.violetapp.storage
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.serialization.json.Json
 import org.koin.core.scope.Scope
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
 actual fun Scope.getStorage(
+    json: Json,
     useSession: Boolean,
     preferencesFileName: String,
     jvmChildDirectory: String,
 ): Storage {
     return DataStoreStorage(
-        internalStore = createIosDataStore(preferencesFileName)
+        internalStore = createIosDataStore(preferencesFileName),
+        json = json
     )
 }
 

@@ -5,18 +5,15 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.koin.core.scope.Scope
 
 /**
  * Internal interface for theme storage operations across different platforms.
- *
- * This interface abstracts theme persistence mechanisms, allowing different platforms
- * to implement storage using their native solutions (SharedPreferences on Android,
- * UserDefaults on iOS, localStorage on Web, etc.).
  */
 interface Storage {
+    val json: Json
+
     fun subscribeToString(key: String): Flow<String?>
 
     suspend fun getString(key: String): String?
@@ -99,7 +96,7 @@ internal suspend inline fun <reified T : Any> Storage.setSerializable(key: Strin
     if (value == null) {
         setString(key, null)
     } else {
-        val valueAsString = DefaultJson.encodeToString<T?>(value)
+        val valueAsString = json.encodeToString<T?>(value)
         setString(key, valueAsString)
     }
 }
@@ -108,7 +105,7 @@ internal suspend inline fun <reified T : Any> Storage.setSerializable(key: Strin
 internal suspend inline fun <reified T : Any> Storage.getSerializable(key: String): T? {
     val stringValue = getString(key) ?: return null
     return try {
-        DefaultJson.decodeFromString<T>(stringValue)
+        json.decodeFromString<T>(stringValue)
     } catch (_: Exception) {
         currentCoroutineContext().ensureActive()
         null
@@ -120,7 +117,7 @@ internal inline fun <reified T : Any> Storage.subscribeToSerializable(key: Strin
     return subscribeToString(key).map { newValue ->
         val stringValue = newValue ?: return@map null
         try {
-            DefaultJson.decodeFromString<T>(stringValue)
+            json.decodeFromString<T>(stringValue)
         } catch (_: Exception) {
             currentCoroutineContext().ensureActive()
             null
@@ -128,26 +125,12 @@ internal inline fun <reified T : Any> Storage.subscribeToSerializable(key: Strin
     }.distinctUntilChanged()
 }
 
-@OptIn(ExperimentalSerializationApi::class)
-@PublishedApi
-internal val DefaultJson = Json {
-    ignoreUnknownKeys = true
-    encodeDefaults = false
-    allowTrailingComma = true
-}
-
 /**
- * Creates a platform-specific [Storage] implementation for theme persistence.
- *
- * This expect function is implemented differently on each platform to use the
- * most appropriate storage mechanism available on that platform.
- *
- * @param preferencesFileName The name of the preferences file or storage key.
- * @param jvmChildDirectory The subdirectory name for JVM platforms (used in user home directory).
- * @return A platform-specific [Storage] implementation.
+ * Creates a platform-specific [Storage] implementation for settings persistence.
  */
 expect fun Scope.getStorage(
+    json: Json,
     useSession: Boolean,
     preferencesFileName: String,
-    jvmChildDirectory: String = ".myapp",
+    jvmChildDirectory: String,
 ): Storage

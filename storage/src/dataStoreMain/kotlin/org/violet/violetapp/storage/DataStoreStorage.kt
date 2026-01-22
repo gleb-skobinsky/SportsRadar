@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.Json
 import okio.Path.Companion.toPath
 
 /**
@@ -39,6 +40,7 @@ internal fun createDataStore(path: String): DataStore<Preferences> =
  */
 internal class DataStoreStorage(
     private val internalStore: DataStore<Preferences>,
+    override val json: Json,
 ) : Storage {
 
     override fun subscribeToString(key: String): Flow<String?> = internalStore.data.map {

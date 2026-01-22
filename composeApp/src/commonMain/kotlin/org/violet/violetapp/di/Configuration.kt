@@ -20,16 +20,19 @@ expect fun Scope.getConnectivityStatus(): ConnectivityStatus
 private const val PREFS_CHILD_DIR = ".violetapp"
 
 private val coreModule = module {
-    single {
+    single<Json> {
         Json {
             ignoreUnknownKeys = true
+            encodeDefaults = false
+            allowTrailingComma = true
         }
     }
     single<Storage> {
         getStorage(
             useSession = false,
             preferencesFileName = "violetapp_base_storage.preferences_pb",
-            jvmChildDirectory = PREFS_CHILD_DIR
+            jvmChildDirectory = PREFS_CHILD_DIR,
+            json = get()
         )
     }
     single<UserSecureStorage> {
@@ -37,7 +40,8 @@ private val coreModule = module {
             getStorage(
                 useSession = true,
                 preferencesFileName = "violetapp_session_storage.preferences_pb",
-                jvmChildDirectory = PREFS_CHILD_DIR
+                jvmChildDirectory = PREFS_CHILD_DIR,
+                json = get()
             )
         )
     }

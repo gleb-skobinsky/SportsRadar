@@ -2,6 +2,7 @@ package org.violet.violetapp.storage
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import kotlinx.serialization.json.Json
 import org.koin.core.scope.Scope
 import java.io.File
 
@@ -32,11 +33,16 @@ internal fun createJvmDataStore(
 )
 
 actual fun Scope.getStorage(
+    json: Json,
     useSession: Boolean,
     preferencesFileName: String,
     jvmChildDirectory: String,
 ): Storage {
     return DataStoreStorage(
-        internalStore = createJvmDataStore(preferencesFileName, jvmChildDirectory)
+        internalStore = createJvmDataStore(
+            preferencesFileName = preferencesFileName,
+            jvmChildDirectory = jvmChildDirectory
+        ),
+        json = json
     )
 }
