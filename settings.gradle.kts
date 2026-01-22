@@ -1,4 +1,4 @@
-rootProject.name = "Violet"
+rootProject.name = "SportsRadar"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

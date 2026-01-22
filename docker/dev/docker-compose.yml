@@ -1,6 +1,6 @@
 services:
   database:
-    container_name: violet_database
+    container_name: sportsradar_database
     image: postgres:14.10-alpine3.19
     restart: always
     environment:
@@ -13,7 +13,7 @@ services:
     ports:
       - ${DATABASE_PORT}:${DATABASE_PORT}
   smtp:
-    container_name: violet_smtp_server
+    container_name: sportsradar_smtp_server
     image: marcopas/docker-mailslurper
     restart: always
     ports:

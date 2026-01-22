@@ -2,10 +2,10 @@
 openapi: "3.0.3"
 jsonSchemaDialect: "https://json-schema.org/draft/2020-12/schema"
 info:
-  title: "Violet API"
+  title: "SportsRadar API"
   version: "1.0.0"
-  summary: "Swagger documentation for the Violet backend API"
-  description: "Here you can find all the necessary endpoints to consume the Violet\
+  summary: "Swagger documentation for the SportsRadar backend API"
+  description: "Here you can find all the necessary endpoints to consume the SportsRadar\
     \ API"
   termsOfService: "https://example.com"
   contact:

@@ -76,7 +76,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.violet.violetapp.storage"
+    namespace = "org.sportsradar.sportsradarapp.storage"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

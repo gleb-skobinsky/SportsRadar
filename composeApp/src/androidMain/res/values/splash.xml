@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.VioletApp.Starting" parent="Theme.SplashScreen.IconBackground">
+    <style name="Theme.SportsRadarApp.Starting" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenBackground">#303030</item>
         <item name="windowSplashScreenIconBackgroundColor">#949494</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>

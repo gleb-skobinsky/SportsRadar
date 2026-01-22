@@ -16,21 +16,21 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
-import org.violet.uiKit.theme.LocalVioletTheme
-import org.violet.uiKit.theme.VioletTheme
-import org.violet.violetapp.auth.presentation.forgotPasswordScreen.ForgotPasswordScreen
-import org.violet.violetapp.auth.presentation.loginScreen.LoginScreen
-import org.violet.violetapp.auth.presentation.signupScreen.SignupScreen
-import org.violet.violetapp.common.mvi.CollectEffects
-import org.violet.violetapp.common.navigation.KMPNavigator
-import org.violet.violetapp.common.navigation.KMPNavigatorImpl
-import org.violet.violetapp.common.navigation.LocalKmpNavigator
-import org.violet.violetapp.common.navigation.Screens
-import org.violet.violetapp.common.presentation.RootSnackbarController
-import org.violet.violetapp.common.presentation.components.SnackbarScaffold
-import org.violet.violetapp.common.presentation.components.VioletAppNavBarWrapper
-import org.violet.violetapp.init.presentation.InitEffect
-import org.violet.violetapp.init.presentation.InitStateController
+import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
+import org.sportsradar.uiKit.theme.SportsRadarTheme
+import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.ForgotPasswordScreen
+import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
+import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
+import org.sportsradar.sportsradarapp.common.mvi.CollectEffects
+import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
+import org.sportsradar.sportsradarapp.common.navigation.KMPNavigatorImpl
+import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
+import org.sportsradar.sportsradarapp.common.navigation.Screens
+import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
+import org.sportsradar.sportsradarapp.common.presentation.components.SnackbarScaffold
+import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppNavBarWrapper
+import org.sportsradar.sportsradarapp.init.presentation.InitEffect
+import org.sportsradar.sportsradarapp.init.presentation.InitStateController
 
 private const val FAST_NAV_ANIMATION = 300
 
@@ -41,7 +41,7 @@ fun App(
     initController: InitStateController = koinInject(),
     savedState: Bundle? = null
 ) {
-    VioletTheme {
+    SportsRadarTheme {
         val navController = rememberNavController()
         val navigator = remember { KMPNavigatorImpl(navController) }
         val haze = remember { HazeState() }
@@ -49,14 +49,14 @@ fun App(
             SnackbarScaffold(
                 snackbarState = RootSnackbarController.snackbarState,
                 bottomBar = {
-                    VioletAppNavBarWrapper(haze)
+                    SportsRadarAppNavBarWrapper(haze)
                 }
             ) {
                 NavHost(
                     navController = navController,
                     modifier = Modifier
                         .hazeSource(haze)
-                        .background(LocalVioletTheme.colors.surface),
+                        .background(LocalSportsRadarTheme.colors.surface),
                     enterTransition = { fadeIn(tween(FAST_NAV_ANIMATION)) },
                     exitTransition = { fadeOut(tween(FAST_NAV_ANIMATION)) },
                     startDestination = Screens.LoginScreen

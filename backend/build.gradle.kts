@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
-group = "com.violet"
+group = "com.sportsradar"
 version = "0.0.1"
 
 application {

@@ -47,7 +47,7 @@ dependencies {
 }
 
 android {
-    namespace = "org.violet.uiKit"
+    namespace = "org.sportsradar.uiKit"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -62,5 +62,5 @@ compose.resources {
     nameOfResClass = "UiKitRes"
     generateResClass = always
     publicResClass = true
-    packageOfResClass = "org.violet.uiKit.resources"
+    packageOfResClass = "org.sportsradar.uiKit.resources"
 }

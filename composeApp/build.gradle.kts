@@ -49,7 +49,7 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            binaryOption("bundleId", "org.violet.violetapp.ComposeApp")
+            binaryOption("bundleId", "org.sportsradar.sportsradarapp.ComposeApp")
             isStatic = true
         }
     }
@@ -108,7 +108,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.violet.violetapp"
+    namespace = "org.sportsradar.sportsradarapp"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -116,7 +116,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "org.violet.violetapp"
+        applicationId = "org.sportsradar.sportsradarapp"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -148,11 +148,11 @@ compose.web {
 
 compose.desktop {
     application {
-        mainClass = "org.violet.violetapp.MainKt"
+        mainClass = "org.sportsradar.sportsradarapp.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.violet.violetapp"
+            packageName = "org.sportsradar.sportsradarapp"
             packageVersion = "1.0.0"
         }
     }
@@ -161,6 +161,6 @@ compose.desktop {
 compose.resources {
     publicResClass = true
     generateResClass = always
-    packageOfResClass = "org.violet.violetapp.resources"
+    packageOfResClass = "org.sportsradar.sportsradarapp.resources"
     nameOfResClass = "AppRes"
 }

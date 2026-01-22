@@ -42,7 +42,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.violet.violetapp.shared"
+    namespace = "org.sportsradar.sportsradarapp.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
