@@ -2,6 +2,7 @@ package org.violet.violetapp.storage
 
 import kotlinx.browser.document
 import kotlinx.browser.localStorage
+import kotlinx.browser.sessionStorage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -29,17 +30,27 @@ import org.w3c.dom.Storage as WebStorage
  * @param preferencesKey The localStorage key used to store the theme preference.
  */
 @OptIn(ExperimentalWasmJsInterop::class)
-internal class JsStorage : Storage {
+internal class JsStorage(
+    private val useSession: Boolean,
+) : Storage {
+
+    private val webStorage: WebStorage by lazy {
+        if (useSession) {
+            sessionStorage
+        } else {
+            localStorage
+        }
+    }
 
     override fun subscribeToString(key: String): Flow<String?> =
         observeKey(key).distinctUntilChanged()
 
     override suspend fun getString(key: String): String? {
-        return localStorage[key]
+        return webStorage[key]
     }
 
     override suspend fun setString(key: String, value: String?) {
-        localStorage.setValue(key, value)
+        webStorage.setValue(key, value)
     }
 
     override fun subscribeToInt(key: String): Flow<Int?> {
@@ -47,11 +58,11 @@ internal class JsStorage : Storage {
     }
 
     override suspend fun getInt(key: String): Int? {
-        return localStorage[key]?.toIntOrNull()
+        return webStorage[key]?.toIntOrNull()
     }
 
     override suspend fun setInt(key: String, value: Int?) {
-        localStorage.setValue(key, value?.toString())
+        webStorage.setValue(key, value?.toString())
     }
 
     override fun subscribeToFloat(key: String): Flow<Float?> {
@@ -59,11 +70,11 @@ internal class JsStorage : Storage {
     }
 
     override suspend fun getFloat(key: String): Float? {
-        return localStorage[key]?.toFloatOrNull()
+        return webStorage[key]?.toFloatOrNull()
     }
 
     override suspend fun setFloat(key: String, value: Float?) {
-        localStorage.setValue(key, value?.toString())
+        webStorage.setValue(key, value?.toString())
     }
 
     override fun subscribeToDouble(key: String): Flow<Double?> {
@@ -71,11 +82,11 @@ internal class JsStorage : Storage {
     }
 
     override suspend fun getDouble(key: String): Double? {
-        return localStorage[key]?.toDoubleOrNull()
+        return webStorage[key]?.toDoubleOrNull()
     }
 
     override suspend fun setDouble(key: String, value: Double?) {
-        localStorage.setValue(key, value?.toString())
+        webStorage.setValue(key, value?.toString())
     }
 
     override fun subscribeToLong(key: String): Flow<Long?> {
@@ -83,11 +94,11 @@ internal class JsStorage : Storage {
     }
 
     override suspend fun getLong(key: String): Long? {
-        return localStorage[key]?.toLongOrNull()
+        return webStorage[key]?.toLongOrNull()
     }
 
     override suspend fun setLong(key: String, value: Long?) {
-        localStorage.setValue(key, value?.toString())
+        webStorage.setValue(key, value?.toString())
     }
 
     override fun subscribeToBoolean(key: String): Flow<Boolean?> {
@@ -95,13 +106,12 @@ internal class JsStorage : Storage {
     }
 
     override suspend fun getBoolean(key: String): Boolean? {
-        return localStorage[key]?.toBooleanStrictOrNull()
+        return webStorage[key]?.toBooleanStrictOrNull()
     }
 
     override suspend fun setBoolean(key: String, value: Boolean?) {
-        localStorage.setValue(key, value?.toString())
+        webStorage.setValue(key, value?.toString())
     }
-
 
     /**
      * Sets a value in localStorage and dispatches a custom event for reactivity.
@@ -128,7 +138,7 @@ internal class JsStorage : Storage {
     override suspend fun clearAll() {
         try {
             for (index in 0 until localStorage.length) {
-                val key = localStorage.key(index)
+                val key = webStorage.key(index)
                 if (key != null) {
                     document.dispatchEvent(
                         CustomEvent(
@@ -140,7 +150,7 @@ internal class JsStorage : Storage {
                     )
                 }
             }
-            localStorage.clear()
+            webStorage.clear()
         } catch (_: Exception) {
             currentCoroutineContext().ensureActive()
         }
@@ -177,7 +187,8 @@ internal class JsStorage : Storage {
     }
 }
 
-actual fun Scope.getThemeStorage(
+actual fun Scope.getStorage(
+    useSession: Boolean,
     preferencesFileName: String,
     jvmChildDirectory: String,
-): Storage = JsStorage()
+): Storage = JsStorage(useSession)

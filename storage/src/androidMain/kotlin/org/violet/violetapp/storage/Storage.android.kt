@@ -23,7 +23,8 @@ internal fun createAndroidDataStore(
     context.filesDir.resolve(preferencesFileName).absolutePath
 )
 
-actual fun Scope.getThemeStorage(
+actual fun Scope.getStorage(
+    useSession: Boolean,
     preferencesFileName: String,
     jvmChildDirectory: String,
 ): Storage {

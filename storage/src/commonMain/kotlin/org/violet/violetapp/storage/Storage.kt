@@ -147,7 +147,8 @@ internal val DefaultJson = Json {
  * @param jvmChildDirectory The subdirectory name for JVM platforms (used in user home directory).
  * @return A platform-specific [Storage] implementation.
  */
-expect fun Scope.getThemeStorage(
-    preferencesFileName: String = "theme_animator.preferences_pb",
+expect fun Scope.getStorage(
+    useSession: Boolean,
+    preferencesFileName: String,
     jvmChildDirectory: String = ".myapp",
 ): Storage

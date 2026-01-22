@@ -8,7 +8,8 @@ import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
-actual fun Scope.getThemeStorage(
+actual fun Scope.getStorage(
+    useSession: Boolean,
     preferencesFileName: String,
     jvmChildDirectory: String,
 ): Storage {

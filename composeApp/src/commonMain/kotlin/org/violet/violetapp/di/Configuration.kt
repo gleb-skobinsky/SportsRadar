@@ -1,7 +1,5 @@
 package org.violet.violetapp.di
 
-import org.violet.violetapp.storage.Storage
-import org.violet.violetapp.storage.getThemeStorage
 import io.ktor.client.HttpClient
 import kotlinx.serialization.json.Json
 import org.koin.core.KoinApplication
@@ -14,6 +12,7 @@ import org.violet.violetapp.common.network.ApiNetworkClient
 import org.violet.violetapp.common.network.ConnectivityStatus
 import org.violet.violetapp.common.network.configureKtorClient
 import org.violet.violetapp.init.initModule
+import org.violet.violetapp.storage.getStorage
 
 expect fun Scope.getConnectivityStatus(): ConnectivityStatus
 
@@ -23,8 +22,15 @@ private val coreModule = module {
             ignoreUnknownKeys = true
         }
     }
-    single<Storage> { getThemeStorage() }
-    single<UserSecureStorage> { UserSecureStorageImpl(get()) }
+    single<UserSecureStorage> {
+        UserSecureStorageImpl(
+            getStorage(
+                useSession = true,
+                preferencesFileName = "violetapp_session_storage.preferences_pb",
+                jvmChildDirectory = ".violetapp"
+            )
+        )
+    }
     single<HttpClient> {
         configureKtorClient(get(), get(), get())
     }

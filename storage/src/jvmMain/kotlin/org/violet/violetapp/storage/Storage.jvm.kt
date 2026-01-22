@@ -31,7 +31,8 @@ internal fun createJvmDataStore(
     }
 )
 
-actual fun Scope.getThemeStorage(
+actual fun Scope.getStorage(
+    useSession: Boolean,
     preferencesFileName: String,
     jvmChildDirectory: String,
 ): Storage {
