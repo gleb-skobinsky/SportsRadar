@@ -143,7 +143,6 @@ internal val DefaultJson = Json {
  * most appropriate storage mechanism available on that platform.
  *
  * @param preferencesFileName The name of the preferences file or storage key.
- * @param preferencesKey The key used to store the theme value within the storage.
  * @param jvmChildDirectory The subdirectory name for JVM platforms (used in user home directory).
  * @return A platform-specific [Storage] implementation.
  */

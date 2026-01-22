@@ -26,8 +26,6 @@ import org.w3c.dom.Storage as WebStorage
  * This implementation provides theme storage for web environments using the browser's
  * localStorage API. It includes reactive change notifications through custom DOM events,
  * enabling multiple tabs or components to stay synchronized.
- *
- * @param preferencesKey The localStorage key used to store the theme preference.
  */
 @OptIn(ExperimentalWasmJsInterop::class)
 internal class JsStorage(
