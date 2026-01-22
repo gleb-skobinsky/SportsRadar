@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -33,6 +34,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.coroutines)
             implementation(libs.koin.core)
+            implementation(libs.kotlinx.serialization.json)
         }
         val dataStoreMain by creating {
             dependsOn(commonMain.get())

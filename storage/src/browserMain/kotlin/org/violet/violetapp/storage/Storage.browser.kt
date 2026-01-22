@@ -8,10 +8,12 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.core.scope.Scope
 import org.w3c.dom.CustomEvent
 import org.w3c.dom.CustomEventInit
+import org.w3c.dom.get
 import org.w3c.dom.set
 import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.unsafeCast
@@ -29,11 +31,77 @@ import org.w3c.dom.Storage as WebStorage
 @OptIn(ExperimentalWasmJsInterop::class)
 internal class JsStorage : Storage {
 
-    override fun subscribeByKey(key: String): Flow<String?> = observeKey(key).distinctUntilChanged()
+    override fun subscribeToString(key: String): Flow<String?> =
+        observeKey(key).distinctUntilChanged()
 
-    override suspend fun setByKey(key: String, value: String?) {
+    override suspend fun getString(key: String): String? {
+        return localStorage[key]
+    }
+
+    override suspend fun setString(key: String, value: String?) {
         localStorage.setValue(key, value)
     }
+
+    override fun subscribeToInt(key: String): Flow<Int?> {
+        return observeKey(key).map { it?.toIntOrNull() }.distinctUntilChanged()
+    }
+
+    override suspend fun getInt(key: String): Int? {
+        return localStorage[key]?.toIntOrNull()
+    }
+
+    override suspend fun setInt(key: String, value: Int?) {
+        localStorage.setValue(key, value?.toString())
+    }
+
+    override fun subscribeToFloat(key: String): Flow<Float?> {
+        return observeKey(key).map { it?.toFloatOrNull() }.distinctUntilChanged()
+    }
+
+    override suspend fun getFloat(key: String): Float? {
+        return localStorage[key]?.toFloatOrNull()
+    }
+
+    override suspend fun setFloat(key: String, value: Float?) {
+        localStorage.setValue(key, value?.toString())
+    }
+
+    override fun subscribeToDouble(key: String): Flow<Double?> {
+        return observeKey(key).map { it?.toDoubleOrNull() }.distinctUntilChanged()
+    }
+
+    override suspend fun getDouble(key: String): Double? {
+        return localStorage[key]?.toDoubleOrNull()
+    }
+
+    override suspend fun setDouble(key: String, value: Double?) {
+        localStorage.setValue(key, value?.toString())
+    }
+
+    override fun subscribeToLong(key: String): Flow<Long?> {
+        return observeKey(key).map { it?.toLongOrNull() }.distinctUntilChanged()
+    }
+
+    override suspend fun getLong(key: String): Long? {
+        return localStorage[key]?.toLongOrNull()
+    }
+
+    override suspend fun setLong(key: String, value: Long?) {
+        localStorage.setValue(key, value?.toString())
+    }
+
+    override fun subscribeToBoolean(key: String): Flow<Boolean?> {
+        return observeKey(key).map { it?.toBooleanStrictOrNull() }.distinctUntilChanged()
+    }
+
+    override suspend fun getBoolean(key: String): Boolean? {
+        return localStorage[key]?.toBooleanStrictOrNull()
+    }
+
+    override suspend fun setBoolean(key: String, value: Boolean?) {
+        localStorage.setValue(key, value?.toString())
+    }
+
 
     /**
      * Sets a value in localStorage and dispatches a custom event for reactivity.

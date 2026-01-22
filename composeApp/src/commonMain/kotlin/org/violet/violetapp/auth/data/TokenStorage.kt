@@ -24,19 +24,19 @@ class UserSecureStorageImpl(
     private val storage: Storage,
 ) : UserSecureStorage {
     override suspend fun saveEmail(email: String) {
-        storage.setByKey(SecureStorageKeys.USER_EMAIL, email)
+        storage.setString(SecureStorageKeys.USER_EMAIL, email)
     }
 
     override suspend fun saveToken(token: String) {
-        storage.setByKey(SecureStorageKeys.USER_ACCESS_TOKEN, token)
+        storage.setString(SecureStorageKeys.USER_ACCESS_TOKEN, token)
     }
 
     override fun getEmail(): Flow<String?> {
-        return storage.subscribeByKey(SecureStorageKeys.USER_EMAIL)
+        return storage.subscribeToString(SecureStorageKeys.USER_EMAIL)
     }
 
     override fun getToken(): Flow<String?> {
-        return storage.subscribeByKey(SecureStorageKeys.USER_ACCESS_TOKEN)
+        return storage.subscribeToString(SecureStorageKeys.USER_ACCESS_TOKEN)
     }
 
     override suspend fun clearAll() {
