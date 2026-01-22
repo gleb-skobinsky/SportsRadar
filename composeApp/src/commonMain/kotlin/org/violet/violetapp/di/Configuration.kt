@@ -1,7 +1,7 @@
 package org.violet.violetapp.di
 
-import io.github.themeanimator.storage.Storage
-import io.github.themeanimator.storage.getThemeStorage
+import org.violet.violetapp.storage.Storage
+import org.violet.violetapp.storage.getThemeStorage
 import io.ktor.client.HttpClient
 import kotlinx.serialization.json.Json
 import org.koin.core.KoinApplication

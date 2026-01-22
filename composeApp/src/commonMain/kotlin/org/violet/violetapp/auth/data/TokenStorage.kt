@@ -1,6 +1,6 @@
 package org.violet.violetapp.auth.data
 
-import io.github.themeanimator.storage.Storage
+import org.violet.violetapp.storage.Storage
 import kotlinx.coroutines.flow.Flow
 
 private data object SecureStorageKeys {
