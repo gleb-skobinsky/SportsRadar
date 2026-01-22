@@ -1,3 +1,5 @@
+package org.violet.violetapp.shared
+
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 

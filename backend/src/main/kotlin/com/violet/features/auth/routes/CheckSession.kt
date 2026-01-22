@@ -1,12 +1,12 @@
 package com.violet.features.auth.routes
 
-import auth.data.UserData
+import org.violet.violetapp.shared.auth.data.UserData
 import com.violet.features.users.models.toUserData
 import com.violet.features.users.repository.UsersRepository
 import com.violet.jwt.JWTConfig
 import com.violet.jwt.email
 import com.violet.shared.RepositoriesTags
-import common.data.Endpoints
+import org.violet.violetapp.shared.common.data.Endpoints
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.HttpStatusCode

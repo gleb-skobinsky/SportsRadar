@@ -1,4 +1,4 @@
-package common.data
+package org.violet.violetapp.shared.common.data
 
 @Suppress("ConstPropertyName")
 object Endpoints {

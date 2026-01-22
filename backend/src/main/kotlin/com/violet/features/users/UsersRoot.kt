@@ -1,6 +1,6 @@
 package com.violet.features.users
 
-import auth.data.UserData
+import org.violet.violetapp.shared.auth.data.UserData
 import com.violet.features.users.models.toUpdatedUser
 import com.violet.features.users.repository.UsersRepository
 import com.violet.jwt.JWTConfig.Companion.JWT_AUTH_ID

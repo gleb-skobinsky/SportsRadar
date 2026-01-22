@@ -1,6 +1,6 @@
 package com.violet.features.users.models
 
-import auth.data.UserData
+import org.violet.violetapp.shared.auth.data.UserData
 
 
 fun UserData.toUpdatedUser(): UpdatedUser {

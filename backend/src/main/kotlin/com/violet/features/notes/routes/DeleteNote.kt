@@ -3,8 +3,8 @@ package com.violet.features.notes.routes
 import com.violet.features.notes.repository.NotesRepository
 import com.violet.jwt.JWTConfig
 import com.violet.shared.RepositoriesTags
-import common.data.Endpoints.Notes.DeleteNote
-import common.data.Endpoints.Notes.NoteIdParam
+import org.violet.violetapp.shared.common.data.Endpoints.Notes.DeleteNote
+import org.violet.violetapp.shared.common.data.Endpoints.Notes.NoteIdParam
 import io.bkbn.kompendium.core.metadata.DeleteInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.bkbn.kompendium.json.schema.definition.TypeDefinition

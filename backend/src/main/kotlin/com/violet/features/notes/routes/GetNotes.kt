@@ -5,7 +5,7 @@ import com.violet.features.notes.repository.NotesRepository
 import com.violet.jwt.JWTConfig
 import com.violet.jwt.email
 import com.violet.shared.RepositoriesTags
-import common.data.Endpoints.Notes.GetNotes
+import org.violet.violetapp.shared.common.data.Endpoints.Notes.GetNotes
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.HttpStatusCode

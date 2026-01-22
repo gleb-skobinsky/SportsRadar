@@ -1,3 +1,5 @@
+package org.violet.violetapp.shared
+
 class Greeting {
     private val platform = getPlatform()
 

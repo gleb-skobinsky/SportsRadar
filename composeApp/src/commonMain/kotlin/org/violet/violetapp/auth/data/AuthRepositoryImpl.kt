@@ -1,11 +1,11 @@
 package org.violet.violetapp.auth.data
 
-import auth.data.SignupRequest
-import auth.data.SignupResponse
-import auth.data.TokenData
-import auth.data.UserData
-import auth.data.UserLoginRequest
-import common.data.Endpoints
+import org.violet.violetapp.shared.auth.data.SignupRequest
+import org.violet.violetapp.shared.auth.data.SignupResponse
+import org.violet.violetapp.shared.auth.data.TokenData
+import org.violet.violetapp.shared.auth.data.UserData
+import org.violet.violetapp.shared.auth.data.UserLoginRequest
+import org.violet.violetapp.shared.common.data.Endpoints
 import org.jetbrains.compose.resources.getString
 import org.violet.violetapp.auth.data.entities.CheckOtpRequest
 import org.violet.violetapp.auth.data.entities.CheckOtpResponse

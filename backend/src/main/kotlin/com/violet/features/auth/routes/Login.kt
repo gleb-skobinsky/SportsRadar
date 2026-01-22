@@ -1,7 +1,7 @@
 package com.violet.features.auth.routes
 
-import auth.data.TokenData
-import auth.data.UserLoginRequest
+import org.violet.violetapp.shared.auth.data.TokenData
+import org.violet.violetapp.shared.auth.data.UserLoginRequest
 import com.violet.features.users.repository.UsersRepository
 import com.violet.jwt.JWTConfig
 import com.violet.jwt.JWTConfig.Companion.ACCESS_EXPIRATION_TIMEOUT
@@ -9,7 +9,7 @@ import com.violet.jwt.JWTConfig.Companion.REFRESH_EXPIRATION_TIMEOUT
 import com.violet.jwt.TokenType
 import com.violet.jwt.createToken
 import com.violet.shared.RepositoriesTags
-import common.data.Endpoints
+import org.violet.violetapp.shared.common.data.Endpoints
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.HttpStatusCode

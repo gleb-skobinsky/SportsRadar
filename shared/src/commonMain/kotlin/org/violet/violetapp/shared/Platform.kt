@@ -1,3 +1,5 @@
+package org.violet.violetapp.shared
+
 enum class Platform {
     Jvm,
     Android,

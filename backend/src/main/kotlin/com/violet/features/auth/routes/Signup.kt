@@ -1,14 +1,14 @@
 package com.violet.features.auth.routes
 
-import auth.data.SignupRequest
-import auth.data.SignupResponse
+import org.violet.violetapp.shared.auth.data.SignupRequest
+import org.violet.violetapp.shared.auth.data.SignupResponse
 import com.violet.email.data.AppSecrets
 import com.violet.email.data.EmailData
 import com.violet.email.data.EmailService
 import com.violet.features.users.models.NewUser
 import com.violet.features.users.repository.UsersRepository
 import com.violet.shared.RepositoriesTags
-import common.data.Endpoints
+import org.violet.violetapp.shared.common.data.Endpoints
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.HttpStatusCode
