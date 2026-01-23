@@ -54,36 +54,51 @@ data class AppSecrets(
 ) {
     companion object {
         fun fromEnvironment(): AppSecrets {
-            val envFile = File(".env")
-            val envMap = if (envFile.exists()) {
-                envFile.readLines()
-                    .associate { it.split('=').run { first() to last() } }
-            } else emptyMap()
+            val dotenv = Dotenv(".env")
+            dotenv.load()
             return AppSecrets(
-                smtpServerHost = envMap.getEnvString(SMTP_HOST),
-                smtpServerPort = envMap.getEnvInt(SMTP_PORT),
-                smtpServerUserName = envMap.getEnvString(SMTP_USER_NAME),
-                smtpServerPassword = envMap.getEnvString(SMTP_PASSWORD),
-                emailFrom = envMap.getEnvString(SMTP_EMAIL_SENDER),
-                dbPort = envMap.getEnvInt(DB_PORT),
-                dbName = envMap.getEnvString(DB_NAME),
-                dbUser = envMap.getEnvString(DB_USER),
-                dbPassword = envMap.getEnvString(DB_PASSWORD),
-                jwtAudience = envMap.getEnvString(JWT_AUDIENCE),
-                jwtIssuer = envMap.getEnvString(JWT_ISSUER),
-                jwtRealm = envMap.getEnvString(JWT_REALM),
-                jwtSecret = envMap.getEnvString(JWT_SECRET),
-                isDebug = envMap.getEnvBool(DEBUG_MODE),
-                smtpSupported = envMap.getEnvBool(SMTP_SUPPORTED)
+                smtpServerHost = dotenv.getEnvString(SMTP_HOST),
+                smtpServerPort = dotenv.getEnvInt(SMTP_PORT),
+                smtpServerUserName = dotenv.getEnvString(SMTP_USER_NAME),
+                smtpServerPassword = dotenv.getEnvString(SMTP_PASSWORD),
+                emailFrom = dotenv.getEnvString(SMTP_EMAIL_SENDER),
+                dbPort = dotenv.getEnvInt(DB_PORT),
+                dbName = dotenv.getEnvString(DB_NAME),
+                dbUser = dotenv.getEnvString(DB_USER),
+                dbPassword = dotenv.getEnvString(DB_PASSWORD),
+                jwtAudience = dotenv.getEnvString(JWT_AUDIENCE),
+                jwtIssuer = dotenv.getEnvString(JWT_ISSUER),
+                jwtRealm = dotenv.getEnvString(JWT_REALM),
+                jwtSecret = dotenv.getEnvString(JWT_SECRET),
+                isDebug = dotenv.getEnvBool(DEBUG_MODE),
+                smtpSupported = dotenv.getEnvBool(SMTP_SUPPORTED)
             )
         }
 
-        private fun Map<String, String>.getEnvString(key: String): String {
-            return getValue(key)
-        }
 
-        private fun Map<String, String>.getEnvInt(key: String): Int = getEnvString(key).toInt()
-
-        private fun Map<String, String>.getEnvBool(key: String): Boolean = getEnvString(key).toBoolean()
     }
+}
+
+private class Dotenv(
+    private val path: String,
+) {
+    private val dotEnvMap: MutableMap<String, String> = mutableMapOf()
+
+    fun load() {
+        val envFile = File(".env")
+        val envMap = if (envFile.exists()) {
+            envFile.readLines()
+                .associate { it.split('=')
+                    .run { first() to last() } }
+        } else emptyMap()
+        dotEnvMap.putAll(envMap)
+    }
+
+    fun getEnvString(key: String): String {
+        return dotEnvMap.getValue(key)
+    }
+
+    fun getEnvInt(key: String): Int = getEnvString(key).toInt()
+
+    fun getEnvBool(key: String): Boolean = getEnvString(key).toBoolean()
 }

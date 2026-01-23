@@ -14,6 +14,10 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+tasks.named<JavaExec>("run") {
+    workingDir = rootProject.projectDir
+}
+
 repositories {
     mavenCentral()
     maven(url = "https://jitpack.io")
