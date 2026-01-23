@@ -2,7 +2,6 @@ package org.sportsradar.sportsradarapp.auth.presentation.profileScreen
 
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.sportsradar.sportsradarapp.auth.domain.AuthRepository
