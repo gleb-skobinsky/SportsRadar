@@ -85,7 +85,7 @@ private class Dotenv(
     private val dotEnvMap: MutableMap<String, String> = mutableMapOf()
 
     fun load() {
-        val envFile = File(".env")
+        val envFile = File(path)
         val envMap = if (envFile.exists()) {
             envFile.readLines()
                 .associate { it.split('=')
