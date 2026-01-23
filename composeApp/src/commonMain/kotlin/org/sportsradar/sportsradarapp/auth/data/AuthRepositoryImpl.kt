@@ -31,6 +31,7 @@ import org.sportsradar.sportsradarapp.shared.auth.data.SignupResponse
 import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
 import org.sportsradar.sportsradarapp.shared.auth.data.UserData
 import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginRequest
+import org.sportsradar.sportsradarapp.shared.auth.data.UserLogoutRequest
 import org.sportsradar.sportsradarapp.shared.auth.domain.Tokens
 import org.sportsradar.sportsradarapp.shared.auth.domain.User
 import org.sportsradar.sportsradarapp.shared.auth.domain.toTokens
@@ -62,7 +63,17 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun logout(): RequestResult<Unit> {
-        TODO("Not yet implemented")
+        val refreshToken = userSecureStorage.getRefreshToken() ?: run {
+            userSecureStorage.clearAll()
+            return RequestResult.Success(Unit)
+        }
+        return client.post<UserLogoutRequest, Unit>(
+            urlPath = Endpoints.Auth.Logout,
+            body = UserLogoutRequest(refreshToken)
+        ).mapOnSuccess {
+            userSecureStorage.clearAll()
+            RequestResult.Success(Unit)
+        }
     }
 
     override suspend fun login(

@@ -34,7 +34,12 @@ fun Application.module() {
     configureSwagger(secrets)
     configureSockets()
     configureSerialization()
-    configureAuth(secrets, get(), get())
+    configureAuth(
+        secrets = secrets,
+        usersRepository = get(),
+        tokenRepository = get(),
+        emailService = get()
+    )
     configureNotes(get())
     configureUsersRoutes(get())
     configureMonitoring()

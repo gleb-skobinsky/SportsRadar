@@ -7,8 +7,10 @@ import com.sportsradar.email.data.EmailService
 import com.sportsradar.features.auth.models.UserSession
 import com.sportsradar.features.auth.routes.checkSessionRoute
 import com.sportsradar.features.auth.routes.loginRoute
+import com.sportsradar.features.auth.routes.logoutRoute
 import com.sportsradar.features.auth.routes.refreshTokenRoute
 import com.sportsradar.features.auth.routes.signupRoute
+import com.sportsradar.features.users.repository.TokenRepository
 import com.sportsradar.features.users.repository.UsersRepository
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.JWTConfig.Companion.JWT_AUTH_ID
@@ -39,6 +41,7 @@ private fun AppSecrets.toJwtConfig(): JWTConfig = JWTConfig(
 fun Application.configureAuth(
     secrets: AppSecrets,
     usersRepository: UsersRepository,
+    tokenRepository: TokenRepository,
     emailService: EmailService
 ) {
     authentication {
@@ -89,6 +92,7 @@ fun Application.configureAuth(
             }
         }
         loginRoute(usersRepository, jwtConfig)
+        logoutRoute(tokenRepository)
         refreshTokenRoute(jwtConfig)
         signupRoute(usersRepository, secrets, emailService)
         checkSessionRoute(usersRepository)

@@ -37,6 +37,25 @@ paths:
                 $ref: "#/components/schemas/TokenData"
       deprecated: false
     parameters: []
+  /api/v1/logout:
+    post:
+      tags:
+      - "Auth repository"
+      summary: "Logout"
+      description: "Logout a user and invalidate refresh token"
+      parameters: []
+      requestBody:
+        description: "Refresh token to invalidate"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogoutRequest"
+        required: true
+      responses:
+        "200":
+          description: "User successfully logged out"
+      deprecated: false
+    parameters: []
   /api/v1/refresh:
     post:
       tags:
@@ -49,7 +68,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RefreshToken"
+              $ref: "#/components/schemas/RefreshTokenRequest"
         required: true
       responses:
         "200":
@@ -266,13 +285,20 @@ components:
       required:
       - "email"
       - "password"
-    RefreshToken:
+    UserLogoutRequest:
       type: "object"
       properties:
-        token:
+        refreshToken:
           type: "string"
       required:
-      - "token"
+      - "refreshToken"
+    RefreshTokenRequest:
+      type: "object"
+      properties:
+        refreshToken:
+          type: "string"
+      required:
+      - "refreshToken"
     SignupResponse:
       type: "object"
       properties:

@@ -26,12 +26,13 @@ internal fun ProfileScreen() {
     val viewModel: ProfileViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val navigator = LocalKmpNavigator.current
-    ProfileScreenContent(state, navigator)
+    ProfileScreenContent(state, viewModel::onAction, navigator)
 }
 
 @Composable
 private fun ProfileScreenContent(
     state: ProfileState,
+    onAction: (ProfileAction) -> Unit,
     navigator: KMPNavigator,
 ) {
     SportsRadarAppSurface {
@@ -60,7 +61,7 @@ private fun ProfileScreenContent(
                     label = stringResource(AppRes.string.log_out),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    navigator.goTo(Screens.LoginScreen)
+                    onAction(ProfileAction.Logout)
                 }
                 24.dp.VerticalSpacer()
             }
