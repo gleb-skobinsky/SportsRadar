@@ -3,17 +3,18 @@ package org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
-import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import org.sportsradar.sportsradarapp.auth.domain.entities.OtpMessageType
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.BigAuthText
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.SportsRadarAppLogo
@@ -34,8 +35,6 @@ import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadar
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppTextField
 import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
 import org.sportsradar.sportsradarapp.common.presentation.components.rememberSportsRadarAppBottomSheetState
-import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.email
 import org.sportsradar.sportsradarapp.resources.enter_otp_email
@@ -46,6 +45,7 @@ import org.sportsradar.sportsradarapp.resources.password_restoration
 import org.sportsradar.sportsradarapp.resources.repeat_password
 import org.sportsradar.sportsradarapp.resources.restore_password
 import org.sportsradar.sportsradarapp.resources.send_otp_code
+import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 
 @Composable
 fun ForgotPasswordScreen(
@@ -79,7 +79,7 @@ fun ForgotPasswordScreen(
     LaunchedEffect(Unit) {
         email?.let { viewModel.onAction(ForgotPasswordAction.UpdateEmail(it)) }
     }
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     ForgotPasswordScreenContent(
         state = state,
         onAction = viewModel::onAction,

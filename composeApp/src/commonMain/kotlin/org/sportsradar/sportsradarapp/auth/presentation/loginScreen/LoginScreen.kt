@@ -10,24 +10,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
-import org.sportsradar.uiKit.theme.SportsRadarTheme
-import org.sportsradar.sportsradarapp.auth.presentation.LoginAction
-import org.sportsradar.sportsradarapp.auth.presentation.LoginEffect
-import org.sportsradar.sportsradarapp.auth.presentation.LoginState
-import org.sportsradar.sportsradarapp.auth.presentation.LoginViewModel
 import org.sportsradar.sportsradarapp.common.icons.Lock
 import org.sportsradar.sportsradarapp.common.icons.Sms
 import org.sportsradar.sportsradarapp.common.mvi.CollectEffects
@@ -36,11 +30,11 @@ import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator.Companion.P
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
-import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppButton
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppPasswordTextField
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppSurface
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppTextField
+import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
 import org.sportsradar.sportsradarapp.common.presentation.modifiers.noRippleClickable
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.email
@@ -49,13 +43,15 @@ import org.sportsradar.sportsradarapp.resources.log_in
 import org.sportsradar.sportsradarapp.resources.logo
 import org.sportsradar.sportsradarapp.resources.password
 import org.sportsradar.sportsradarapp.resources.sign_up
+import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
+import org.sportsradar.uiKit.theme.SportsRadarTheme
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel()
 ) {
     val navigator = LocalKmpNavigator.current
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     viewModel.CollectEffects {
         when (it) {
             LoginEffect.NavigateToMain -> navigator.replaceAll(Screens.HomeScreen)

@@ -10,19 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import org.sportsradar.sportsradarapp.init.presentation.InitStateController
 
-class MainActivity : ComponentActivity(), KoinComponent {
-    private val initViewModel: InitStateController by inject()
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         installSplashScreen().apply {
             setKeepOnScreenCondition {
-                initViewModel.state.value.sessionCheckLoading
+                false
             }
         }
         enableEdgeToEdge()
@@ -35,7 +31,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
         window.statusBarColor = Color.TRANSPARENT
 
         setContent {
-            App(initViewModel, savedInstanceState)
+            App()
         }
     }
 }

@@ -60,6 +60,8 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
+            implementation(libs.androidx.lifecycle.viewmodelCompose)
+            implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)

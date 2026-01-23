@@ -4,13 +4,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.AuthTopTwoButtons
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.SportsRadarAppLogo
 import org.sportsradar.sportsradarapp.common.icons.Lock
@@ -26,9 +28,6 @@ import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadar
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppSurface
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppTextField
 import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
-import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.enter_email
 import org.sportsradar.sportsradarapp.resources.log_in
@@ -39,13 +38,14 @@ import org.sportsradar.sportsradarapp.resources.password_is_long_enough
 import org.sportsradar.sportsradarapp.resources.passwords_match
 import org.sportsradar.sportsradarapp.resources.repeat_password
 import org.sportsradar.sportsradarapp.resources.sign_up
+import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 
 @Composable
 fun SignupScreen(
     viewModel: SignupViewModel = koinViewModel()
 ) {
     val navigator = LocalKmpNavigator.current
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     viewModel.CollectEffects {
         when (it) {
             is SignupEffect.ShowError -> RootSnackbarController.showSnackbar(it.message)

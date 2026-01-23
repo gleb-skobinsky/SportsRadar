@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SportsRadarAppSurface(
+inline fun SportsRadarAppSurface(
     modifier: Modifier = Modifier,
     scrollable: Boolean = true,
     horizontalPadding: Dp = 32.dp,

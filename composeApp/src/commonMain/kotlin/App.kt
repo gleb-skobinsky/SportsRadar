@@ -16,6 +16,7 @@ import dev.chrisbanes.haze.hazeSource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.ForgotPasswordScreen
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
+import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileScreen
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigatorImpl
@@ -51,7 +52,7 @@ fun App() {
                         .background(LocalSportsRadarTheme.colors.surface),
                     enterTransition = { fadeIn(tween(FAST_NAV_ANIMATION)) },
                     exitTransition = { fadeOut(tween(FAST_NAV_ANIMATION)) },
-                    startDestination = Screens.LoginScreen
+                    startDestination = Screens.HomeScreen
                 ) {
                     // Auth graph
                     composable<Screens.LoginScreen> { LoginScreen() }
@@ -62,7 +63,9 @@ fun App() {
                     }
                     composable<Screens.HomeScreen> { }
                     composable<Screens.FeedScreen> { }
-                    composable<Screens.ProfileScreen> { }
+                    composable<Screens.ProfileScreen> {
+                        ProfileScreen()
+                    }
                 }
             }
         }

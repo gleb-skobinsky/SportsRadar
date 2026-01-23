@@ -1,4 +1,4 @@
-package org.sportsradar.sportsradarapp.auth.presentation
+package org.sportsradar.sportsradarapp.auth.presentation.loginScreen
 
 import io.ktor.http.HttpStatusCode
 import org.jetbrains.compose.resources.getString

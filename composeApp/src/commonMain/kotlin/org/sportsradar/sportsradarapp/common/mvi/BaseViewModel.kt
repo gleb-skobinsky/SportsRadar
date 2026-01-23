@@ -29,22 +29,18 @@ abstract class BaseViewModel<S : BaseState, A : BaseAction, E : BaseEffect>(
         get() = state.value
 
     private var actionJob: Job? = null
-
-    private var prevAction: A? = null
     fun onAction(action: A) {
         if (
-            prevAction?.equals(action) == true &&
             actionJob?.isActive == true
         ) {
             return
         }
-        prevAction = action
         actionJob = viewModelScope.launch {
             performOnAction(action)
         }
     }
 
-    protected abstract suspend fun performOnAction(action: A)
+    protected open suspend fun performOnAction(action: A) {}
 
     private val _effect: MutableSharedFlow<E> = MutableSharedFlow()
     val effect: Flow<E> = _effect.asSharedFlow()

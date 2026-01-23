@@ -21,10 +21,17 @@ import org.sportsradar.sportsradarapp.common.utils.localhost
 
 private const val NETWORK_TIMEOUT = 30_000L
 
-fun configureKtorClient(
+internal sealed interface KtorClientAuthConfig {
+    object NoAuth : KtorClientAuthConfig
+    class BearerAuth(
+        val userSecureStorage: UserSecureStorage,
+        val authRepository: AuthRepository
+    ) : KtorClientAuthConfig
+}
+
+internal fun configureKtorClient(
     json: Json,
-    userSecureStorage: UserSecureStorage,
-    authRepository: AuthRepository,
+    authConfig: KtorClientAuthConfig,
 ) = HttpClient {
     expectSuccess = false
     install(Logging) {
@@ -55,8 +62,18 @@ fun configureKtorClient(
         json(json)
     }
 
-    install(Auth) {
-        configureBearerAuth(userSecureStorage, authRepository)
+    when (authConfig) {
+        is KtorClientAuthConfig.BearerAuth -> {
+            install(Auth) {
+                configureBearerAuth(
+                    authConfig.userSecureStorage,
+                    authConfig.authRepository
+                )
+            }
+
+        }
+
+        KtorClientAuthConfig.NoAuth -> Unit
     }
 }
 
