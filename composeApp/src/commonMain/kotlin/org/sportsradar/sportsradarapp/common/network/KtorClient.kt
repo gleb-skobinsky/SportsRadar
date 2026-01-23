@@ -3,6 +3,7 @@ package org.sportsradar.sportsradarapp.common.network
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.AuthConfig
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -13,19 +14,17 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
 import org.sportsradar.sportsradarapp.auth.data.UserSecureStorage
+import org.sportsradar.sportsradarapp.auth.domain.AuthRepository
 import org.sportsradar.sportsradarapp.common.utils.localhost
-import org.sportsradar.sportsradarapp.init.presentation.InitAction
-import org.sportsradar.sportsradarapp.init.presentation.InitStateController
 
 private const val NETWORK_TIMEOUT = 30_000L
 
 fun configureKtorClient(
     json: Json,
     userSecureStorage: UserSecureStorage,
-    initStateController: InitStateController
+    authRepository: AuthRepository,
 ) = HttpClient {
     expectSuccess = false
     install(Logging) {
@@ -57,20 +56,30 @@ fun configureKtorClient(
     }
 
     install(Auth) {
-        bearer {
-            loadTokens {
-                userSecureStorage.getToken().firstOrNull()?.let {
-                    BearerTokens(
-                        accessToken = it,
-                        refreshToken = ""
-                    )
-                }
-            }
+        configureBearerAuth(userSecureStorage, authRepository)
+    }
+}
 
-            refreshTokens {
-                userSecureStorage.clearAll()
-                initStateController.onAction(InitAction.Logout)
-                null
+internal fun AuthConfig.configureBearerAuth(
+    userSecureStorage: UserSecureStorage,
+    authRepository: AuthRepository,
+) {
+    bearer {
+        loadTokens {
+            userSecureStorage.getTokens()?.let { tokens ->
+                BearerTokens(
+                    accessToken = tokens.accessToken,
+                    refreshToken = tokens.refreshToken
+                )
+            }
+        }
+
+        refreshTokens {
+            authRepository.refresh().data?.let { tokens ->
+                BearerTokens(
+                    accessToken = tokens.accessToken,
+                    refreshToken = tokens.refreshToken
+                )
             }
         }
     }

@@ -2,9 +2,10 @@ package org.sportsradar.sportsradarapp.auth.domain
 
 import org.sportsradar.sportsradarapp.auth.domain.entities.OtpMessageType
 import org.sportsradar.sportsradarapp.common.network.RequestResult
+import org.sportsradar.sportsradarapp.shared.auth.domain.Tokens
 
 interface AuthRepository {
-    suspend fun login(email: String, password: String): RequestResult<Unit>
+    suspend fun login(email: String, password: String): RequestResult<Tokens>
 
     suspend fun register(login: String, password: String): RequestResult<Unit>
 
@@ -15,4 +16,6 @@ interface AuthRepository {
     suspend fun resetPassword(login: String, password: String, otpToken: String): RequestResult<Unit>
 
     suspend fun checkSession(): RequestResult<Unit>
+
+    suspend fun refresh(): RequestResult<Tokens>
 }

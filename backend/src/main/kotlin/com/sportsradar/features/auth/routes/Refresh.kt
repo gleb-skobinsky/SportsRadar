@@ -1,7 +1,7 @@
 package com.sportsradar.features.auth.routes
 
 import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
-import com.sportsradar.features.auth.models.RefreshToken
+import org.sportsradar.sportsradarapp.shared.auth.data.RefreshTokenRequest
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.JWTConfig.Companion.ACCESS_EXPIRATION_TIMEOUT
 import com.sportsradar.jwt.JWTConfig.Companion.REFRESH_EXPIRATION_TIMEOUT
@@ -28,7 +28,7 @@ internal fun Routing.refreshTokenRoute(jwtConfig: JWTConfig) {
                 description("Refresh JWT token")
                 request {
                     description("Refresh a token")
-                    requestType<RefreshToken>()
+                    requestType<RefreshTokenRequest>()
                 }
                 response {
                     description("Token successfully refreshed")
@@ -39,11 +39,11 @@ internal fun Routing.refreshTokenRoute(jwtConfig: JWTConfig) {
         }
         post {
             // Extract the refresh token from the request
-            val refreshToken = call.receive<RefreshToken>()
+            val refreshToken = call.receive<RefreshTokenRequest>()
 
             // Verify the refresh token and obtain the user
             val email = jwtConfig.verifyToken(
-                token = refreshToken.token,
+                token = refreshToken.refreshToken,
                 type = TokenType.RefreshToken
             ) ?: run {
                 call.respond(HttpStatusCode.Forbidden, "Invalid refresh token")
