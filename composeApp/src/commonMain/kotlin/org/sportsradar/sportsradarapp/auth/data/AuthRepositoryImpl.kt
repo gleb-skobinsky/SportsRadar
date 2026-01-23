@@ -14,7 +14,6 @@ import org.sportsradar.sportsradarapp.common.network.RequestResult
 import org.sportsradar.sportsradarapp.common.network.ServerResponse
 import org.sportsradar.sportsradarapp.common.network.mapOnError
 import org.sportsradar.sportsradarapp.common.network.mapOnSuccess
-import org.sportsradar.sportsradarapp.common.network.onAny
 import org.sportsradar.sportsradarapp.common.network.onError
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.email
