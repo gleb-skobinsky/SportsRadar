@@ -55,7 +55,7 @@ fun LoginScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     viewModel.CollectEffects {
         when (it) {
-            LoginEffect.NavigateToMain -> navigator.replaceAll(Screens.HomeScreen)
+            LoginEffect.NavigateToMain -> navigator.replaceAll(Screens.ProfileScreen)
             is LoginEffect.ShowError -> RootSnackbarController.showSnackbar(it.message)
         }
     }

@@ -165,13 +165,13 @@ internal class JsStorage(
      */
     private fun observeKey(key: String): Flow<String?> {
         return callbackFlow {
+            trySend(webStorage[key])
+
             val listener = createEventListener { event ->
                 val detail = (event as? CustomEvent)?.detail ?: return@createEventListener
                 detail.unsafeCast<EventDetail>().let { detail ->
                     if (detail.key == key) {
-                        launch {
-                            send(detail.value)
-                        }
+                        trySend(detail.value)
                     }
                 }
             }

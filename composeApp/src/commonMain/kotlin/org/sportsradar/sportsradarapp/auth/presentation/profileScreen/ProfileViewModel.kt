@@ -17,8 +17,10 @@ internal class ProfileViewModel(
     BaseViewModel<ProfileState, ProfileAction, BaseEffect>(ProfileState.Loading) {
 
     init {
+        checkSession()
         viewModelScope.launch {
             authRepository.subscribeToUserData().collectLatest { user ->
+                println("User!!! $user")
                 setState {
                     if (user != null) {
                         ProfileState.Authenticated(
@@ -31,6 +33,12 @@ internal class ProfileViewModel(
                     }
                 }
             }
+        }
+    }
+
+    private fun checkSession() {
+        viewModelScope.launch {
+            authRepository.checkSession()
         }
     }
 

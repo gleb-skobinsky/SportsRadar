@@ -48,7 +48,7 @@ fun Application.module() {
 
 private fun Application.configureCors() {
     install(CORS) {
-        allowHost("localhost:8080", schemes = listOf("http"))
+        allowHost("localhost:8082", schemes = listOf("http"))
 
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.Authorization)

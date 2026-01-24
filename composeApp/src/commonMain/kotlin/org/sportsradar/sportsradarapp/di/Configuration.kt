@@ -41,12 +41,7 @@ private val coreModule = module {
     }
     single<UserSecureStorage> {
         UserSecureStorageImpl(
-            getStorage(
-                useSession = true,
-                preferencesFileName = "sportsradarapp_session_storage.preferences_pb",
-                jvmChildDirectory = PREFS_CHILD_DIR,
-                json = get()
-            )
+            get()
         )
     }
     single<ConnectivityStatus> { getConnectivityStatus() }
