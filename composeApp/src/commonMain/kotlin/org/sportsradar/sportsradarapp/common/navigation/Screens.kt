@@ -70,6 +70,7 @@ sealed interface Screens {
     }
 }
 
+@Serializable
 enum class BottomBarTab(
     val screen: Screens,
     val icon: ImageVector
