@@ -1,9 +1,6 @@
 package org.sportsradar.sportsradarapp.common.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavType
 import androidx.savedstate.SavedState
 import androidx.savedstate.read
