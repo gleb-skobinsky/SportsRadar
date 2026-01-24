@@ -30,18 +30,19 @@ import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
 import org.sportsradar.sportsradarapp.common.navigation.BottomBarTab
+import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 import org.sportsradar.sportsradarapp.common.navigation.currentTab
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 
-private val NavBarHeight = 90.dp
+private val NavBarHeight = 82.dp
 
 @Composable
 fun SportsRadarAppNavBarWrapper(
     hazeState: HazeState,
-    navController: NavController,
 ) {
-    val entry by navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
+    val navigator = LocalKmpNavigator.current
+    val entry by navigator.currentEntryFlow.collectAsStateWithLifecycle(null)
     val tab by remember {
         derivedStateOf {
             entry.currentTab()
@@ -50,35 +51,35 @@ fun SportsRadarAppNavBarWrapper(
 
     AnimatedVisibility(
         visible = tab != null,
-        modifier = Modifier
-            .navigationBarsPadding()
-            .imePadding(),
         enter = fadeIn(tween(300)),
         exit = fadeOut(tween(300))
     ) {
-        SportsRadarAppNavBar(hazeState = hazeState, currentTab = tab)
+        SportsRadarAppNavBar(
+            navigator = navigator,
+            hazeState = hazeState,
+            currentTab = tab
+        )
     }
 }
 
 @Composable
 fun SportsRadarAppNavBar(
     hazeState: HazeState,
+    navigator: KMPNavigator,
     currentTab: BottomBarTab?
 ) {
-    val navigator = LocalKmpNavigator.current
-
-
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(NavBarHeight)
-            .clip(RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
+            .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
             .hazeEffect(
                 state = hazeState,
                 style = HazeDefaults.style(
                     backgroundColor = LocalSportsRadarTheme.colors.surfaceTint
                 )
-            ),
+            )
+            .fillMaxWidth()
+            .height(NavBarHeight)
+            .navigationBarsPadding(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround
     ) {

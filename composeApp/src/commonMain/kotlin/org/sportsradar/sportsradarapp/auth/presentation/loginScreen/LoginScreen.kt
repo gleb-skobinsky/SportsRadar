@@ -22,6 +22,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileTopBar
 import org.sportsradar.sportsradarapp.common.icons.Lock
 import org.sportsradar.sportsradarapp.common.icons.Sms
 import org.sportsradar.sportsradarapp.common.mvi.CollectEffects
@@ -32,8 +33,8 @@ import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppButton
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppPasswordTextField
-import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppTextField
+import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
 import org.sportsradar.sportsradarapp.common.presentation.modifiers.noRippleClickable
 import org.sportsradar.sportsradarapp.resources.AppRes
@@ -71,7 +72,11 @@ fun LoginScreenContent(
     onAction: (LoginAction) -> Unit,
     navigator: KMPNavigator
 ) {
-    SportsRadarScaffold {
+    SportsRadarScaffold(
+        topBar = {
+            ProfileTopBar()
+        }
+    ) {
         22.dp.VerticalSpacer()
         SportsRadarAppLogo()
         50.dp.VerticalSpacer()

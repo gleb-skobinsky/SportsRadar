@@ -1,9 +1,11 @@
 package org.sportsradar.sportsradarapp.auth.presentation.profileScreen
 
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -19,6 +21,7 @@ import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpa
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.log_in
 import org.sportsradar.sportsradarapp.resources.log_out
+import org.sportsradar.sportsradarapp.resources.profile_screen_header
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 
 @Composable
@@ -35,7 +38,11 @@ private fun ProfileScreenContent(
     onAction: (ProfileAction) -> Unit,
     navigator: KMPNavigator,
 ) {
-    SportsRadarScaffold {
+    SportsRadarScaffold(
+        topBar = {
+            ProfileTopBar()
+        }
+    ) {
         when (state) {
             ProfileState.Loading -> Unit
             ProfileState.Anonymous -> {
@@ -48,6 +55,7 @@ private fun ProfileScreenContent(
                 }
                 24.dp.VerticalSpacer()
             }
+
             is ProfileState.Authenticated -> {
                 40.dp.VerticalSpacer()
                 Text(
@@ -67,4 +75,14 @@ private fun ProfileScreenContent(
             }
         }
     }
+}
+
+@Composable
+internal fun BoxScope.ProfileTopBar() {
+    Text(
+        text = stringResource(AppRes.string.profile_screen_header),
+        style = LocalSportsRadarTheme.typography.headlineSmall,
+        color = LocalSportsRadarTheme.colors.secondary,
+        modifier = Modifier.align(Alignment.Center),
+    )
 }

@@ -3,6 +3,7 @@ package org.sportsradar.sportsradarapp.common.presentation.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -82,7 +83,7 @@ fun SportsRadarAppBottomSheetScaffold(
     sheetPadding: PaddingValues = PaddingValues.Absolute(16.dp, 0.dp, 16.dp, 16.dp),
     bottomSheetColor: Color = LocalSportsRadarTheme.colors.surfaceVariant,
     bottomSheetContent: @Composable ColumnScope.() -> Unit,
-    topBar: @Composable () -> Unit = {},
+    topBar: @Composable (BoxScope.() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     SportsRadarScaffold(

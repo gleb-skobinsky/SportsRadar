@@ -1,3 +1,5 @@
+package org.sportsradar.sportsradarapp
+
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -6,8 +8,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -27,6 +29,7 @@ import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigatorImpl
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 import org.sportsradar.sportsradarapp.common.navigation.Screens
+import org.sportsradar.sportsradarapp.common.presentation.LocalScreenSize
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
 import org.sportsradar.sportsradarapp.common.presentation.components.SnackbarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppNavBarWrapper
@@ -37,7 +40,7 @@ import org.sportsradar.uiKit.theme.SportsRadarTheme
 private const val FAST_NAV_ANIMATION = 300
 
 @PublishedApi
-internal val GlobalScaffoldPadding = staticCompositionLocalOf {
+internal val GlobalScaffoldPadding = compositionLocalOf {
     PaddingValues(0.dp)
 }
 
@@ -48,12 +51,16 @@ fun App() {
     SportsRadarTheme {
         val navController = rememberNavController()
         val navigator: KMPNavigator = remember { KMPNavigatorImpl(navController) }
-        val haze = remember { HazeState() }
-        ProvideNavigator(navigator) {
+        val haze = remember(
+            LocalScreenSize.current
+        ) { HazeState() }
+        CompositionLocalProvider(
+            LocalKmpNavigator provides navigator,
+        ) {
             SnackbarScaffold(
                 snackbarState = RootSnackbarController.snackbarState,
                 bottomBar = {
-                    SportsRadarAppNavBarWrapper(haze, navController)
+                    SportsRadarAppNavBarWrapper(haze)
                 }
             ) { paddingValues ->
                 CompositionLocalProvider(GlobalScaffoldPadding provides paddingValues) {
@@ -117,15 +124,4 @@ fun App() {
             }
         }
     }
-}
-
-@Composable
-fun ProvideNavigator(
-    navigator: KMPNavigator,
-    content: @Composable () -> Unit
-) {
-    CompositionLocalProvider(
-        LocalKmpNavigator provides navigator,
-        content = content
-    )
 }

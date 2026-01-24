@@ -1,6 +1,5 @@
 package org.sportsradar.sportsradarapp
 
-import App
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity

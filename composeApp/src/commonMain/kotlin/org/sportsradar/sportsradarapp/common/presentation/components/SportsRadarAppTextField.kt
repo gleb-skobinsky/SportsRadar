@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import org.sportsradar.sportsradarapp.common.presentation.components.ClickableIcon
 
 val DefaultTextFieldShape = RoundedCornerShape(4.dp)
 

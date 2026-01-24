@@ -1,6 +1,5 @@
 package org.sportsradar.sportsradarapp
 
-import App
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
