@@ -47,6 +47,11 @@ sealed interface Screens {
     }
 
     @Serializable
+    object AuthGraph : Screens {
+        override val tab = BottomBarTab.ProfileTab
+    }
+
+    @Serializable
     object LoginScreen : Screens {
         override val tab = BottomBarTab.ProfileTab
     }

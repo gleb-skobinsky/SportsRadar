@@ -3,7 +3,8 @@ package org.sportsradar.sportsradarapp.common.navigation
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import androidx.navigation.toRoute
+import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -101,11 +102,17 @@ internal class KMPNavigatorImpl(
     override fun goToTab(tab: BottomBarTab) {
         runSafely {
             val prevTab = navController.currentBackStackEntry.currentTab()
-            navController.navigate(tab.screen) {
-                if (prevTab != null) {
-                    popUpTo(prevTab.screen) {
-                        saveState = true
-                        inclusive = true
+            if (prevTab == tab) {
+                navController.popBackStack(route = prevTab.screen, inclusive = false)
+            } else {
+                navController.navigate(tab.screen) {
+                    restoreState = true
+
+                    if (prevTab != null) {
+                        popUpTo(prevTab.screen) {
+                            saveState = true
+                            inclusive = true
+                        }
                     }
                 }
             }
@@ -131,8 +138,19 @@ internal class KMPNavigatorImpl(
 
 internal fun NavBackStackEntry?.currentTab(): BottomBarTab? {
     val entry = this ?: return null
-    val tabRoute = entry.destination.parent?.startDestinationRoute
+    val tabRoute = entry.destination.rootTabGraph()?.startDestinationRoute
     return BottomBarTab.entries.find {
         it.screen::class.qualifiedName == tabRoute
     }
 }
+
+fun NavDestination.rootTabGraph(): NavGraph? {
+    var current = this.parent
+
+    while (current?.parent?.parent != null) {
+        current = current.parent
+    }
+
+    return current
+}
+

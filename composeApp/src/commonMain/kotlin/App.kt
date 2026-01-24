@@ -76,17 +76,21 @@ fun App() {
                         ) {
                             ProfileScreen()
                         }
-                        composable<Screens.LoginScreen>(
-                            typeMap = BottomBarTab.typeMap,
-                        ) { LoginScreen() }
-                        composable<Screens.SignupScreen>(
-                            typeMap = BottomBarTab.typeMap,
-                        ) { SignupScreen() }
-                        composable<Screens.ForgotPasswordScreen>(
-                            typeMap = BottomBarTab.typeMap,
+                        navigation<Screens.AuthGraph>(
+                            startDestination = Screens.LoginScreen
                         ) {
-                            val route = it.toRoute<Screens.ForgotPasswordScreen>()
-                            ForgotPasswordScreen(route.email)
+                            composable<Screens.LoginScreen>(
+                                typeMap = BottomBarTab.typeMap,
+                            ) { LoginScreen() }
+                            composable<Screens.SignupScreen>(
+                                typeMap = BottomBarTab.typeMap,
+                            ) { SignupScreen() }
+                            composable<Screens.ForgotPasswordScreen>(
+                                typeMap = BottomBarTab.typeMap,
+                            ) {
+                                val route = it.toRoute<Screens.ForgotPasswordScreen>()
+                                ForgotPasswordScreen(route.email)
+                            }
                         }
                     }
                     navigation<Screens.FavoritesTabScreen>(
