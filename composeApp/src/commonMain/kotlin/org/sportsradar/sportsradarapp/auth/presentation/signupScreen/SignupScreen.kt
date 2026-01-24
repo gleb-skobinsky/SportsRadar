@@ -15,7 +15,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.AuthTopTwoButtons
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.SportsRadarAppLogo
-import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileScreen
 import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileTopBar
 import org.sportsradar.sportsradarapp.common.icons.Lock
 import org.sportsradar.sportsradarapp.common.icons.LockHidden
@@ -27,8 +26,8 @@ import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppButton
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppPasswordTextField
-import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppTextField
+import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.enter_email
