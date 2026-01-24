@@ -20,9 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,47 +34,47 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import dev.chrisbanes.haze.HazeState
 import org.sportsradar.sportsradarapp.common.navigation.BottomBarTab
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
-import org.sportsradar.sportsradarapp.common.navigation.hasScreen
-import org.sportsradar.uiKit.theme.PrimaryGradient
+import org.sportsradar.sportsradarapp.common.navigation.currentTab
 import org.sportsradar.sportsradarapp.common.presentation.modifiers.tintHazeChild
-import dev.chrisbanes.haze.HazeState
+import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
+import org.sportsradar.uiKit.theme.PrimaryGradient
 
 private val NavBarHeight = 90.dp
 private val HalfHeight = NavBarHeight / 2
 
 @Composable
 fun SportsRadarAppNavBarWrapper(
-    hazeState: HazeState
+    hazeState: HazeState,
+    navController: NavController,
 ) {
-    val navigator = LocalKmpNavigator.current
-    val entry by navigator.currentEntry.collectAsState(null)
-    val navbarVisible by remember {
+    val entry by navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
+    val tab by remember {
         derivedStateOf {
-            BottomBarTab.entries.any {
-                entry.hasScreen(it.screen) && it.hasNavBar
-            }
+            entry.currentTab()
         }
     }
 
     AnimatedVisibility(
-        visible = navbarVisible,
+        visible = tab != null,
         modifier = Modifier
             .navigationBarsPadding()
             .imePadding(),
         enter = fadeIn(tween(300)),
         exit = fadeOut(tween(300))
     ) {
-        SportsRadarAppNavBar(hazeState = hazeState, currentEntry = entry)
+        SportsRadarAppNavBar(hazeState = hazeState, currentTab = tab)
     }
 }
 
 @Composable
 fun SportsRadarAppNavBar(
     hazeState: HazeState,
-    currentEntry: NavBackStackEntry?
+    currentTab: BottomBarTab?
 ) {
     val navigator = LocalKmpNavigator.current
     with(LocalDensity.current) {
@@ -108,13 +106,13 @@ fun SportsRadarAppNavBar(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 for (tab in BottomBarTab.entries) {
-                    val isSelected = currentEntry.hasScreen(tab.screen)
+                    val isSelected = currentTab == tab
                     Box(
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
                             .clickable {
-                                navigator.goTo(tab.screen)
+                                navigator.goToTab(tab)
                             },
                         contentAlignment = Alignment.Center
                     ) {

@@ -1,61 +1,110 @@
 package org.sportsradar.sportsradarapp.common.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavType
+import androidx.savedstate.SavedState
+import androidx.savedstate.read
+import androidx.savedstate.write
 import kotlinx.serialization.Serializable
-import org.sportsradar.sportsradarapp.common.icons.History
+import org.sportsradar.sportsradarapp.common.icons.Favorites
 import org.sportsradar.sportsradarapp.common.icons.Home
-import org.sportsradar.sportsradarapp.common.icons.Shop
+import org.sportsradar.sportsradarapp.common.icons.Profile
+import kotlin.jvm.JvmSuppressWildcards
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 @Serializable
 sealed interface Screens {
 
-    @Serializable
-    data object LoginScreen : Screens
+    val tab: BottomBarTab?
 
     @Serializable
-    data object HomeScreen : Screens
+    object HomeTabScreen : Screens {
+        override val tab = BottomBarTab.HomeTab
+    }
 
     @Serializable
-    data object InvoicesScreen : Screens
+    object ProfileTabScreen : Screens {
+        override val tab = BottomBarTab.ProfileTab
+    }
 
     @Serializable
-    data object TransactionsScreen : Screens
+    object FavoritesTabScreen : Screens {
+        override val tab = BottomBarTab.FavoritesTab
+    }
 
     @Serializable
-    data object SignupScreen : Screens
+    object HomeScreen : Screens {
+        override val tab = BottomBarTab.HomeTab
+    }
 
     @Serializable
-    data class ForgotPasswordScreen(val email: String? = null) : Screens
+    object SignupScreen : Screens {
+        override val tab = BottomBarTab.ProfileTab
+    }
 
     @Serializable
-    data object FeedScreen : Screens
+    object LoginScreen : Screens {
+        override val tab = BottomBarTab.ProfileTab
+    }
 
     @Serializable
-    data object ProfileScreen : Screens
+    data class ForgotPasswordScreen(val email: String? = null) : Screens {
+        override val tab = BottomBarTab.ProfileTab
+    }
+
+
+    @Serializable
+    object ProfileScreen : Screens {
+        override val tab = BottomBarTab.ProfileTab
+    }
+
+    @Serializable
+    object FavoritesScreen : Screens {
+        override val tab = BottomBarTab.FavoritesTab
+    }
 }
 
 enum class BottomBarTab(
     val screen: Screens,
-    val title: String,
-    val hasNavBar: Boolean,
     val icon: ImageVector
 ) {
     HomeTab(
         screen = Screens.HomeScreen,
-        title = "Home",
-        hasNavBar = true,
         icon = Home
     ),
-    ShowCaseTab(
-        screen = Screens.FeedScreen,
-        title = "Shop",
-        hasNavBar = false,
-        icon = Shop
+    FavoritesTab(
+        screen = Screens.FavoritesScreen,
+        icon = Favorites
     ),
-    HistoryTab(
+    ProfileTab(
         screen = Screens.ProfileScreen,
-        title = "History",
-        hasNavBar = true,
-        icon = History
-    )
+        icon = Profile
+    );
+
+    companion object {
+        val typeMap: Map<KType, @JvmSuppressWildcards NavType<*>> = mapOf(
+            typeOf<BottomBarTab>() to enumNavType(BottomBarTab.entries)
+        )
+    }
+}
+
+fun <E : Enum<E>> enumNavType(entries: List<E>): NavType<E> {
+    return object : NavType<E>(isNullableAllowed = false) {
+        override fun put(bundle: SavedState, key: String, value: E) {
+            bundle.write { putString(key, value.name) }
+        }
+
+        override fun get(bundle: SavedState, key: String): E? {
+            val stringVal = bundle.read { getString(key) }
+            return entries.find { it.name == stringVal }
+        }
+
+        override fun parseValue(value: String): E {
+            return entries.first { it.name == value }
+        }
+    }
 }

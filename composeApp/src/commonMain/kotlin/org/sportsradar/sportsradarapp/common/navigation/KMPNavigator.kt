@@ -3,6 +3,7 @@ package org.sportsradar.sportsradarapp.common.navigation
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.toRoute
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -28,9 +29,9 @@ interface KMPNavigator {
 
     fun popUntil(screen: Screens)
 
-    val currentEntry: Flow<NavBackStackEntry?>
+    fun goToTab(tab: BottomBarTab)
 
-    fun hasScreen(screen: Screens): Boolean
+    val currentEntryFlow: Flow<NavBackStackEntry?>
 
     companion object {
         val PreviewNavigator = object : KMPNavigator {
@@ -39,20 +40,18 @@ interface KMPNavigator {
             override fun replace(screen: Screens) = Unit
             override fun replaceAll(screen: Screens) = Unit
             override fun popUntil(screen: Screens) = Unit
-            override val currentEntry: Flow<NavBackStackEntry?> = emptyFlow()
-            override fun hasScreen(screen: Screens): Boolean = false
+            override fun goToTab(tab: BottomBarTab) = Unit
+            override val currentEntryFlow: Flow<NavBackStackEntry?> = emptyFlow()
         }
     }
 }
 
-class KMPNavigatorImpl(
-    private val navController: NavController
+internal class KMPNavigatorImpl(
+    val navController: NavController
 ) : KMPNavigator {
 
-    override val currentEntry = navController.currentBackStackEntryFlow
+    override val currentEntryFlow = navController.currentBackStackEntryFlow
 
-    override fun hasScreen(screen: Screens): Boolean =
-        navController.currentBackStackEntry.hasScreen(screen)
 
     override fun goBack() {
         runSafely {
@@ -89,8 +88,25 @@ class KMPNavigatorImpl(
     override fun replaceAll(screen: Screens) {
         runSafely {
             navController.navigate(screen) {
-                popUpTo(0) {
-                    inclusive = true
+                val tab = screen.tab
+                if (tab != null) {
+                    popUpTo(tab.screen) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    }
+
+    override fun goToTab(tab: BottomBarTab) {
+        runSafely {
+            val prevTab = navController.currentBackStackEntry.currentTab()
+            navController.navigate(tab.screen) {
+                if (prevTab != null) {
+                    popUpTo(prevTab.screen) {
+                        saveState = true
+                        inclusive = true
+                    }
                 }
             }
         }
@@ -105,10 +121,18 @@ class KMPNavigatorImpl(
             it.printStackTrace()
         }
     }
+
+    private fun hasScreen(screens: Screens): Boolean {
+        val route = navController.currentBackStackEntry?.destination?.route ?: return false
+        val screenName = screens::class.qualifiedName ?: return false
+        return screenName in route
+    }
 }
 
-fun NavBackStackEntry?.hasScreen(screen: Screens): Boolean {
-    val route = this?.destination?.route ?: return false
-    val screenName = screen::class.qualifiedName ?: return false
-    return screenName in route
+internal fun NavBackStackEntry?.currentTab(): BottomBarTab? {
+    val entry = this ?: return null
+    val tabRoute = entry.destination.parent?.startDestinationRoute
+    return BottomBarTab.entries.find {
+        it.screen::class.qualifiedName == tabRoute
+    }
 }

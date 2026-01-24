@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import kotlin.Suppress
 
-val Shop: ImageVector
+val Favorites: ImageVector
     get() {
         if (_Shop != null) {
             return _Shop!!
