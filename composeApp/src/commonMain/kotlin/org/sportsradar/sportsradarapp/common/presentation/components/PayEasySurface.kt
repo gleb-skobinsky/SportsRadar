@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.haze.hazeEffect
-import org.sportsradar.sportsradarapp.common.presentation.modifiers.tintHazeChild
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 
 @Composable
