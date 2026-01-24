@@ -31,7 +31,6 @@ import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadar
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppBottomSheetState
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppButton
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppPasswordTextField
-import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppSurface
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppTextField
 import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
 import org.sportsradar.sportsradarapp.common.presentation.components.rememberSportsRadarAppBottomSheetState
@@ -102,59 +101,57 @@ fun ForgotPasswordScreenContent(
             OtpSheetContent(state.otpType, state.otpCode, onAction)
         },
         bottomSheetColor = LocalSportsRadarTheme.colors.surface
-    ) { _, _ ->
-        SportsRadarAppSurface {
-            22.dp.VerticalSpacer()
-            SportsRadarAppLogo()
-            50.dp.VerticalSpacer()
-            BigAuthText(stringResource(AppRes.string.password_restoration))
-            40.dp.VerticalSpacer()
-            if (!hasEmail) {
-                SportsRadarAppTextField(
-                    value = state.email,
-                    onValueChange = {
-                        onAction(ForgotPasswordAction.UpdateEmail(it))
-                    },
-                    leftIcon = Sms,
-                    placeholder = stringResource(AppRes.string.email)
-                )
-                24.dp.VerticalSpacer()
-            }
-            SportsRadarAppPasswordTextField(
-                value = state.password,
+    ) {
+        22.dp.VerticalSpacer()
+        SportsRadarAppLogo()
+        50.dp.VerticalSpacer()
+        BigAuthText(stringResource(AppRes.string.password_restoration))
+        40.dp.VerticalSpacer()
+        if (!hasEmail) {
+            SportsRadarAppTextField(
+                value = state.email,
                 onValueChange = {
-                    onAction(ForgotPasswordAction.UpdateNewPassword(it))
+                    onAction(ForgotPasswordAction.UpdateEmail(it))
                 },
-                leftIcon = Lock,
-                placeholder = stringResource(AppRes.string.make_up_new_password)
+                leftIcon = Sms,
+                placeholder = stringResource(AppRes.string.email)
             )
-            24.dp.VerticalSpacer()
-            SportsRadarAppPasswordTextField(
-                value = state.repeatPassword,
-                onValueChange = {
-                    onAction(ForgotPasswordAction.UpdateRepeatPassword(it))
-                },
-                leftIcon = LockHidden,
-                placeholder = stringResource(AppRes.string.repeat_password)
-            )
-            24.dp.VerticalSpacer()
-            PasswordConditions(
-                passwordsMatch = state.passwordsMatch,
-                containOnlyLatin = state.onlyLatin,
-                isLongEnough = state.longEnough,
-                hasSpecialSymbols = state.specialSymbols
-            )
-            40.dp.VerticalSpacer()
-            SportsRadarAppButton(
-                label = stringResource(AppRes.string.restore_password),
-                modifier = Modifier.fillMaxWidth(),
-                enabled = state.canResetPassword,
-                isLoading = state.isLoading
-            ) {
-                onAction(ForgotPasswordAction.SendOtp)
-            }
             24.dp.VerticalSpacer()
         }
+        SportsRadarAppPasswordTextField(
+            value = state.password,
+            onValueChange = {
+                onAction(ForgotPasswordAction.UpdateNewPassword(it))
+            },
+            leftIcon = Lock,
+            placeholder = stringResource(AppRes.string.make_up_new_password)
+        )
+        24.dp.VerticalSpacer()
+        SportsRadarAppPasswordTextField(
+            value = state.repeatPassword,
+            onValueChange = {
+                onAction(ForgotPasswordAction.UpdateRepeatPassword(it))
+            },
+            leftIcon = LockHidden,
+            placeholder = stringResource(AppRes.string.repeat_password)
+        )
+        24.dp.VerticalSpacer()
+        PasswordConditions(
+            passwordsMatch = state.passwordsMatch,
+            containOnlyLatin = state.onlyLatin,
+            isLongEnough = state.longEnough,
+            hasSpecialSymbols = state.specialSymbols
+        )
+        40.dp.VerticalSpacer()
+        SportsRadarAppButton(
+            label = stringResource(AppRes.string.restore_password),
+            modifier = Modifier.fillMaxWidth(),
+            enabled = state.canResetPassword,
+            isLoading = state.isLoading
+        ) {
+            onAction(ForgotPasswordAction.SendOtp)
+        }
+        24.dp.VerticalSpacer()
     }
 }
 

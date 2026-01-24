@@ -25,7 +25,7 @@ import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppButton
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppPasswordTextField
-import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppSurface
+import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppTextField
 import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
 import org.sportsradar.sportsradarapp.resources.AppRes
@@ -65,7 +65,7 @@ fun SignupScreenContent(
     onAction: (SignupAction) -> Unit,
     navigator: KMPNavigator
 ) {
-    SportsRadarAppSurface {
+    SportsRadarScaffold {
         22.dp.VerticalSpacer()
         SportsRadarAppLogo()
         50.dp.VerticalSpacer()

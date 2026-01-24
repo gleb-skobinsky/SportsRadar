@@ -14,7 +14,7 @@ import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppButton
-import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppSurface
+import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.log_in
@@ -35,7 +35,7 @@ private fun ProfileScreenContent(
     onAction: (ProfileAction) -> Unit,
     navigator: KMPNavigator,
 ) {
-    SportsRadarAppSurface {
+    SportsRadarScaffold {
         when (state) {
             ProfileState.Loading -> Unit
             ProfileState.Anonymous -> {

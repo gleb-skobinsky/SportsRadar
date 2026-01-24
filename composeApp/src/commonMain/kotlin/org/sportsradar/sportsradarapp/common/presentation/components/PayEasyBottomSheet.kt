@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -40,6 +38,7 @@ import androidx.compose.ui.window.DialogProperties
 import org.sportsradar.sportsradarapp.common.presentation.LocalScreenSize
 import org.sportsradar.sportsradarapp.common.presentation.modifiers.noRippleClickable
 import org.sportsradar.sportsradarapp.common.utils.platform
+import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 
 @Stable
 class SportsRadarAppBottomSheetState(initialState: Boolean) {
@@ -84,13 +83,11 @@ fun SportsRadarAppBottomSheetScaffold(
     bottomSheetColor: Color = LocalSportsRadarTheme.colors.surfaceVariant,
     bottomSheetContent: @Composable ColumnScope.() -> Unit,
     topBar: @Composable () -> Unit = {},
-    bottomBar: @Composable () -> Unit = {},
-    content: @Composable (top: Dp, bottom: Dp) -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) {
-    SportsRadarAppScaffold(
+    SportsRadarScaffold(
         topBar = topBar,
         modifier = modifier,
-        bottomBar = bottomBar,
         content = content
     )
     SportsRadarAppBottomSheet(

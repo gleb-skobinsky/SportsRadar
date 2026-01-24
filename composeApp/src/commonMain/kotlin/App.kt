@@ -2,11 +2,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,11 +30,16 @@ import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
 import org.sportsradar.sportsradarapp.common.presentation.components.SnackbarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppNavBarWrapper
-import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppSurface
+import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import org.sportsradar.uiKit.theme.SportsRadarTheme
 
 private const val FAST_NAV_ANIMATION = 300
+
+@PublishedApi
+internal val GlobalScaffoldPadding = staticCompositionLocalOf {
+    PaddingValues(0.dp)
+}
 
 @Composable
 @Preview
@@ -47,60 +55,62 @@ fun App() {
                 bottomBar = {
                     SportsRadarAppNavBarWrapper(haze, navController)
                 }
-            ) {
-                NavHost(
-                    navController = navController,
-                    modifier = Modifier
-                        .hazeSource(haze)
-                        .background(LocalSportsRadarTheme.colors.surface),
-                    enterTransition = { fadeIn(tween(FAST_NAV_ANIMATION)) },
-                    exitTransition = { fadeOut(tween(FAST_NAV_ANIMATION)) },
-                    startDestination = Screens.HomeTabScreen
-                ) {
-                    navigation<Screens.HomeTabScreen>(
-                        startDestination = Screens.HomeScreen,
-                        typeMap = BottomBarTab.typeMap,
+            ) { paddingValues ->
+                CompositionLocalProvider(GlobalScaffoldPadding provides paddingValues) {
+                    NavHost(
+                        navController = navController,
+                        modifier = Modifier
+                            .hazeSource(haze)
+                            .background(LocalSportsRadarTheme.colors.surface),
+                        enterTransition = { fadeIn(tween(FAST_NAV_ANIMATION)) },
+                        exitTransition = { fadeOut(tween(FAST_NAV_ANIMATION)) },
+                        startDestination = Screens.HomeTabScreen
                     ) {
-                        composable<Screens.HomeScreen>(
+                        navigation<Screens.HomeTabScreen>(
+                            startDestination = Screens.HomeScreen,
                             typeMap = BottomBarTab.typeMap,
                         ) {
-                            SportsRadarAppSurface {}
-                        }
-                    }
-                    navigation<Screens.ProfileTabScreen>(
-                        startDestination = Screens.ProfileScreen,
-                        typeMap = BottomBarTab.typeMap,
-                    ) {
-                        composable<Screens.ProfileScreen>(
-                            typeMap = BottomBarTab.typeMap,
-                        ) {
-                            ProfileScreen()
-                        }
-                        navigation<Screens.AuthGraph>(
-                            startDestination = Screens.LoginScreen
-                        ) {
-                            composable<Screens.LoginScreen>(
-                                typeMap = BottomBarTab.typeMap,
-                            ) { LoginScreen() }
-                            composable<Screens.SignupScreen>(
-                                typeMap = BottomBarTab.typeMap,
-                            ) { SignupScreen() }
-                            composable<Screens.ForgotPasswordScreen>(
+                            composable<Screens.HomeScreen>(
                                 typeMap = BottomBarTab.typeMap,
                             ) {
-                                val route = it.toRoute<Screens.ForgotPasswordScreen>()
-                                ForgotPasswordScreen(route.email)
+                                SportsRadarScaffold {}
                             }
                         }
-                    }
-                    navigation<Screens.FavoritesTabScreen>(
-                        startDestination = Screens.FavoritesScreen,
-                        typeMap = BottomBarTab.typeMap,
-                    ) {
-                        composable<Screens.FavoritesScreen>(
+                        navigation<Screens.ProfileTabScreen>(
+                            startDestination = Screens.ProfileScreen,
                             typeMap = BottomBarTab.typeMap,
                         ) {
-                            SportsRadarAppSurface {}
+                            composable<Screens.ProfileScreen>(
+                                typeMap = BottomBarTab.typeMap,
+                            ) {
+                                ProfileScreen()
+                            }
+                            navigation<Screens.AuthGraph>(
+                                startDestination = Screens.LoginScreen
+                            ) {
+                                composable<Screens.LoginScreen>(
+                                    typeMap = BottomBarTab.typeMap,
+                                ) { LoginScreen() }
+                                composable<Screens.SignupScreen>(
+                                    typeMap = BottomBarTab.typeMap,
+                                ) { SignupScreen() }
+                                composable<Screens.ForgotPasswordScreen>(
+                                    typeMap = BottomBarTab.typeMap,
+                                ) {
+                                    val route = it.toRoute<Screens.ForgotPasswordScreen>()
+                                    ForgotPasswordScreen(route.email)
+                                }
+                            }
+                        }
+                        navigation<Screens.FavoritesTabScreen>(
+                            startDestination = Screens.FavoritesScreen,
+                            typeMap = BottomBarTab.typeMap,
+                        ) {
+                            composable<Screens.FavoritesScreen>(
+                                typeMap = BottomBarTab.typeMap,
+                            ) {
+                                SportsRadarScaffold {}
+                            }
                         }
                     }
                 }
