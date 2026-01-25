@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 import org.sportsradar.sportsradarapp.auth.domain.entities.OtpMessageType
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.BigAuthText
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.SportsRadarAppLogo
@@ -49,8 +50,11 @@ import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 @Composable
 fun ForgotPasswordScreen(
     email: String? = null,
-    viewModel: ForgotPasswordViewModel = koinViewModel()
 ) {
+    val viewModel: ForgotPasswordViewModel = koinViewModel {
+        parametersOf(email)
+    }
+
     val focusManager = LocalFocusManager.current
     val navigator = LocalKmpNavigator.current
     val bottomSheetState = rememberSportsRadarAppBottomSheetState()
@@ -72,11 +76,6 @@ fun ForgotPasswordScreen(
                 bottomSheetState.hide()
             }
         }
-    }
-    // to ensure state consistency,
-    // we update email once on composition start
-    LaunchedEffect(Unit) {
-        email?.let { viewModel.onAction(ForgotPasswordAction.UpdateEmail(it)) }
     }
     val state by viewModel.state.collectAsStateWithLifecycle()
     ForgotPasswordScreenContent(

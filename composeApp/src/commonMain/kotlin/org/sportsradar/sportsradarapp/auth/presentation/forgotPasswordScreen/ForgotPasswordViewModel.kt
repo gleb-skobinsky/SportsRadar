@@ -1,6 +1,9 @@
 package org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.koin.core.component.inject
 import org.sportsradar.sportsradarapp.auth.domain.AuthRepository
 import org.sportsradar.sportsradarapp.auth.domain.entities.OtpMessageType
 import org.sportsradar.sportsradarapp.common.mvi.BaseAction
@@ -14,13 +17,14 @@ import org.sportsradar.sportsradarapp.common.utils.onlyLatin
 import org.sportsradar.sportsradarapp.common.utils.passwordsMatch
 import org.sportsradar.sportsradarapp.common.utils.satisfiesMinLength
 import org.sportsradar.sportsradarapp.common.utils.upperCaseNumberOrSpecialSymbol
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import org.koin.core.component.inject
 
-class ForgotPasswordViewModel :
+class ForgotPasswordViewModel(
+    email: String?,
+) :
     BaseViewModel<ForgotPasswordState, ForgotPasswordAction, ForgotPasswordEffect>(
-        ForgotPasswordState()
+        ForgotPasswordState(
+            email = email.orEmpty()
+        )
     ) {
 
     private val authRepository: AuthRepository by inject()

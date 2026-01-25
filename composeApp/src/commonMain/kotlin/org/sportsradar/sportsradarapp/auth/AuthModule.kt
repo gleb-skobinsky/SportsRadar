@@ -16,5 +16,5 @@ val authModule = module {
     }
     viewModel { LoginViewModel() }
     viewModel { SignupViewModel() }
-    viewModel { ForgotPasswordViewModel() }
+    viewModel { ForgotPasswordViewModel(getOrNull()) }
 }

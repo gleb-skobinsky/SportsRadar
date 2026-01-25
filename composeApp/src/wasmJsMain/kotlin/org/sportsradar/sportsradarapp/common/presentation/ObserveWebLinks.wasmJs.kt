@@ -6,6 +6,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
+import io.ktor.http.URLBuilder
+import io.ktor.http.encodedPath
 import kotlinx.browser.window
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -40,6 +42,10 @@ actual fun KMPNavigator.handleWebDeepLinkOnStart() {
         navController.currentBackStackEntryFlow.collect { entry ->
             val currentUrl = window.location.pathname
             val meta = ScreensMeta.getByEntry(entry)
+            val deeplinkPath = meta?.deeplink?.let(::URLBuilder)?.encodedPath
+            if (deeplinkPath == currentUrl) {
+                return@collect
+            }
             when {
                 meta?.deeplink == currentUrl -> Unit
                 meta?.deeplink == null -> {
