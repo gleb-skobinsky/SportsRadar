@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import dev.chrisbanes.haze.HazeState
@@ -89,6 +90,11 @@ fun App() {
                         ) {
                             composable<Screens.ProfileScreen>(
                                 typeMap = BottomBarTab.typeMap,
+                                deepLinks = listOf(
+                                    navDeepLink {
+                                        uriPattern = "http://localhost:8082/profile"
+                                    }
+                                )
                             ) {
                                 ProfileScreen()
                             }
