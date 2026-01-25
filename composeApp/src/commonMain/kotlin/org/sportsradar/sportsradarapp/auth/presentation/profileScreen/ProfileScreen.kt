@@ -39,6 +39,7 @@ private fun ProfileScreenContent(
     navigator: KMPNavigator,
 ) {
     SportsRadarScaffold(
+        alignment = Alignment.CenterHorizontally,
         topBar = {
             ProfileTopBar()
         }
@@ -81,7 +82,7 @@ private fun ProfileScreenContent(
 internal fun BoxScope.ProfileTopBar() {
     Text(
         text = stringResource(AppRes.string.profile_screen_header),
-        style = LocalSportsRadarTheme.typography.headlineSmall,
+        style = LocalSportsRadarTheme.typography.headlineLarge,
         color = LocalSportsRadarTheme.colors.secondary,
         modifier = Modifier.align(Alignment.Center),
     )

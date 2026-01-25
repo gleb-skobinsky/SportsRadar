@@ -18,9 +18,12 @@ internal class ProfileViewModel(
 
     init {
         checkSession()
+        subscribeToUserData()
+    }
+
+    private fun subscribeToUserData() {
         viewModelScope.launch {
             authRepository.subscribeToUserData().collectLatest { user ->
-                println("User!!! $user")
                 setState {
                     if (user != null) {
                         ProfileState.Authenticated(
