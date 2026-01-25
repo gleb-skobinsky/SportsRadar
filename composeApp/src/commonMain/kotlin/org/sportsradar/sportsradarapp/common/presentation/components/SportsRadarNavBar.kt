@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -23,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
@@ -40,7 +40,7 @@ fun SportsRadarAppNavBarWrapper(
     hazeState: HazeState,
 ) {
     val navigator = LocalKmpNavigator.current
-    val entry by navigator.currentEntryFlow.collectAsStateWithLifecycle(null)
+    val entry by navigator.currentEntryFlow.collectAsState(null)
     val tab by remember {
         derivedStateOf {
             entry.currentTab()
