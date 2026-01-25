@@ -4,7 +4,6 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.navDeepLink
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlin.reflect.KClass
 
 enum class ScreensMeta(
