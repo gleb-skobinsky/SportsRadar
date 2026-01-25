@@ -10,7 +10,6 @@ import com.sportsradar.plugins.configureSerialization
 import com.sportsradar.plugins.configureSockets
 import com.sportsradar.plugins.configureStaticFiles
 import com.sportsradar.plugins.configureSwagger
-import com.sportsradar.util.configListOrNull
 import com.sportsradar.util.configureDevClients
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -18,7 +17,6 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.server.plugins.cors.CORSConfig
 import io.ktor.server.plugins.cors.routing.CORS
 import org.koin.ktor.ext.get
 
