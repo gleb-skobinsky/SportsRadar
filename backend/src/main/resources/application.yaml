@@ -9,3 +9,7 @@ jwt:
   domain: "https://jwt-provider-domain/"
   audience: "jwt-audience"
   realm: "ktor sample app"
+
+devClients:
+  - host: "localhost:8082"
+    scheme: "http"

@@ -10,12 +10,14 @@ import com.sportsradar.plugins.configureSerialization
 import com.sportsradar.plugins.configureSockets
 import com.sportsradar.plugins.configureStaticFiles
 import com.sportsradar.plugins.configureSwagger
+import com.sportsradar.util.configListOrNull
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.server.plugins.cors.CORSConfig
 import io.ktor.server.plugins.cors.routing.CORS
 import org.koin.ktor.ext.get
 
@@ -48,7 +50,7 @@ fun Application.module() {
 
 private fun Application.configureCors() {
     install(CORS) {
-        allowHost("localhost:8082", schemes = listOf("http"))
+        configureDevClients(this@configureCors)
 
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.Authorization)
@@ -60,4 +62,23 @@ private fun Application.configureCors() {
         allowMethod(HttpMethod.Delete)
         allowMethod(HttpMethod.Options)
     }
+}
+
+private fun CORSConfig.configureDevClients(
+    application: Application,
+) {
+    application.environment.log.info("DEV CLIENTS")
+    application.environment.config
+        .configListOrNull("devClients")
+        ?.forEach { cfg ->
+            val host = cfg.propertyOrNull("host")?.getString()
+            val scheme = cfg.propertyOrNull("scheme")?.getString()
+            application.environment.log.info("Allowed dev client: host $host scheme $scheme")
+            if (host != null && scheme != null) {
+                allowHost(
+                    host = host,
+                    schemes = listOf(scheme)
+                )
+            }
+        }
 }
