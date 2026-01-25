@@ -30,11 +30,12 @@ import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.For
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
 import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileScreen
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
-import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
-import org.sportsradar.sportsradarapp.common.navigation.KMPNavigatorImpl
+import org.sportsradar.sportsradarapp.common.navigation.BottomBarTab
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
+import org.sportsradar.sportsradarapp.common.navigation.TabRootScreenBackHandler
+import org.sportsradar.sportsradarapp.common.navigation.rememberKmpNavigator
 import org.sportsradar.sportsradarapp.common.presentation.LocalScreenSize
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
 import org.sportsradar.sportsradarapp.common.presentation.components.SnackbarScaffold
@@ -60,10 +61,8 @@ private const val MAIN_HOST = "http://localhost:3000"
 fun App() {
     SportsRadarTheme {
         val navController = rememberNavController()
-        val navigator: KMPNavigator = remember { KMPNavigatorImpl(navController) }
-        val haze = remember(
-            LocalScreenSize.current
-        ) { HazeState() }
+        val navigator = rememberKmpNavigator(navController)
+        val haze = remember(LocalScreenSize.current) { HazeState() }
 
         navController.handleWebDeepLinkOnStart()
 
@@ -92,6 +91,7 @@ fun App() {
                             startDestination = Screens.HomeScreen,
                         ) {
                             screensComposable<Screens.HomeScreen> {
+                                TabRootScreenBackHandler(BottomBarTab.HomeTab)
                                 SportsRadarScaffold {}
                             }
                         }
@@ -99,6 +99,7 @@ fun App() {
                             startDestination = Screens.ProfileScreen,
                         ) {
                             screensComposable<Screens.ProfileScreen> {
+                                TabRootScreenBackHandler(BottomBarTab.ProfileTab)
                                 ProfileScreen()
                             }
                             screensNavigation<Screens.AuthGraph>(
@@ -116,6 +117,7 @@ fun App() {
                             startDestination = Screens.FavoritesScreen,
                         ) {
                             screensComposable<Screens.FavoritesScreen> {
+                                TabRootScreenBackHandler(BottomBarTab.FavoritesTab)
                                 SportsRadarScaffold {}
                             }
                         }

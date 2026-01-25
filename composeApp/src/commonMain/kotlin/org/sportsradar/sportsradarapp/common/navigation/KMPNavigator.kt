@@ -1,21 +1,29 @@
 package org.sportsradar.sportsradarapp.common.navigation
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.retain.RetainedEffect
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLink
-import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph
 import androidx.navigation.NavUri
 import androidx.navigation.navDeepLink
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import org.sportsradar.sportsradarapp.common.presentation.ActivityFinisher
+import org.sportsradar.sportsradarapp.common.presentation.rememberActivityFinisher
 
 val LocalKmpNavigator = staticCompositionLocalOf<KMPNavigator> {
     error("No KMPNavigator provided")
 }
 
 interface KMPNavigator {
+    val currentEntryFlow: Flow<NavBackStackEntry?>
+
+    val tabHistory: TabHistory
 
     /**
      * Safely navigates back on back button click.
@@ -35,8 +43,6 @@ interface KMPNavigator {
 
     fun goToTab(tab: BottomBarTab)
 
-    val currentEntryFlow: Flow<NavBackStackEntry?>
-
     companion object {
         val PreviewNavigator = object : KMPNavigator {
             override fun goBack() = Unit
@@ -46,7 +52,18 @@ interface KMPNavigator {
             override fun popUntil(screen: Screens) = Unit
             override fun goToTab(tab: BottomBarTab) = Unit
             override val currentEntryFlow: Flow<NavBackStackEntry?> = emptyFlow()
+            override val tabHistory: TabHistory = TabHistory()
         }
+    }
+}
+
+@Composable
+internal fun rememberKmpNavigator(
+    navController: NavController,
+): KMPNavigator {
+    val tabHistory = rememberTabHistory()
+    return remember(navController, tabHistory) {
+        KMPNavigatorImpl(navController, tabHistory)
     }
 }
 
@@ -57,7 +74,8 @@ fun String.toNavDeeplink(): NavDeepLink = navDeepLink {
 fun String.toNavUri(): NavUri = NavUri(this)
 
 internal class KMPNavigatorImpl(
-    val navController: NavController
+    val navController: NavController,
+    override val tabHistory: TabHistory,
 ) : KMPNavigator {
 
     override val currentEntryFlow = navController.currentBackStackEntryFlow
@@ -139,27 +157,50 @@ internal class KMPNavigatorImpl(
     }
 
     private fun hasScreen(screens: Screens): Boolean {
-        val route = navController.currentBackStackEntry?.destination?.route ?: return false
+        val route = navController.currentBackStackEntry?.screenRoute ?: return false
         val screenName = screens::class.qualifiedName ?: return false
-        return screenName in route
+        return screenName == route
     }
 }
 
 internal fun NavBackStackEntry?.currentTab(): BottomBarTab? {
     val entry = this ?: return null
-    val tabRoute = entry.destination.rootTabGraph()?.startDestDisplayName
-    return BottomBarTab.entries.find {
-        it.screen::class.qualifiedName == tabRoute
+    val meta = ScreensMeta.getByEntry(entry) ?: return null
+    return meta.tab
+}
+
+internal inline val NavBackStackEntry.screenRoute: String?
+    get() = destination.route?.substringBefore('?')
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+internal fun TabRootScreenBackHandler(
+    tab: BottomBarTab,
+) {
+    val navigator = LocalKmpNavigator.current
+    val activity = rememberActivityFinisher()
+    RetainedEffect(Unit) {
+        navigator.tabHistory.pushIfNotLast(tab)
+        onRetire {}
+    }
+
+    BackHandler {
+        navigator.handleBackOnTabRoot(activity)
     }
 }
 
-fun NavDestination.rootTabGraph(): NavGraph? {
-    var current = this.parent
-
-    while (current?.parent?.parent != null) {
-        current = current.parent
+internal fun KMPNavigator.handleBackOnTabRoot(
+    activity: ActivityFinisher,
+) {
+    val previousTab = tabHistory.popPrevious()
+    if (previousTab != null) {
+        (this as? KMPNavigatorImpl)
+            ?.navController
+            ?.navigate(previousTab.screen) {
+                restoreState = true
+            }
+    } else {
+        activity.finish()
     }
-
-    return current
 }
 

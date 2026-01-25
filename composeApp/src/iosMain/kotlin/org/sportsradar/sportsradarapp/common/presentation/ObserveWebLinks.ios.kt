@@ -5,3 +5,6 @@ import androidx.navigation.NavHostController
 
 @Composable
 actual fun NavHostController.handleWebDeepLinkOnStart() = Unit
+
+@Composable
+actual fun rememberActivityFinisher() = ActivityFinisher.NoOp

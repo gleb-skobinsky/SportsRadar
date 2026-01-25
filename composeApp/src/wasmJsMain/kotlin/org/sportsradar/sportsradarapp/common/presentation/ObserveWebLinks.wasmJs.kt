@@ -9,7 +9,6 @@ import kotlinx.browser.window
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
-import org.sportsradar.sportsradarapp.common.navigation.toNavDeeplink
 import org.sportsradar.sportsradarapp.common.navigation.toNavUri
 import org.w3c.dom.events.Event
 
@@ -35,11 +34,10 @@ actual fun NavHostController.handleWebDeepLinkOnStart() {
 
         currentBackStackEntryFlow.collect { entry ->
             val currentUrl = window.location.pathname
-            val route = entry.destination.route?.substringBefore('?') ?: return@collect
-            val meta = ScreensMeta.getByDisplayName(route)
-            when (meta?.deeplink) {
-                currentUrl -> Unit
-                null -> {
+            val meta = ScreensMeta.getByEntry(entry)
+            when {
+                meta?.deeplink == currentUrl -> Unit
+                meta?.deeplink == null -> {
                     window.history.pushState(
                         data = null,
                         title = "",
@@ -60,13 +58,18 @@ actual fun NavHostController.handleWebDeepLinkOnStart() {
 
     DisposableEffect(Unit) {
         val listener: (Event) -> Unit = {
-            val newUrl = window.location.pathname
-            if (!navigateUp()) {
-                navigate(newUrl.toNavDeeplink())
-            }
+            navigateUp()
         }
-        window.addEventListener(POPSTATE_EVENT_NAME, listener)
-        onDispose { window.removeEventListener(POPSTATE_EVENT_NAME, listener) }
+        window.addEventListener(
+            type = POPSTATE_EVENT_NAME,
+            callback = listener
+        )
+        onDispose {
+            window.removeEventListener(
+                type = POPSTATE_EVENT_NAME,
+                callback = listener
+            )
+        }
     }
 }
 
@@ -75,3 +78,6 @@ private suspend fun NavHostController.awaitGraphIsReady() {
         .filterNotNull()
         .first()
 }
+
+@Composable
+actual fun rememberActivityFinisher() = ActivityFinisher.NoOp

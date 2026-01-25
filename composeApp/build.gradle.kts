@@ -62,6 +62,7 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
+            // implementation(libs.androidx.navigationevent.compose)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(compose.runtime)

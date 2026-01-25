@@ -1,5 +1,6 @@
 package org.sportsradar.sportsradarapp.common.navigation
 
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.navDeepLink
 import kotlinx.serialization.Serializable
@@ -10,6 +11,7 @@ enum class ScreensMeta(
     val tab: BottomBarTab?,
     val argsClass: KClass<out Screens>,
     val deeplink: String?,
+    val isTabRoot: Boolean = false,
 ) {
     HomeTab(
         tab = BottomBarTab.HomeTab,
@@ -29,7 +31,8 @@ enum class ScreensMeta(
     Home(
         tab = BottomBarTab.HomeTab,
         argsClass = Screens.HomeScreen::class,
-        deeplink = "/home"
+        deeplink = "/home",
+        isTabRoot = true
     ),
     Auth(
         tab = BottomBarTab.ProfileTab,
@@ -76,7 +79,6 @@ enum class ScreensMeta(
         }
 
         fun getByDisplayName(displayName: String): ScreensMeta? {
-            println("Meta map: $screensMetaMap")
             return screensMetaMap[displayName]
         }
 
@@ -87,6 +89,10 @@ enum class ScreensMeta(
         fun getByKClass(kClass: KClass<out Screens>): ScreensMeta? {
             return screensMetaMap[kClass.qualifiedName]
         }
+
+        fun getByEntry(entry: NavBackStackEntry): ScreensMeta? {
+            return screensMetaMap[entry.screenRoute]
+        }
     }
 }
 
@@ -95,6 +101,9 @@ sealed interface Screens {
 
     @Transient
     val meta: ScreensMeta
+
+    @Transient
+    val hydratedDeeplink: String? get() = meta.deeplink
 
     @Serializable
     object HomeTabScreen : Screens {
