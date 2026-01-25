@@ -10,10 +10,10 @@ import kotlin.Suppress
 
 val Home: ImageVector
     get() {
-        if (_Home != null) {
-            return _Home!!
+        if (IcHome != null) {
+            return IcHome!!
         }
-        _Home = ImageVector.Builder(
+        IcHome = ImageVector.Builder(
             name = "Home",
             defaultWidth = 32.dp,
             defaultHeight = 32.dp,
@@ -23,9 +23,9 @@ val Home: ImageVector
             path(
                 fill = Brush.linearGradient(
                     colorStops = arrayOf(
-                        0f to Color(0xFF3ADD5E),
-                        0.5f to Color(0xFF73F178),
-                        1f to Color(0xFF5DEB85)
+                        0f to Color(0xFFFFFFFF),
+                        0.5f to Color(0xFFFFFFFF),
+                        1f to Color(0xFFFFFFFF)
                     ),
                     start = Offset(1.664f, 1.9f),
                     end = Offset(25.816f, 30.489f)
@@ -60,9 +60,9 @@ val Home: ImageVector
             path(
                 fill = Brush.linearGradient(
                     colorStops = arrayOf(
-                        0f to Color(0xFF3ADD5E),
-                        0.5f to Color(0xFF73F178),
-                        1f to Color(0xFF5DEB85)
+                        0f to Color(0xFFFFFFFF),
+                        0.5f to Color(0xFFFFFFFF),
+                        1f to Color(0xFFFFFFFF)
                     ),
                     start = Offset(11.666f, 13f),
                     end = Offset(19.114f, 21.667f)
@@ -83,8 +83,7 @@ val Home: ImageVector
             }
         }.build()
 
-        return _Home!!
+        return IcHome!!
     }
 
-@Suppress("ObjectPropertyName")
-private var _Home: ImageVector? = null
+private var IcHome: ImageVector? = null
