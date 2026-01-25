@@ -1,10 +1,10 @@
 package org.sportsradar.sportsradarapp.common.presentation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
+import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 
 @Composable
-actual fun NavHostController.handleWebDeepLinkOnStart() = Unit
+actual fun KMPNavigator.handleWebDeepLinkOnStart() = Unit
 
 @Composable
 actual fun rememberActivityFinisher() = ActivityFinisher.NoOp

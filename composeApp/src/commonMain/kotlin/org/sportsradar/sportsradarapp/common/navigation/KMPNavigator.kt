@@ -166,6 +166,8 @@ internal class KMPNavigatorImpl(
 internal fun NavBackStackEntry?.currentTab(): BottomBarTab? {
     val entry = this ?: return null
     val meta = ScreensMeta.getByEntry(entry) ?: return null
+    println("Resolved meta: $meta")
+    println("Resolved tab: ${meta.tab}")
     return meta.tab
 }
 

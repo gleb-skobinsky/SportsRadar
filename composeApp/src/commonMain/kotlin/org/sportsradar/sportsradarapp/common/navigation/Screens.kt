@@ -32,7 +32,7 @@ enum class ScreensMeta(
         tab = BottomBarTab.HomeTab,
         argsClass = Screens.HomeScreen::class,
         deeplink = "/home",
-        isTabRoot = true
+        isTabRoot = true,
     ),
     Auth(
         tab = BottomBarTab.ProfileTab,
@@ -52,7 +52,8 @@ enum class ScreensMeta(
     Profile(
         tab = BottomBarTab.ProfileTab,
         argsClass = Screens.ProfileScreen::class,
-        deeplink = "/profile"
+        deeplink = "/profile",
+        isTabRoot = true,
     ),
     Signup(
         tab = BottomBarTab.ProfileTab,
@@ -62,7 +63,8 @@ enum class ScreensMeta(
     Favorites(
         tab = BottomBarTab.FavoritesTab,
         argsClass = Screens.FavoritesScreen::class,
-        deeplink = "/favorites"
+        deeplink = "/favorites",
+        isTabRoot = true,
     );
 
     fun navDeeplink(hostWithScheme: String): NavDeepLink? {
@@ -76,10 +78,6 @@ enum class ScreensMeta(
     companion object {
         private val screensMetaMap: Map<String?, ScreensMeta> = ScreensMeta.entries.associateBy {
             it.argsClass.qualifiedName
-        }
-
-        fun getByDisplayName(displayName: String): ScreensMeta? {
-            return screensMetaMap[displayName]
         }
 
         fun getByScreen(screen: Screens): ScreensMeta? {
@@ -99,70 +97,59 @@ enum class ScreensMeta(
 @Serializable
 sealed interface Screens {
 
-    @Transient
-    val meta: ScreensMeta
-
-    @Transient
-    val hydratedDeeplink: String? get() = meta.deeplink
+    fun hydratedDeeplink(): String? {
+        val meta = ScreensMeta.getByScreen(this) ?: return null
+        return meta.deeplink
+    }
 
     @Serializable
     object HomeTabScreen : Screens {
-        @Transient
-        override val meta = ScreensMeta.HomeTab
+
     }
 
     @Serializable
     object ProfileTabScreen : Screens {
-        @Transient
-        override val meta = ScreensMeta.ProfileTab
+
     }
 
     @Serializable
     object FavoritesTabScreen : Screens {
-        @Transient
-        override val meta = ScreensMeta.FavoritesTab
+
     }
 
     @Serializable
     object HomeScreen : Screens {
-        @Transient
-        override val meta = ScreensMeta.Home
+
     }
 
     @Serializable
     object SignupScreen : Screens {
-        @Transient
-        override val meta = ScreensMeta.Signup
+
     }
 
     @Serializable
     object AuthGraph : Screens {
-        @Transient
-        override val meta = ScreensMeta.Auth
+
     }
 
     @Serializable
     object LoginScreen : Screens {
-        @Transient
-        override val meta = ScreensMeta.Login
+
     }
 
     @Serializable
     data class ForgotPasswordScreen(val email: String? = null) : Screens {
-        @Transient
-        override val meta = ScreensMeta.ForgotPassword
+
     }
 
 
     @Serializable
     object ProfileScreen : Screens {
-        @Transient
-        override val meta = ScreensMeta.Profile
+
     }
 
     @Serializable
     object FavoritesScreen : Screens {
-        @Transient
-        override val meta = ScreensMeta.Favorites
+
     }
 }

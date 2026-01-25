@@ -64,7 +64,7 @@ fun App() {
         val navigator = rememberKmpNavigator(navController)
         val haze = remember(LocalScreenSize.current) { HazeState() }
 
-        navController.handleWebDeepLinkOnStart()
+        navigator.handleWebDeepLinkOnStart()
 
         CompositionLocalProvider(
             LocalKmpNavigator provides navigator,
