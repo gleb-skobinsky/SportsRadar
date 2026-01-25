@@ -1,17 +1,6 @@
 package org.sportsradar.sportsradarapp.common.navigation
 
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavType
-import androidx.savedstate.SavedState
-import androidx.savedstate.read
-import androidx.savedstate.write
 import kotlinx.serialization.Serializable
-import org.sportsradar.sportsradarapp.common.icons.Favorites
-import org.sportsradar.sportsradarapp.common.icons.Home
-import org.sportsradar.sportsradarapp.common.icons.Profile
-import kotlin.jvm.JvmSuppressWildcards
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
 @Serializable
 sealed interface Screens {
@@ -67,47 +56,5 @@ sealed interface Screens {
     @Serializable
     object FavoritesScreen : Screens {
         override val tab = BottomBarTab.FavoritesTab
-    }
-}
-
-@Serializable
-enum class BottomBarTab(
-    val screen: Screens,
-    val icon: ImageVector
-) {
-    HomeTab(
-        screen = Screens.HomeScreen,
-        icon = Home
-    ),
-    FavoritesTab(
-        screen = Screens.FavoritesScreen,
-        icon = Favorites
-    ),
-    ProfileTab(
-        screen = Screens.ProfileScreen,
-        icon = Profile
-    );
-
-    companion object {
-        val typeMap: Map<KType, @JvmSuppressWildcards NavType<*>> = mapOf(
-            typeOf<BottomBarTab>() to enumNavType(BottomBarTab.entries)
-        )
-    }
-}
-
-fun <E : Enum<E>> enumNavType(entries: List<E>): NavType<E> {
-    return object : NavType<E>(isNullableAllowed = false) {
-        override fun put(bundle: SavedState, key: String, value: E) {
-            bundle.write { putString(key, value.name) }
-        }
-
-        override fun get(bundle: SavedState, key: String): E? {
-            val stringVal = bundle.read { getString(key) }
-            return entries.find { it.name == stringVal }
-        }
-
-        override fun parseValue(value: String): E {
-            return entries.first { it.name == value }
-        }
     }
 }
