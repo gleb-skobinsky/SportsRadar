@@ -23,6 +23,7 @@ kotlin {
         outputModuleName.set("composeApp")
         browser {
             commonWebpackConfig {
+                configDirectory = rootDir.resolve("webpack.config.d")
                 outputFileName = "composeApp.js"
                 devServer =
                     (devServer ?: KotlinWebpackConfig.DevServer()).apply {
