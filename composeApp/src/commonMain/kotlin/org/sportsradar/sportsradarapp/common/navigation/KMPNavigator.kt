@@ -3,8 +3,11 @@ package org.sportsradar.sportsradarapp.common.navigation
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLink
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
+import androidx.navigation.NavUri
+import androidx.navigation.navDeepLink
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -46,6 +49,12 @@ interface KMPNavigator {
         }
     }
 }
+
+fun String.toNavDeeplink(): NavDeepLink = navDeepLink {
+    uriPattern = this@toNavDeeplink
+}
+
+fun String.toNavUri(): NavUri = NavUri(this)
 
 internal class KMPNavigatorImpl(
     val navController: NavController
