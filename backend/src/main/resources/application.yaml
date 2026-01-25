@@ -11,5 +11,5 @@ jwt:
   realm: "ktor sample app"
 
 devClients:
-  - host: "localhost:8082"
+  - host: "localhost:3000"
     scheme: "http"

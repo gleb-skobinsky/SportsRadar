@@ -89,7 +89,7 @@ internal class KMPNavigatorImpl(
     override fun replaceAll(screen: Screens) {
         runSafely {
             navController.navigate(screen) {
-                val tab = screen.tab
+                val tab = ScreensMeta.getByScreen(screen)?.tab
                 if (tab != null) {
                     popUpTo(tab.screen) {
                         inclusive = true

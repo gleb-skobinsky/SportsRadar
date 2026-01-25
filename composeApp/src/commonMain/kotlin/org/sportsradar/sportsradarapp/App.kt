@@ -1,39 +1,40 @@
 package org.sportsradar.sportsradarapp
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestinationDsl
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.ForgotPasswordScreen
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
 import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileScreen
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
-import org.sportsradar.sportsradarapp.common.navigation.BottomBarTab
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigatorImpl
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 import org.sportsradar.sportsradarapp.common.navigation.Screens
+import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
 import org.sportsradar.sportsradarapp.common.presentation.LocalScreenSize
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
 import org.sportsradar.sportsradarapp.common.presentation.components.SnackbarScaffold
@@ -50,12 +51,8 @@ internal val GlobalScaffoldPadding = compositionLocalOf {
     PaddingValues(0.dp)
 }
 
-private suspend fun NavHostController.awaitGraphReady() {
-    currentBackStackEntryFlow
-        .filterNotNull()
-        .first()
-}
-
+// TODO: Move to build config
+private const val MAIN_HOST = "http://localhost:3000"
 
 @Composable
 @Preview
@@ -68,10 +65,7 @@ fun App() {
             LocalScreenSize.current
         ) { HazeState() }
 
-        LaunchedEffect(Unit) {
-            navController.awaitGraphReady()
-            navController.handleWebDeepLinkOnStart()
-        }
+        navController.handleWebDeepLinkOnStart()
 
         CompositionLocalProvider(
             LocalKmpNavigator provides navigator,
@@ -86,60 +80,42 @@ fun App() {
                     NavHost(
                         navController = navController,
                         modifier = Modifier
+                            .fillMaxSize()
                             .hazeSource(haze)
                             .background(LocalSportsRadarTheme.colors.surface),
+                        contentAlignment = Alignment.Center,
                         enterTransition = { fadeIn(tween(FAST_NAV_ANIMATION)) },
                         exitTransition = { fadeOut(tween(FAST_NAV_ANIMATION)) },
                         startDestination = Screens.HomeTabScreen
                     ) {
-                        navigation<Screens.HomeTabScreen>(
+                        screensNavigation<Screens.HomeTabScreen>(
                             startDestination = Screens.HomeScreen,
-                            typeMap = BottomBarTab.typeMap,
                         ) {
-                            composable<Screens.HomeScreen>(
-                                typeMap = BottomBarTab.typeMap,
-                            ) {
+                            screensComposable<Screens.HomeScreen> {
                                 SportsRadarScaffold {}
                             }
                         }
-                        navigation<Screens.ProfileTabScreen>(
+                        screensNavigation<Screens.ProfileTabScreen>(
                             startDestination = Screens.ProfileScreen,
-                            typeMap = BottomBarTab.typeMap,
                         ) {
-                            composable<Screens.ProfileScreen>(
-                                typeMap = BottomBarTab.typeMap,
-                                deepLinks = listOf(
-                                    navDeepLink {
-                                        uriPattern = "http://localhost:8082/profile"
-                                    }
-                                )
-                            ) {
+                            screensComposable<Screens.ProfileScreen> {
                                 ProfileScreen()
                             }
-                            navigation<Screens.AuthGraph>(
+                            screensNavigation<Screens.AuthGraph>(
                                 startDestination = Screens.LoginScreen
                             ) {
-                                composable<Screens.LoginScreen>(
-                                    typeMap = BottomBarTab.typeMap,
-                                ) { LoginScreen() }
-                                composable<Screens.SignupScreen>(
-                                    typeMap = BottomBarTab.typeMap,
-                                ) { SignupScreen() }
-                                composable<Screens.ForgotPasswordScreen>(
-                                    typeMap = BottomBarTab.typeMap,
-                                ) {
+                                screensComposable<Screens.LoginScreen> { LoginScreen() }
+                                screensComposable<Screens.SignupScreen> { SignupScreen() }
+                                screensComposable<Screens.ForgotPasswordScreen> {
                                     val route = it.toRoute<Screens.ForgotPasswordScreen>()
                                     ForgotPasswordScreen(route.email)
                                 }
                             }
                         }
-                        navigation<Screens.FavoritesTabScreen>(
+                        screensNavigation<Screens.FavoritesTabScreen>(
                             startDestination = Screens.FavoritesScreen,
-                            typeMap = BottomBarTab.typeMap,
                         ) {
-                            composable<Screens.FavoritesScreen>(
-                                typeMap = BottomBarTab.typeMap,
-                            ) {
+                            screensComposable<Screens.FavoritesScreen> {
                                 SportsRadarScaffold {}
                             }
                         }
@@ -148,4 +124,26 @@ fun App() {
             }
         }
     }
+}
+
+@NavDestinationDsl
+private inline fun <reified S : Screens> NavGraphBuilder.screensNavigation(
+    startDestination: Any,
+    noinline builder: NavGraphBuilder.() -> Unit,
+) {
+    navigation<S>(
+        startDestination = startDestination,
+        builder = builder
+    )
+}
+
+@NavDestinationDsl
+private inline fun <reified S : Screens> NavGraphBuilder.screensComposable(
+    noinline content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
+) {
+    val meta = ScreensMeta.getByKClass(S::class)
+    composable<S>(
+        deepLinks = listOfNotNull(meta?.navDeeplink(MAIN_HOST)),
+        content = content
+    )
 }

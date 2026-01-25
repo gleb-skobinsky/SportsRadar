@@ -47,6 +47,7 @@ fun SportsRadarScaffold(
     Scaffold(
         contentColor = LocalSportsRadarTheme.colors.secondary,
         containerColor = LocalSportsRadarTheme.colors.surface,
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             topBar?.let { topBarContent ->
                 Box(
