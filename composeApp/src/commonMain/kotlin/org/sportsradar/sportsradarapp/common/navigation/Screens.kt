@@ -96,59 +96,34 @@ enum class ScreensMeta(
 @Serializable
 sealed interface Screens {
 
-    fun hydratedDeeplink(): String? {
-        val meta = ScreensMeta.getByScreen(this) ?: return null
-        return meta.deeplink
-    }
+    @Serializable
+    object HomeTabScreen : Screens
 
     @Serializable
-    object HomeTabScreen : Screens {
-
-    }
+    object ProfileTabScreen : Screens
 
     @Serializable
-    object ProfileTabScreen : Screens {
-
-    }
+    object FavoritesTabScreen : Screens
 
     @Serializable
-    object FavoritesTabScreen : Screens {
-
-    }
+    object HomeScreen : Screens
 
     @Serializable
-    object HomeScreen : Screens {
-
-    }
+    object SignupScreen : Screens
 
     @Serializable
-    object SignupScreen : Screens {
-
-    }
+    object AuthGraph : Screens
 
     @Serializable
-    object AuthGraph : Screens {
-
-    }
+    object LoginScreen : Screens
 
     @Serializable
-    object LoginScreen : Screens {
-
-    }
-
-    @Serializable
-    data class ForgotPasswordScreen(val email: String? = null) : Screens {
-
-    }
+    data class ForgotPasswordScreen(val email: String? = null) : Screens
 
 
     @Serializable
-    object ProfileScreen : Screens {
-
-    }
+    object ProfileScreen : Screens
 
     @Serializable
-    object FavoritesScreen : Screens {
-
-    }
+    object FavoritesScreen : Screens
 }

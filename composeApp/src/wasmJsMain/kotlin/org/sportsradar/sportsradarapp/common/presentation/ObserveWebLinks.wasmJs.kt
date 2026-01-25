@@ -6,7 +6,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
+import androidx.savedstate.SavedState
+import androidx.savedstate.read
 import io.ktor.http.URLBuilder
+import io.ktor.http.encodeURLParameter
 import io.ktor.http.encodedPath
 import kotlinx.browser.window
 import kotlinx.coroutines.flow.filterNotNull
@@ -46,21 +49,22 @@ actual fun KMPNavigator.handleWebDeepLinkOnStart() {
             if (deeplinkPath == currentUrl) {
                 return@collect
             }
-            when {
-                meta?.deeplink == currentUrl -> Unit
-                meta?.deeplink == null -> {
+
+            when (meta?.deeplink) {
+                currentUrl -> Unit
+                null -> {
                     window.history.pushState(
                         data = null,
                         title = "",
                         url = "/"
                     )
                 }
-
                 else -> {
+                    val hydratedLink = entry.hydratedDeepLink(meta.deeplink)
                     window.history.pushState(
                         data = null,
                         title = "",
-                        url = meta.deeplink
+                        url = hydratedLink
                     )
                 }
             }
@@ -101,6 +105,31 @@ private suspend fun NavController.awaitGraphIsReady() {
         .filterNotNull()
         .first()
 }
+
+fun NavBackStackEntry.hydratedDeepLink(
+    deeplinkPath: String?,
+): String? {
+    val args = arguments ?: return null
+    if (deeplinkPath == null) return null
+    var uri: String = deeplinkPath
+    val argsMap = args.map()
+    argsMap.keys.forEach { key ->
+        val value = argsMap[key]?.toString()
+        uri = if (value == null) {
+            uri.replace("$key={$key}", "")
+        } else {
+            uri.replace(
+                oldValue = "{$key}",
+                newValue = value.encodeURLParameter()
+            )
+        }
+    }
+
+    return uri.trimEnd('?').trimEnd('&')
+}
+
+private fun SavedState.map() = read { toMap() }
+
 
 @Composable
 actual fun rememberActivityFinisher() = ActivityFinisher.NoOp
