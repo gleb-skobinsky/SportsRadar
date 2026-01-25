@@ -138,7 +138,7 @@ internal class KMPNavigatorImpl(
 
 internal fun NavBackStackEntry?.currentTab(): BottomBarTab? {
     val entry = this ?: return null
-    val tabRoute = entry.destination.rootTabGraph()?.startDestinationRoute
+    val tabRoute = entry.destination.rootTabGraph()?.startDestDisplayName
     return BottomBarTab.entries.find {
         it.screen::class.qualifiedName == tabRoute
     }
