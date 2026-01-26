@@ -16,7 +16,7 @@ internal fun TabRootScreenBackHandler(
 ) {
     val navigator = LocalKmpNavigator.current
     RetainedEffect(Unit) {
-        navigator.tabHistory.pushIfNotLast(tab)
+        navigator.pushIfNotLast(tab)
         onRetire {}
     }
 

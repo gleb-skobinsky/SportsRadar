@@ -85,10 +85,8 @@ private fun KMPNavigator.HandleBrowserBackPress(
                 currentIndex < lastIndex -> {
                     val isTabRoot = currentEntry.isTabRoot()
                     if (isTabRoot) {
-                        println("Going back to tab")
                         handleBackOnTabRoot()
                     } else {
-                        println("Going back")
                         goBack()
                     }
                 }
