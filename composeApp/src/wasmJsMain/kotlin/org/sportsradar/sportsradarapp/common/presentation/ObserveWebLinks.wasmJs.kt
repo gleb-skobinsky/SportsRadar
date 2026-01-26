@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.first
 import org.sportsradar.sportsradarapp.common.navigation.BottomBarTab
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
-import org.sportsradar.sportsradarapp.common.navigation.isTabRoot
 import org.sportsradar.sportsradarapp.common.utils.NavigationStorage
 import org.sportsradar.sportsradarapp.common.utils.toIntOrZero
 import org.w3c.dom.PopStateEvent
