@@ -31,7 +31,7 @@ import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
 import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileScreen
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
 import org.sportsradar.sportsradarapp.common.navigation.BottomBarTab
-import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
+import org.sportsradar.sportsradarapp.common.navigation.ProvideNavigationComponents
 import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
 import org.sportsradar.sportsradarapp.common.navigation.TabRootScreenBackHandler
@@ -67,9 +67,7 @@ fun App() {
 
         navigator.handleWebDeepLinkOnStart()
 
-        CompositionLocalProvider(
-            LocalKmpNavigator provides navigator,
-        ) {
+        ProvideNavigationComponents(navigator) {
             SnackbarScaffold(
                 snackbarState = RootSnackbarController.snackbarState,
                 bottomBar = {
