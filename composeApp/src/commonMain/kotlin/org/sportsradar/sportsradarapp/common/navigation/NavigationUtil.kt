@@ -11,7 +11,7 @@ import androidx.navigation.navDeepLink
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun TabRootScreenBackHandler(
+internal fun RegisterTabVisitedAndBackHandler(
     tab: BottomBarTab?,
 ) {
     val navigator = LocalKmpNavigator.current

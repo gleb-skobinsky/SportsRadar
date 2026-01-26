@@ -32,7 +32,7 @@ import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScree
 import org.sportsradar.sportsradarapp.common.navigation.ProvideCommonNavigation
 import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
-import org.sportsradar.sportsradarapp.common.navigation.TabRootScreenBackHandler
+import org.sportsradar.sportsradarapp.common.navigation.RegisterTabVisitedAndBackHandler
 import org.sportsradar.sportsradarapp.common.navigation.rememberController
 import org.sportsradar.sportsradarapp.common.navigation.rememberKmpNavigator
 import org.sportsradar.sportsradarapp.common.presentation.LocalScreenSize
@@ -147,7 +147,7 @@ private inline fun <reified S : Screens> NavGraphBuilder.screensComposable(
     composable<S>(
         deepLinks = listOfNotNull(meta?.navDeeplink(MAIN_HOST)),
         content = {
-            TabRootScreenBackHandler(meta?.tab)
+            RegisterTabVisitedAndBackHandler(meta?.tab)
             content(it)
         }
     )
