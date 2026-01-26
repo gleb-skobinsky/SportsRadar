@@ -62,7 +62,8 @@ fun App() {
     SportsRadarTheme {
         val navController = rememberNavController()
         val navigator = rememberKmpNavigator(navController)
-        val haze = remember(LocalScreenSize.current) { HazeState() }
+
+        val haze = rememberHazeState()
 
         navigator.handleWebDeepLinkOnStart()
 
@@ -126,6 +127,11 @@ fun App() {
             }
         }
     }
+}
+
+@Composable
+private fun rememberHazeState(): HazeState {
+    return remember(LocalScreenSize.current) { HazeState() }
 }
 
 @NavDestinationDsl

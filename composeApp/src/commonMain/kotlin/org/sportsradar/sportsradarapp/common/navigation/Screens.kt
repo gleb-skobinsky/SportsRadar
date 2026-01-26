@@ -97,33 +97,33 @@ enum class ScreensMeta(
 sealed interface Screens {
 
     @Serializable
-    object HomeTabScreen : Screens
+    data object HomeTabScreen : Screens
 
     @Serializable
-    object ProfileTabScreen : Screens
+    data object ProfileTabScreen : Screens
 
     @Serializable
-    object FavoritesTabScreen : Screens
+    data object FavoritesTabScreen : Screens
 
     @Serializable
-    object HomeScreen : Screens
+    data object HomeScreen : Screens
 
     @Serializable
-    object SignupScreen : Screens
+    data object SignupScreen : Screens
 
     @Serializable
-    object AuthGraph : Screens
+    data object AuthGraph : Screens
 
     @Serializable
-    object LoginScreen : Screens
+    data object LoginScreen : Screens
 
     @Serializable
     data class ForgotPasswordScreen(val email: String? = null) : Screens
 
 
     @Serializable
-    object ProfileScreen : Screens
+    data object ProfileScreen : Screens
 
     @Serializable
-    object FavoritesScreen : Screens
+    data object FavoritesScreen : Screens
 }
