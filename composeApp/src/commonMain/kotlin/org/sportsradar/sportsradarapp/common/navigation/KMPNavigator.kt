@@ -31,8 +31,6 @@ interface KMPNavigator {
 
     fun goToTab(tab: BottomBarTab)
 
-    fun handleBackOnTabRoot()
-
     fun handleDeeplink(deeplink: String)
 
     companion object {
@@ -47,7 +45,6 @@ interface KMPNavigator {
             override fun replaceAll(screen: Screens) = Unit
             override fun popUntil(screen: Screens) = Unit
             override fun goToTab(tab: BottomBarTab) = Unit
-            override fun handleBackOnTabRoot() = Unit
             override fun handleDeeplink(deeplink: String) = Unit
         }
     }

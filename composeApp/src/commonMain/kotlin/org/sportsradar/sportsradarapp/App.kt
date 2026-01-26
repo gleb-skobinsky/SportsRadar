@@ -29,7 +29,6 @@ import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.For
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
 import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileScreen
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
-import org.sportsradar.sportsradarapp.common.navigation.BottomBarTab
 import org.sportsradar.sportsradarapp.common.navigation.ProvideCommonNavigation
 import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
@@ -90,7 +89,6 @@ fun App() {
                             startDestination = Screens.HomeScreen,
                         ) {
                             screensComposable<Screens.HomeScreen> {
-                                TabRootScreenBackHandler(BottomBarTab.HomeTab)
                                 SportsRadarScaffold {}
                             }
                         }
@@ -98,7 +96,6 @@ fun App() {
                             startDestination = Screens.ProfileScreen,
                         ) {
                             screensComposable<Screens.ProfileScreen> {
-                                TabRootScreenBackHandler(BottomBarTab.ProfileTab)
                                 ProfileScreen()
                             }
                             screensNavigation<Screens.AuthGraph>(
@@ -116,7 +113,6 @@ fun App() {
                             startDestination = Screens.FavoritesScreen,
                         ) {
                             screensComposable<Screens.FavoritesScreen> {
-                                TabRootScreenBackHandler(BottomBarTab.FavoritesTab)
                                 SportsRadarScaffold {}
                             }
                         }
@@ -150,6 +146,9 @@ private inline fun <reified S : Screens> NavGraphBuilder.screensComposable(
     val meta = ScreensMeta.getByKClass(S::class)
     composable<S>(
         deepLinks = listOfNotNull(meta?.navDeeplink(MAIN_HOST)),
-        content = content
+        content = {
+            TabRootScreenBackHandler(meta?.tab)
+            content(it)
+        }
     )
 }

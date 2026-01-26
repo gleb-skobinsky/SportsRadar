@@ -37,7 +37,12 @@ private class KMPNavigatorImpl(
 
     override fun goBack() {
         runSafely {
-            navController.navigateUp()
+            val isTabRoot = currentEntry.isTabRoot()
+            if (isTabRoot) {
+                handleBackOnTabRoot()
+            } else {
+                navController.navigateUp()
+            }
         }
     }
 
@@ -80,7 +85,7 @@ private class KMPNavigatorImpl(
         }
     }
 
-    override fun handleBackOnTabRoot() {
+    private fun handleBackOnTabRoot() {
         val previousTab = tabHistory.popPrevious()
         if (previousTab != null) {
             navController.navigate(previousTab.screen) {

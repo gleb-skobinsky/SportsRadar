@@ -12,16 +12,18 @@ import androidx.navigation.navDeepLink
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun TabRootScreenBackHandler(
-    tab: BottomBarTab,
+    tab: BottomBarTab?,
 ) {
     val navigator = LocalKmpNavigator.current
-    RetainedEffect(Unit) {
-        navigator.pushIfNotLast(tab)
+    RetainedEffect(navigator) {
+        if (tab != null) {
+            navigator.pushIfNotLast(tab)
+        }
         onRetire {}
     }
 
     BackHandler {
-        navigator.handleBackOnTabRoot()
+        navigator.goBack()
     }
 }
 
@@ -39,3 +41,8 @@ internal fun String.toNavDeeplink(): NavDeepLink = navDeepLink {
 }
 
 internal fun String.toNavUri(): NavUri = NavUri(this)
+
+internal fun NavBackStackEntry?.isTabRoot(): Boolean {
+    val entry = this ?: return false
+    return ScreensMeta.getByEntry(entry)?.isTabRoot == true
+}

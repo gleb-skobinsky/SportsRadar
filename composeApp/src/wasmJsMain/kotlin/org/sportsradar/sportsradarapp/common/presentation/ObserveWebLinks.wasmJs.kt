@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.first
 import org.sportsradar.sportsradarapp.common.navigation.BottomBarTab
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
+import org.sportsradar.sportsradarapp.common.navigation.isTabRoot
 import org.sportsradar.sportsradarapp.common.utils.NavigationStorage
 import org.sportsradar.sportsradarapp.common.utils.toIntOrZero
 import org.w3c.dom.PopStateEvent
@@ -82,14 +83,7 @@ private fun KMPNavigator.HandleBrowserBackPress(
             val lastIndex = navStorage.getLastIndex()
 
             when {
-                currentIndex < lastIndex -> {
-                    val isTabRoot = currentEntry.isTabRoot()
-                    if (isTabRoot) {
-                        handleBackOnTabRoot()
-                    } else {
-                        goBack()
-                    }
-                }
+                currentIndex < lastIndex -> goBack()
 
                 currentIndex > lastIndex -> {
                     val newPath = window.location.pathname
@@ -115,11 +109,6 @@ private fun KMPNavigator.HandleBrowserBackPress(
             )
         }
     }
-}
-
-private fun NavBackStackEntry?.isTabRoot(): Boolean {
-    val entry = this ?: return false
-    return ScreensMeta.getByEntry(entry)?.isTabRoot == true
 }
 
 private val tabsByLinks = BottomBarTab.entries.associateBy {
