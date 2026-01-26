@@ -5,7 +5,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
 import androidx.savedstate.SavedState
 import androidx.savedstate.read
 import io.ktor.http.URLBuilder
