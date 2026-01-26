@@ -5,6 +5,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
+import androidx.savedstate.compose.LocalSavedStateRegistryOwner
 import kotlinx.browser.window
 import org.sportsradar.sportsradarapp.common.presentation.SessionStorageSaveableStateRegistry
 import org.w3c.dom.events.Event
