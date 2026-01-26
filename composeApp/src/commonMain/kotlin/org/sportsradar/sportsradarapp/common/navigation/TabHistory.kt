@@ -9,7 +9,7 @@ interface TabHistory {
     fun popPrevious(): BottomBarTab?
 }
 
-private class TabHistoryImpl : TabHistory {
+internal class TabHistoryImpl : TabHistory {
     val stack = ArrayDeque<BottomBarTab>()
 
     override fun pushIfNotLast(tab: BottomBarTab) {
@@ -41,7 +41,10 @@ private class TabHistoryImpl : TabHistory {
 }
 
 @Composable
-fun rememberTabHistory(): TabHistory {
+expect fun rememberTabHistory(): TabHistory
+
+@Composable
+fun rememberTabHistoryCommon(): TabHistory {
     return rememberSaveable(saver = TabHistoryImpl.Saver) {
         TabHistoryImpl()
     }

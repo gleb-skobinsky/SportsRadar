@@ -1,7 +1,6 @@
 package org.sportsradar.sportsradarapp.common.presentation.components
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +16,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.sportsradar.sportsradarapp.common.icons.Eye
-import org.sportsradar.sportsradarapp.common.presentation.components.ClickableIcon
+import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 
 @Composable
 fun SportsRadarAppPasswordTextField(
