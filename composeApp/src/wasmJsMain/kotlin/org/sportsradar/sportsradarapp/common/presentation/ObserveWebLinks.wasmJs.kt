@@ -3,6 +3,7 @@ package org.sportsradar.sportsradarapp.common.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
@@ -14,11 +15,15 @@ import io.ktor.http.encodedPath
 import kotlinx.browser.window
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import org.sportsradar.sportsradarapp.common.navigation.BottomBarTab
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigatorImpl
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
 import org.sportsradar.sportsradarapp.common.navigation.handleBackOnTabRoot
 import org.sportsradar.sportsradarapp.common.navigation.toNavUri
+import org.sportsradar.sportsradarapp.common.utils.NavigationStorage
+import org.sportsradar.sportsradarapp.common.utils.toIntOrZero
+import org.w3c.dom.PopStateEvent
 import org.w3c.dom.events.Event
 
 private const val POPSTATE_EVENT_NAME = "popstate"
@@ -27,19 +32,15 @@ private const val POPSTATE_EVENT_NAME = "popstate"
 @Composable
 actual fun KMPNavigator.handleWebDeepLinkOnStart() {
     val navController = (this as? KMPNavigatorImpl)?.navController ?: return
+    val navStorage = remember { NavigationStorage() }
+
     LaunchedEffect(Unit) {
         navController.awaitGraphIsReady()
         val deeplink = window.location.href
         val path = window.location.pathname
 
         if (path.isNotBlank() && path != "/") {
-            navController.handleDeepLink(
-                NavDeepLinkRequest(
-                    uri = deeplink.toNavUri(),
-                    action = null,
-                    mimeType = null
-                )
-            )
+            navController.handleDeeplink(deeplink)
         }
 
         navController.currentBackStackEntryFlow.collect { entry ->
@@ -50,41 +51,81 @@ actual fun KMPNavigator.handleWebDeepLinkOnStart() {
                 return@collect
             }
 
-            when (meta?.deeplink) {
-                currentUrl -> Unit
-                null -> {
-                    window.history.pushState(
-                        data = null,
-                        title = "",
-                        url = "/"
-                    )
-                }
-                else -> {
-                    val hydratedLink = entry.hydratedDeepLink(meta.deeplink)
-                    window.history.pushState(
-                        data = null,
-                        title = "",
-                        url = hydratedLink
-                    )
-                }
+            if (meta?.deeplink == null) {
+                pushUrl(navStorage, "/")
+            } else {
+                pushUrl(navStorage, entry.hydratedDeepLink(meta.deeplink))
             }
         }
     }
 
+    HandleBrowserBackPress(
+        navController = navController,
+        navStorage = navStorage
+    )
+}
+
+private fun NavController.handleDeeplink(deeplink: String) {
+    handleDeepLink(
+        NavDeepLinkRequest(
+            uri = deeplink.toNavUri(),
+            action = null,
+            mimeType = null
+        )
+    )
+}
+
+@OptIn(ExperimentalWasmJsInterop::class)
+private fun pushUrl(navStorage: NavigationStorage, url: String) {
+    val next = navStorage.getNavIndex() + 1
+    navStorage.setNavIndex(next)
+    window.history.pushState(
+        data = next.toString().toJsString(),
+        title = "",
+        url = url
+    )
+    navStorage.setLastIndex(next)
+}
+
+@OptIn(ExperimentalWasmJsInterop::class)
+@Composable
+private fun KMPNavigator.HandleBrowserBackPress(
+    navController: NavController,
+    navStorage: NavigationStorage,
+) {
     val activityFinisher = rememberActivityFinisher()
 
     DisposableEffect(Unit) {
-        val listener: (Event) -> Unit = {
-            val isTabRoot = navController.currentBackStackEntry.isTabRoot()
-            if (isTabRoot) {
-                handleBackOnTabRoot(activityFinisher)
-            } else {
-                goBack()
+        val listener: (PopStateEvent) -> Unit = { e ->
+            val currentIndex = (e.state as? JsString)?.toString().toIntOrZero()
+            val lastIndex = navStorage.getLastIndex()
+
+            when {
+                currentIndex < lastIndex -> {
+                    val isTabRoot = navController.currentBackStackEntry.isTabRoot()
+                    if (isTabRoot) {
+                        handleBackOnTabRoot(activityFinisher)
+                    } else {
+                        goBack()
+                    }
+                }
+
+                currentIndex > lastIndex -> {
+                    val newPath = window.location.pathname
+                    val newTab = getTabByLink(newPath)
+                    if (newTab != null) {
+                        goToTab(newTab)
+                    } else {
+                        navController.handleDeeplink(window.location.href)
+                    }
+                }
             }
+
+            navStorage.setLastIndex(currentIndex)
         }
         window.addEventListener(
             type = POPSTATE_EVENT_NAME,
-            callback = listener
+            callback = listener as ((Event) -> Unit)
         )
         onDispose {
             window.removeEventListener(
@@ -100,6 +141,14 @@ private fun NavBackStackEntry?.isTabRoot(): Boolean {
     return ScreensMeta.getByEntry(entry)?.isTabRoot == true
 }
 
+private val tabsByLinks = BottomBarTab.entries.associateBy {
+    ScreensMeta.getByScreen(it.screen)?.deeplink
+}
+
+private fun getTabByLink(path: String): BottomBarTab? {
+    return tabsByLinks[path]
+}
+
 private suspend fun NavController.awaitGraphIsReady() {
     currentBackStackEntryFlow
         .filterNotNull()
@@ -107,12 +156,11 @@ private suspend fun NavController.awaitGraphIsReady() {
 }
 
 fun NavBackStackEntry.hydratedDeepLink(
-    deeplinkPath: String?,
-): String? {
-    val args = arguments ?: return null
-    if (deeplinkPath == null) return null
+    deeplinkPath: String,
+): String {
+    val argsMap = arguments?.map().orEmpty()
     var uri: String = deeplinkPath
-    val argsMap = args.map()
+
     argsMap.keys.forEach { key ->
         val value = argsMap[key]?.toString()
         uri = if (value == null) {

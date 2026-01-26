@@ -166,8 +166,6 @@ internal class KMPNavigatorImpl(
 internal fun NavBackStackEntry?.currentTab(): BottomBarTab? {
     val entry = this ?: return null
     val meta = ScreensMeta.getByEntry(entry) ?: return null
-    println("Resolved meta: $meta")
-    println("Resolved tab: ${meta.tab}")
     return meta.tab
 }
 
@@ -195,6 +193,8 @@ internal fun KMPNavigator.handleBackOnTabRoot(
     activity: ActivityFinisher,
 ) {
     val previousTab = tabHistory.popPrevious()
+    println("Previous tab: $previousTab")
+    println("Tab history: ${tabHistory.stack.toList()}")
     if (previousTab != null) {
         (this as? KMPNavigatorImpl)
             ?.navController

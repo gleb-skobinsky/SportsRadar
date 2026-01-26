@@ -5,7 +5,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 
 class TabHistory {
-    private val stack = ArrayDeque<BottomBarTab>()
+    val stack = ArrayDeque<BottomBarTab>()
 
     fun pushIfNotLast(tab: BottomBarTab) {
         if (stack.lastOrNull() != tab) stack.addLast(tab)
