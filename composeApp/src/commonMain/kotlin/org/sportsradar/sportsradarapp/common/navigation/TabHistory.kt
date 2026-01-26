@@ -3,6 +3,7 @@ package org.sportsradar.sportsradarapp.common.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.navigation.NavHostController
 
 interface TabHistory {
     fun pushIfNotLast(tab: BottomBarTab)
@@ -42,6 +43,9 @@ internal class TabHistoryImpl : TabHistory {
 
 @Composable
 expect fun rememberTabHistory(): TabHistory
+
+@Composable
+expect fun rememberController(): NavHostController
 
 @Composable
 fun rememberTabHistoryCommon(): TabHistory {

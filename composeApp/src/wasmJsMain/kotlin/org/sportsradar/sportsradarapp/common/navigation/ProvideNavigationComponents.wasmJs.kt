@@ -10,7 +10,7 @@ import org.w3c.dom.events.Event
 private const val BEFORE_UNLOAD_KEY = "beforeunload"
 
 @Composable
-private inline fun RegisterBeforeUnloadEffect(
+internal inline fun RegisterBeforeUnloadEffect(
     crossinline beforeUnload: () -> Unit
 ) {
     DisposableEffect(Unit) {

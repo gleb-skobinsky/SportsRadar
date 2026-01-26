@@ -20,7 +20,6 @@ import androidx.navigation.NavDestinationDsl
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import dev.chrisbanes.haze.HazeState
@@ -35,6 +34,7 @@ import org.sportsradar.sportsradarapp.common.navigation.ProvideCommonNavigation
 import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
 import org.sportsradar.sportsradarapp.common.navigation.TabRootScreenBackHandler
+import org.sportsradar.sportsradarapp.common.navigation.rememberController
 import org.sportsradar.sportsradarapp.common.navigation.rememberKmpNavigator
 import org.sportsradar.sportsradarapp.common.presentation.LocalScreenSize
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
@@ -60,7 +60,7 @@ private const val MAIN_HOST = "http://localhost:3000"
 @NonRestartableComposable
 fun App() {
     SportsRadarTheme {
-        val navController = rememberNavController()
+        val navController = rememberController()
         val navigator = rememberKmpNavigator(navController)
 
         val haze = rememberHazeState()
