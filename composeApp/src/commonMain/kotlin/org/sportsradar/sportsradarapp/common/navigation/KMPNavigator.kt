@@ -9,7 +9,9 @@ interface KMPNavigator {
 
     val currentEntry: NavBackStackEntry?
 
-    val tabHistory: TabHistory
+    fun pushIfNotLast(tab: BottomBarTab)
+
+    fun popPrevious(): BottomBarTab?
 
     /**
      * Safely navigates back on back button click.
@@ -37,7 +39,8 @@ interface KMPNavigator {
         val PreviewNavigator = object : KMPNavigator {
             override val currentEntryFlow: Flow<NavBackStackEntry?> = emptyFlow()
             override val currentEntry: NavBackStackEntry? = null
-            override val tabHistory: TabHistory = TabHistory()
+            override fun pushIfNotLast(tab: BottomBarTab) = Unit
+            override fun popPrevious(): BottomBarTab? = null
             override fun goBack() = Unit
             override fun goTo(screen: Screens) = Unit
             override fun replace(screen: Screens) = Unit

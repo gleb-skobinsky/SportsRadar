@@ -4,14 +4,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 
-class TabHistory {
+interface TabHistory {
+    fun pushIfNotLast(tab: BottomBarTab)
+    fun popPrevious(): BottomBarTab?
+}
+
+private class TabHistoryImpl : TabHistory {
     val stack = ArrayDeque<BottomBarTab>()
 
-    fun pushIfNotLast(tab: BottomBarTab) {
+    override fun pushIfNotLast(tab: BottomBarTab) {
         if (stack.lastOrNull() != tab) stack.addLast(tab)
     }
 
-    fun popPrevious(): BottomBarTab? {
+    override fun popPrevious(): BottomBarTab? {
         if (stack.size <= 1) return null
         stack.removeLast()
         return stack.lastOrNull()
@@ -20,12 +25,12 @@ class TabHistory {
     private fun toList(): List<BottomBarTab> = stack.toList()
 
     companion object {
-        val Saver: Saver<TabHistory, List<String>> = Saver(
+        val Saver: Saver<TabHistoryImpl, List<String>> = Saver(
             save = { history ->
                 history.toList().map { it.name }
             },
             restore = { saved ->
-                TabHistory().apply {
+                TabHistoryImpl().apply {
                     saved
                         .map { BottomBarTab.valueOf(it) }
                         .forEach { pushIfNotLast(it) }
@@ -37,7 +42,7 @@ class TabHistory {
 
 @Composable
 fun rememberTabHistory(): TabHistory {
-    return rememberSaveable(saver = TabHistory.Saver) {
-        TabHistory()
+    return rememberSaveable(saver = TabHistoryImpl.Saver) {
+        TabHistoryImpl()
     }
 }

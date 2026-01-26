@@ -25,9 +25,9 @@ internal fun rememberKmpNavigator(
 
 private class KMPNavigatorImpl(
     private val navController: NavController,
-    override val tabHistory: TabHistory,
+    private val tabHistory: TabHistory,
     private val activityFinisher: ActivityFinisher,
-) : KMPNavigator {
+) : KMPNavigator, TabHistory by tabHistory {
 
     override val currentEntryFlow = navController.currentBackStackEntryFlow
 
