@@ -2,7 +2,6 @@ package com.sportsradar.features.notes.repository
 
 import com.sportsradar.features.notes.models.NoteResponse
 import com.sportsradar.features.users.data.UsersTable
-import com.sportsradar.features.users.repository.UsersTable
 import com.sportsradar.shared.BaseRepository
 import com.sportsradar.shared.uuid
 import kotlinx.datetime.Clock
