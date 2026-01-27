@@ -73,7 +73,7 @@ class UsersRepositoryImpl(database: Database) : UsersRepository,
             UsersTable.update({ UsersTable.id eq id.uuid() }) {
                 it[email] = user.email
                 // it[password] = user.password
-                it[updatedAt] = kotlin.time.Clock.System.now()
+                it[updatedAt] = Clock.System.now()
             }
         }
     }
