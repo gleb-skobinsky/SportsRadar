@@ -80,7 +80,6 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.json.serialization)
             implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.kmp.viewmodel)
             implementation(libs.kmp.navigation)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.coil.core)

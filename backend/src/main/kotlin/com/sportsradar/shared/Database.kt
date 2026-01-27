@@ -1,7 +1,7 @@
 package com.sportsradar.shared
 
 import com.sportsradar.email.data.AppSecrets
-import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.v1.jdbc.Database
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -11,7 +11,7 @@ val databaseModule = module {
             url = "jdbc:postgresql://localhost:${secrets.dbPort}/${secrets.dbName}",
             user = secrets.dbUser,
             driver = "org.h2.Driver",
-            password = secrets.dbPassword
+            password = secrets.dbPassword,
         )
     }
 }

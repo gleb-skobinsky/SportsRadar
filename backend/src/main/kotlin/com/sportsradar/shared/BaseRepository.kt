@@ -1,11 +1,12 @@
 package com.sportsradar.shared
 
-import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 
 abstract class BaseRepository {
-    protected suspend fun <T> dbQuery(block: suspend () -> T): T {
-        return newSuspendedTransaction(Dispatchers.IO) {
+    protected suspend inline fun <T> dbQuery(
+        crossinline block: suspend () -> T
+    ): T {
+        return suspendTransaction {
             block()
         }
     }

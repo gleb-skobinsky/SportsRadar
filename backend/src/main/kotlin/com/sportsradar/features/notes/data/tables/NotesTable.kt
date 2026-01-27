@@ -1,17 +1,17 @@
 package com.sportsradar.features.notes.data.tables
 
 import com.sportsradar.features.users.data.UsersTable
-import kotlinx.datetime.Instant
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ReferenceOption
-import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
-import java.util.UUID
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.core.dao.id.IdTable
+import org.jetbrains.exposed.v1.datetime.timestamp
+import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
-object NotesTable : IdTable<UUID>("notes") {
+object NotesTable : IdTable<Uuid>("notes") {
     override val id = uuid("id").entityId().clientDefault {
-        EntityID(UUID.randomUUID(), NotesTable)
+        EntityID(Uuid.random(), NotesTable)
     }
     val userId = uuid("user_id").references(
         ref = UsersTable.id,

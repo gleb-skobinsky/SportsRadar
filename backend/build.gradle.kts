@@ -18,6 +18,12 @@ tasks.named<JavaExec>("run") {
     workingDir = rootProject.projectDir
 }
 
+kotlin {
+    sourceSets.all {
+        languageSettings.optIn("kotlin.uuid.ExperimentalUuidApi")
+    }
+}
+
 repositories {
     mavenCentral()
     maven(url = "https://jitpack.io")
@@ -26,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":shared"))
+    implementation(projects.shared)
     implementation(libs.simple.mail)
     implementation(libs.javax.activation)
     implementation(libs.jakarta.activation)
@@ -49,6 +55,8 @@ dependencies {
     implementation(libs.exposed.datetime)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.migrations.core)
+    implementation(libs.exposed.migrations.jdbc)
     implementation(libs.ktor.server.logging)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.client.core.jvm)
