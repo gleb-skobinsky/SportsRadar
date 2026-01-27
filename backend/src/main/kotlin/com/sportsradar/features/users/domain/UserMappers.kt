@@ -1,7 +1,6 @@
-package com.sportsradar.features.users.models
+package com.sportsradar.features.users.domain
 
 import org.sportsradar.sportsradarapp.shared.auth.data.UserData
-
 
 fun UserData.toUpdatedUser(): UpdatedUser {
     return UpdatedUser(

@@ -2,7 +2,7 @@ package com.sportsradar.features.auth.routes
 
 import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
 import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginRequest
-import com.sportsradar.features.users.repository.UsersRepository
+import com.sportsradar.features.users.data.UsersRepository
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.JWTConfig.Companion.ACCESS_EXPIRATION_TIMEOUT
 import com.sportsradar.jwt.JWTConfig.Companion.REFRESH_EXPIRATION_TIMEOUT

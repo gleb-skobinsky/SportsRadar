@@ -1,8 +1,8 @@
 package com.sportsradar.features.users
 
 import org.sportsradar.sportsradarapp.shared.auth.data.UserData
-import com.sportsradar.features.users.models.toUpdatedUser
-import com.sportsradar.features.users.repository.UsersRepository
+import com.sportsradar.features.users.domain.toUpdatedUser
+import com.sportsradar.features.users.data.UsersRepository
 import com.sportsradar.jwt.JWTConfig.Companion.JWT_AUTH_ID
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application

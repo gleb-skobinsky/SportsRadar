@@ -1,12 +1,7 @@
-package com.sportsradar.features.users.repository
+package com.sportsradar.features.auth.data
 
 import com.sportsradar.shared.BaseRepository
 import org.jetbrains.exposed.sql.Database
-
-interface TokenRepository {
-    suspend fun revokeRefreshToken(token: String)
-    suspend fun isRevoked(token: String): Boolean
-}
 
 class TokenRepositoryImpl(database: Database) : TokenRepository, BaseRepository() {
     // TODO: Revoke in DB

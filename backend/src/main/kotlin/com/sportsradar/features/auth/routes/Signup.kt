@@ -5,8 +5,8 @@ import org.sportsradar.sportsradarapp.shared.auth.data.SignupResponse
 import com.sportsradar.email.data.AppSecrets
 import com.sportsradar.email.data.EmailData
 import com.sportsradar.email.data.EmailService
-import com.sportsradar.features.users.models.NewUser
-import com.sportsradar.features.users.repository.UsersRepository
+import com.sportsradar.features.users.domain.NewUser
+import com.sportsradar.features.users.data.UsersRepository
 import com.sportsradar.shared.RepositoriesTags
 import org.sportsradar.sportsradarapp.shared.common.data.Endpoints
 import io.bkbn.kompendium.core.metadata.PostInfo

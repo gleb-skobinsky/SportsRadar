@@ -1,6 +1,6 @@
 package com.sportsradar.features.auth.routes
 
-import com.sportsradar.features.users.repository.TokenRepository
+import com.sportsradar.features.auth.data.TokenRepository
 import com.sportsradar.shared.RepositoriesTags
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute

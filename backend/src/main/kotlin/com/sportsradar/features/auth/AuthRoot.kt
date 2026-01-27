@@ -10,8 +10,8 @@ import com.sportsradar.features.auth.routes.loginRoute
 import com.sportsradar.features.auth.routes.logoutRoute
 import com.sportsradar.features.auth.routes.refreshTokenRoute
 import com.sportsradar.features.auth.routes.signupRoute
-import com.sportsradar.features.users.repository.TokenRepository
-import com.sportsradar.features.users.repository.UsersRepository
+import com.sportsradar.features.auth.data.TokenRepository
+import com.sportsradar.features.users.data.UsersRepository
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.JWTConfig.Companion.JWT_AUTH_ID
 import io.ktor.client.HttpClient

@@ -1,7 +1,7 @@
 package com.sportsradar.features.notes.repository
 
 import com.sportsradar.features.notes.models.NoteResponse
-import com.sportsradar.features.users.repository.Users
+import com.sportsradar.features.users.repository.UsersTable
 import com.sportsradar.shared.BaseRepository
 import com.sportsradar.shared.uuid
 import kotlinx.datetime.Clock
@@ -27,7 +27,7 @@ private object Notes : IdTable<UUID>("notes") {
         EntityID(UUID.randomUUID(), Notes)
     }
     val userId = uuid("user_id").references(
-        ref = Users.id,
+        ref = UsersTable.id,
         onDelete = ReferenceOption.CASCADE
     )
     val title = varchar("title", 255)
@@ -95,10 +95,10 @@ class NotesRepositoryImpl(
     }
 
     private fun getUserOrNull(email: String): UUID? {
-        return Users.selectAll()
+        return UsersTable.selectAll()
             .andWhere {
-                Users.email eq email
-            }.map { it[Users.id] }
+                UsersTable.email eq email
+            }.map { it[UsersTable.id] }
             .singleOrNull()?.value
     }
 }

@@ -1,8 +1,8 @@
-package com.sportsradar.features.users.repository
+package com.sportsradar.features.users.data
 
-import com.sportsradar.features.users.models.ExistingUser
-import com.sportsradar.features.users.models.NewUser
-import com.sportsradar.features.users.models.UpdatedUser
+import com.sportsradar.features.users.domain.ExistingUser
+import com.sportsradar.features.users.domain.NewUser
+import com.sportsradar.features.users.domain.UpdatedUser
 
 interface UsersRepository {
 

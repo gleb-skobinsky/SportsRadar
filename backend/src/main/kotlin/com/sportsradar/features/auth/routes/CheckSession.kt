@@ -1,8 +1,8 @@
 package com.sportsradar.features.auth.routes
 
 import org.sportsradar.sportsradarapp.shared.auth.data.UserData
-import com.sportsradar.features.users.models.toUserData
-import com.sportsradar.features.users.repository.UsersRepository
+import com.sportsradar.features.users.domain.toUserData
+import com.sportsradar.features.users.data.UsersRepository
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.email
 import com.sportsradar.shared.RepositoriesTags
