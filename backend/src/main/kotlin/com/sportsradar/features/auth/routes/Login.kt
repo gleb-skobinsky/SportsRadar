@@ -3,6 +3,7 @@ package com.sportsradar.features.auth.routes
 import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
 import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginRequest
 import com.sportsradar.features.users.data.UsersRepository
+import com.sportsradar.features.users.domain.toUserData
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.JWTConfig.Companion.ACCESS_EXPIRATION_TIMEOUT
 import com.sportsradar.jwt.JWTConfig.Companion.REFRESH_EXPIRATION_TIMEOUT
@@ -18,6 +19,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginResponse
 
 internal fun Routing.loginRoute(
     usersRepository: UsersRepository,
@@ -36,7 +38,7 @@ internal fun Routing.loginRoute(
                 response {
                     description("User successfully logged in")
                     responseCode(HttpStatusCode.Created)
-                    responseType<TokenData>()
+                    responseType<UserLoginResponse>()
                 }
             }
         }
@@ -63,7 +65,12 @@ internal fun Routing.loginRoute(
                 TokenType.RefreshToken,
                 REFRESH_EXPIRATION_TIMEOUT
             )
-            call.respond(TokenData(accessToken, refreshToken))
+            call.respond(
+                UserLoginResponse(
+                    tokens = TokenData(accessToken, refreshToken),
+                    user = dbUser.toUserData()
+                )
+            )
         }
     }
 }

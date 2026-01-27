@@ -1,7 +1,7 @@
 package org.sportsradar.sportsradarapp.auth.data
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.jetbrains.compose.resources.getString
@@ -31,10 +31,12 @@ import org.sportsradar.sportsradarapp.shared.auth.data.SignupResponse
 import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
 import org.sportsradar.sportsradarapp.shared.auth.data.UserData
 import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginRequest
+import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginResponse
 import org.sportsradar.sportsradarapp.shared.auth.data.UserLogoutRequest
 import org.sportsradar.sportsradarapp.shared.auth.domain.Tokens
 import org.sportsradar.sportsradarapp.shared.auth.domain.User
 import org.sportsradar.sportsradarapp.shared.auth.domain.toTokens
+import org.sportsradar.sportsradarapp.shared.auth.domain.toUser
 import org.sportsradar.sportsradarapp.shared.common.data.Endpoints
 
 private const val USER_ALREADY_EXIST_CONTRACT = "User already exists"
@@ -57,9 +59,7 @@ class AuthRepositoryImpl(
     private val mutex = Mutex()
 
     override fun subscribeToUserData(): Flow<User?> {
-        return userSecureStorage.getEmail().map {
-            it?.let(::User)
-        }
+        return userSecureStorage.getUserData().distinctUntilChanged()
     }
 
     override suspend fun logout(): RequestResult<Unit> {
@@ -80,13 +80,14 @@ class AuthRepositoryImpl(
         email: String,
         password: String
     ): RequestResult<Tokens> {
-        return client.post<UserLoginRequest, TokenData>(
+        return client.post<UserLoginRequest, UserLoginResponse>(
             urlPath = Endpoints.Auth.Login,
             body = UserLoginRequest(email = email, password = password)
-        ).mapOnSuccess { tokens ->
-            userSecureStorage.saveTokens(tokens)
-            userSecureStorage.saveEmail(email)
-            RequestResult.Success(tokens.toTokens())
+        ).mapOnSuccess { loginData ->
+            val domainUser = loginData.user.toUser()
+            userSecureStorage.saveTokens(loginData.tokens)
+            userSecureStorage.saveUserData(domainUser)
+            RequestResult.Success(loginData.tokens.toTokens())
         }
     }
 

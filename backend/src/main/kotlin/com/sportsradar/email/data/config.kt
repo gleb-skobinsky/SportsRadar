@@ -54,6 +54,7 @@ data class AppSecrets(
 ) {
     companion object {
         fun fromEnvironment(): AppSecrets {
+            println("Current directory: ${System.getProperty("user.dir")}")
             val dotenv = Dotenv(".env")
             dotenv.load()
             return AppSecrets(

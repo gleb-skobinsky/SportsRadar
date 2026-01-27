@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.migrations.core)
     implementation(libs.exposed.migrations.jdbc)
+    implementation(libs.flyway)
+    implementation(libs.flyway.psql)
     implementation(libs.ktor.server.logging)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.client.core.jvm)
@@ -72,3 +74,19 @@ dependencies {
 }
 
 tasks.register<OpenApiGenerationTask>("generateOpenAPIYaml")
+
+tasks.register<JavaExec>("generateMigrationScript") {
+    group = "application"
+    description = "Generate a migration script"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass = "com.sportsradar.db.GenerateMigrationScriptKt"
+    workingDir = rootProject.projectDir
+}
+
+tasks.register<JavaExec>("reviewDatabaseMigrations") {
+    group = "application"
+    description = "Review database migrations"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass = "com.sportsradar.db.ReviewDatabaseMigrationsKt"
+    workingDir = rootProject.projectDir
+}

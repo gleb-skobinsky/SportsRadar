@@ -38,7 +38,7 @@ internal fun configureKtorClient(
         level = LogLevel.ALL
         logger = object : Logger {
             override fun log(message: String) {
-                // println("Ktor Client: $message")
+                println("Ktor Client: $message")
             }
         }
     }

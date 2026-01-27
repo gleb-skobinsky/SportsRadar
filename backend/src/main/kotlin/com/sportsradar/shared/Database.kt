@@ -16,16 +16,20 @@ val databaseModule = module {
     }
 }
 
-fun createDatabase(
+internal fun createDatabase(
     port: Int,
     dbName: String,
     dbUser: String,
     dbPassword: String,
 ): Database {
     return Database.connect(
-        url = "jdbc:postgresql://localhost:$port/$dbName",
+        url = getDatabaseUrl(port, dbName),
         user = dbUser,
         driver = "org.h2.Driver",
         password = dbPassword,
     )
+}
+
+internal fun getDatabaseUrl(port: Int, dbName: String): String {
+    return "jdbc:postgresql://localhost:$port/$dbName"
 }

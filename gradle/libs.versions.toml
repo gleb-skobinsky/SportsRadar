@@ -45,6 +45,7 @@ datastore = "1.2.0"
 kotlinx-browser = "0.5.0"
 composeHotReload = "v1.0.0-beta08"
 androidx-lifecycle = "2.9.6"
+flyway = "11.20.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
@@ -92,6 +93,8 @@ openapi-generator = { module = "com.github.papsign:Ktor-OpenAPI-Generator", vers
 kompendium = { module = "io.bkbn:kompendium-core", version.ref = "kompendium" }
 kotlinx_datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-psql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 
 androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }

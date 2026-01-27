@@ -6,12 +6,16 @@ fun UserData.toUpdatedUser(): UpdatedUser {
     return UpdatedUser(
         id = id,
         email = email,
-        verified = verified
+        verified = verified,
+        firstName = firstName,
+        lastName = lastName,
     )
 }
 
 fun ExistingUser.toUserData() = UserData(
     id = id,
     email = email,
-    verified = verified
+    verified = verified,
+    firstName = firstName,
+    lastName = lastName
 )

@@ -34,7 +34,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TokenData"
+                $ref: "#/components/schemas/UserLoginResponse"
       deprecated: false
     parameters: []
   /api/v1/logout:
@@ -265,6 +265,16 @@ paths:
 webhooks: {}
 components:
   schemas:
+    UserLoginResponse:
+      type: "object"
+      properties:
+        tokens:
+          $ref: "#/components/schemas/TokenData"
+        user:
+          $ref: "#/components/schemas/UserData"
+      required:
+      - "tokens"
+      - "user"
     TokenData:
       type: "object"
       properties:
@@ -275,6 +285,25 @@ components:
       required:
       - "accessToken"
       - "refreshToken"
+    UserData:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        firstName:
+          type: "string"
+        id:
+          type: "string"
+        lastName:
+          type: "string"
+        verified:
+          type: "boolean"
+      required:
+      - "email"
+      - "firstName"
+      - "id"
+      - "lastName"
+      - "verified"
     UserLoginRequest:
       type: "object"
       properties:
@@ -319,19 +348,6 @@ components:
       required:
       - "email"
       - "password"
-    UserData:
-      type: "object"
-      properties:
-        email:
-          type: "string"
-        id:
-          type: "string"
-        verified:
-          type: "boolean"
-      required:
-      - "email"
-      - "id"
-      - "verified"
     NoteResponse:
       type: "object"
       properties:

@@ -1,21 +1,25 @@
 package org.sportsradar.sportsradarapp.auth.data
 
-import org.sportsradar.sportsradarapp.storage.Storage
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
+import org.sportsradar.sportsradarapp.shared.auth.domain.User
+import org.sportsradar.sportsradarapp.storage.Storage
 
 private data object SecureStorageKeys {
     const val USER_EMAIL = "user_email"
+    const val USER_FIRST_NAME = "user_first_name"
+    const val USER_LAST_NAME = "user_last_name"
     const val USER_ACCESS_TOKEN = "user_access_token"
     const val USER_REFRESH_TOKEN = "user_refresh_token"
 }
 
 interface UserSecureStorage {
-    suspend fun saveEmail(email: String)
+    suspend fun saveUserData(user: User)
 
     suspend fun saveTokens(tokens: TokenData)
 
-    fun getEmail(): Flow<String?>
+    fun getUserData(): Flow<User?>
 
     suspend fun getTokens(): TokenData?
 
@@ -27,8 +31,10 @@ interface UserSecureStorage {
 class UserSecureStorageImpl(
     private val storage: Storage,
 ) : UserSecureStorage {
-    override suspend fun saveEmail(email: String) {
-        storage.setString(SecureStorageKeys.USER_EMAIL, email)
+    override suspend fun saveUserData(user: User) {
+        storage.setString(SecureStorageKeys.USER_EMAIL, user.email)
+        storage.setString(SecureStorageKeys.USER_FIRST_NAME, user.firstName)
+        storage.setString(SecureStorageKeys.USER_LAST_NAME, user.lastName)
     }
 
     override suspend fun saveTokens(tokens: TokenData) {
@@ -37,9 +43,20 @@ class UserSecureStorageImpl(
     }
 
 
-
-    override fun getEmail(): Flow<String?> {
-        return storage.subscribeToString(SecureStorageKeys.USER_EMAIL)
+    override fun getUserData(): Flow<User?> {
+        return combine(
+            storage.subscribeToString(SecureStorageKeys.USER_EMAIL),
+            storage.subscribeToString(SecureStorageKeys.USER_FIRST_NAME),
+            storage.subscribeToString(SecureStorageKeys.USER_LAST_NAME)
+        ) { email, firstName, lastName ->
+            email?.let {
+                User(
+                    email = email,
+                    firstName = firstName.orEmpty(),
+                    lastName = lastName.orEmpty()
+                )
+            }
+        }
     }
 
     override suspend fun getTokens(): TokenData? {

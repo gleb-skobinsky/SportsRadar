@@ -6,7 +6,7 @@ import org.jetbrains.exposed.v1.core.ExperimentalDatabaseMigrationApi
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.migration.jdbc.MigrationUtils
 
-const val MIGRATIONS_DIRECTORY = "src/main/kotlin/com/sportsradar/db/migrations"
+internal const val MIGRATIONS_DIRECTORY = "backend/src/main/kotlin/com/sportsradar/db/migrations"
 
 fun main() {
     val secrets = AppSecrets.fromEnvironment()
@@ -26,6 +26,6 @@ private fun generateMigrationScript() {
     MigrationUtils.generateMigrationScript(
         *TablesRegistry,
         scriptDirectory = MIGRATIONS_DIRECTORY,
-        scriptName = "V2__Add_RevokedTokens_Table",
+        scriptName = MigrationsRegistry.last(),
     )
 }
