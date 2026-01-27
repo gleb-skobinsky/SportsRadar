@@ -1,6 +1,6 @@
 package com.sportsradar.features.notes.routes
 
-import com.sportsradar.features.notes.repository.NotesRepository
+import com.sportsradar.features.notes.data.NotesRepository
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.shared.RepositoriesTags
 import org.sportsradar.sportsradarapp.shared.common.data.Endpoints.Notes.DeleteNote

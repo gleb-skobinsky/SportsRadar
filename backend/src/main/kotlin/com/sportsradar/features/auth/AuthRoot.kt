@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.sportsradar.email.data.AppSecrets
 import com.sportsradar.email.data.EmailService
-import com.sportsradar.features.auth.models.UserSession
+import com.sportsradar.features.auth.domain.UserSession
 import com.sportsradar.features.auth.routes.checkSessionRoute
 import com.sportsradar.features.auth.routes.loginRoute
 import com.sportsradar.features.auth.routes.logoutRoute

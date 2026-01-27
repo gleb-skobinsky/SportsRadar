@@ -1,42 +1,21 @@
-package com.sportsradar.features.notes.repository
+package com.sportsradar.features.notes.data
 
-import com.sportsradar.features.notes.models.NoteResponse
+import com.sportsradar.features.notes.data.dto.NoteResponse
+import com.sportsradar.features.notes.data.tables.NotesTable
 import com.sportsradar.features.users.data.UsersTable
 import com.sportsradar.shared.BaseRepository
 import com.sportsradar.shared.uuid
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.SortOrder.DESC
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.UUID
-
-private object Notes : IdTable<UUID>("notes") {
-    override val id = uuid("id").entityId().clientDefault {
-        EntityID(UUID.randomUUID(), Notes)
-    }
-    val userId = uuid("user_id").references(
-        ref = UsersTable.id,
-        onDelete = ReferenceOption.CASCADE
-    )
-    val title = varchar("title", 255)
-    val content = text("content")
-    val createdAt: Column<Instant> = timestamp("created_at")
-    val updatedAt: Column<Instant> = timestamp("updated_at")
-
-    override val primaryKey = PrimaryKey(id)
-}
 
 class NotesRepositoryImpl(
     database: Database
@@ -44,7 +23,7 @@ class NotesRepositoryImpl(
 
     init {
         transaction(database) {
-            SchemaUtils.create(Notes)
+            SchemaUtils.create(NotesTable)
         }
     }
 
@@ -53,14 +32,14 @@ class NotesRepositoryImpl(
             val userId = getUserOrNull(
                 email = email
             ) ?: return@dbQuery emptyList()
-            Notes.selectAll()
-                .andWhere { Notes.userId eq userId }
-                .orderBy(Notes.createdAt to DESC)
+            NotesTable.selectAll()
+                .andWhere { NotesTable.userId eq userId }
+                .orderBy(NotesTable.createdAt to SortOrder.DESC)
                 .map { row ->
                     NoteResponse(
-                        id = row[Notes.id].value.toString(),
-                        title = row[Notes.title],
-                        body = row[Notes.content]
+                        id = row[NotesTable.id].value.toString(),
+                        title = row[NotesTable.title],
+                        body = row[NotesTable.content]
                     )
                 }
         }
@@ -75,7 +54,7 @@ class NotesRepositoryImpl(
             val userId = getUserOrNull(
                 email = userEmail
             ) ?: return@dbQuery false
-            Notes.insert {
+            NotesTable.insert {
                 it[this.userId] = userId
                 it[this.title] = title
                 it[this.content] = body
@@ -88,8 +67,8 @@ class NotesRepositoryImpl(
 
     override suspend fun deleteNote(noteId: String): Boolean {
         return dbQuery {
-            Notes.deleteWhere {
-                id.eq(noteId.uuid())
+            NotesTable.deleteWhere {
+                id eq noteId.uuid()
             } > 0
         }
     }

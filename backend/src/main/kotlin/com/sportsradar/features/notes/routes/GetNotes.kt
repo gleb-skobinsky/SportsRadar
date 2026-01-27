@@ -1,7 +1,7 @@
 package com.sportsradar.features.notes.routes
 
-import com.sportsradar.features.notes.models.NoteResponse
-import com.sportsradar.features.notes.repository.NotesRepository
+import com.sportsradar.features.notes.data.dto.NoteResponse
+import com.sportsradar.features.notes.data.NotesRepository
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.email
 import com.sportsradar.shared.RepositoriesTags

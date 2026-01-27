@@ -1,10 +1,9 @@
-package com.sportsradar.features.notes.models
+package com.sportsradar.features.notes.data.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NoteResponse(
-    val id: String,
+data class CreateNoteRequest(
     val title: String,
     val body: String
 )

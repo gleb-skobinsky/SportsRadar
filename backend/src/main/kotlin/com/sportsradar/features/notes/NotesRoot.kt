@@ -1,6 +1,6 @@
 package com.sportsradar.features.notes
 
-import com.sportsradar.features.notes.repository.NotesRepository
+import com.sportsradar.features.notes.data.NotesRepository
 import com.sportsradar.features.notes.routes.createNoteRoute
 import com.sportsradar.features.notes.routes.deleteNoteRoute
 import com.sportsradar.features.notes.routes.getNotesRoute

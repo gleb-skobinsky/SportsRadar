@@ -1,6 +1,6 @@
-package com.sportsradar.features.notes.repository
+package com.sportsradar.features.notes.data
 
-import com.sportsradar.features.notes.models.NoteResponse
+import com.sportsradar.features.notes.data.dto.NoteResponse
 
 interface NotesRepository {
     suspend fun getNotesForUser(email: String): List<NoteResponse>
