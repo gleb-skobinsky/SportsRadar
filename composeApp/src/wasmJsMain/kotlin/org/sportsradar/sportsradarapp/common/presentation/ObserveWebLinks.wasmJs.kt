@@ -37,26 +37,36 @@ actual fun KMPNavigator.handleWebDeepLinkOnStart() {
             handleDeeplink(deeplink)
         }
 
-        currentEntryFlow.collect { entry ->
-            if (entry == null) return@collect
-            val currentUrl = window.location.pathname
-            val meta = ScreensMeta.getByEntry(entry)
-            val deeplinkPath = meta?.deeplink?.let(::URLBuilder)?.encodedPath
-            if (deeplinkPath == currentUrl) {
-                return@collect
-            }
-
-            if (meta?.deeplink == null) {
-                pushUrl(navStorage, "/")
-            } else {
-                pushUrl(navStorage, entry.hydratedDeepLink(meta.deeplink))
-            }
-        }
+        observeLinkByEntry(
+            navigator = this@handleWebDeepLinkOnStart,
+            navStorage = navStorage
+        )
     }
 
     HandleBrowserBackPress(
         navStorage = navStorage
     )
+}
+
+private suspend fun observeLinkByEntry(
+    navigator: KMPNavigator,
+    navStorage: NavigationStorage,
+) {
+    navigator.currentEntryFlow.collect { entry ->
+        if (entry == null) return@collect
+        val currentUrl = window.location.pathname
+        val meta = ScreensMeta.getByEntry(entry)
+        val deeplinkPath = meta?.deeplink?.let(::URLBuilder)?.encodedPath
+        if (deeplinkPath == currentUrl) {
+            return@collect
+        }
+
+        if (meta?.deeplink == null) {
+            pushUrl(navStorage, "/")
+        } else {
+            pushUrl(navStorage, entry.hydratedDeepLink(meta.deeplink))
+        }
+    }
 }
 
 @OptIn(ExperimentalWasmJsInterop::class)
