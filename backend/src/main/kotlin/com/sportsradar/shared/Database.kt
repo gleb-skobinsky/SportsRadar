@@ -7,11 +7,25 @@ import org.koin.dsl.module
 val databaseModule = module {
     single<Database> {
         val secrets: AppSecrets = get()
-        Database.connect(
-            url = "jdbc:postgresql://localhost:${secrets.dbPort}/${secrets.dbName}",
-            user = secrets.dbUser,
-            driver = "org.h2.Driver",
-            password = secrets.dbPassword,
+        createDatabase(
+            port = secrets.dbPort,
+            dbName = secrets.dbName,
+            dbUser = secrets.dbUser,
+            dbPassword = secrets.dbPassword
         )
     }
+}
+
+fun createDatabase(
+    port: Int,
+    dbName: String,
+    dbUser: String,
+    dbPassword: String,
+): Database {
+    return Database.connect(
+        url = "jdbc:postgresql://localhost:$port/$dbName",
+        user = dbUser,
+        driver = "org.h2.Driver",
+        password = dbPassword,
+    )
 }
