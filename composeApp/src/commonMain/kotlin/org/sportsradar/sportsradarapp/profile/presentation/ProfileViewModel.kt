@@ -29,7 +29,8 @@ internal class ProfileViewModel(
                         ProfileState.Authenticated(
                             userFirstName = user.firstName,
                             userLastName = user.lastName,
-                            email = user.email
+                            email = user.email,
+                            isEdited = false
                         )
                     } else {
                         ProfileState.Anonymous
@@ -51,7 +52,25 @@ internal class ProfileViewModel(
                 performLogout()
             }
 
-            ProfileAction.SwitchToEditMode -> Unit
+            ProfileAction.SwitchToEditMode -> {
+                setStateAuthenticated { oldState ->
+                    oldState.copy(
+                        isEdited = !oldState.isEdited
+                    )
+                }
+            }
+        }
+    }
+
+    private inline fun setStateAuthenticated(
+        crossinline block: (ProfileState.Authenticated) -> ProfileState.Authenticated
+    ) {
+        setState { oldState ->
+            if (oldState is ProfileState.Authenticated) {
+                block(oldState)
+            } else {
+                oldState
+            }
         }
     }
 
@@ -63,6 +82,8 @@ internal class ProfileViewModel(
 }
 
 internal sealed interface ProfileState : BaseState {
+    val isEditable: Boolean get() = false
+
     object Loading : ProfileState
 
     object Anonymous : ProfileState
@@ -71,7 +92,10 @@ internal sealed interface ProfileState : BaseState {
         val userFirstName: String,
         val userLastName: String,
         val email: String,
-    ) : ProfileState
+        val isEdited: Boolean,
+    ) : ProfileState {
+        override val isEditable: Boolean = true
+    }
 }
 
 internal sealed interface ProfileAction : BaseAction {

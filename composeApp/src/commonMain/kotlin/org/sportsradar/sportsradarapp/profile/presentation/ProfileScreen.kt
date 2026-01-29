@@ -1,13 +1,18 @@
 package org.sportsradar.sportsradarapp.profile.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -27,6 +32,7 @@ import org.sportsradar.sportsradarapp.resources.log_out
 import org.sportsradar.sportsradarapp.resources.profile_screen_header
 import org.sportsradar.sportsradarapp.resources.user_first_name
 import org.sportsradar.sportsradarapp.resources.user_last_name
+import org.sportsradar.uiKit.components.FlippableCard
 import org.sportsradar.uiKit.components.SportsRadarTopBar
 import org.sportsradar.uiKit.icons.IcEdit
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
@@ -51,10 +57,15 @@ private fun ProfileScreenContent(
 ) {
     SportsRadarScaffold(
         alignment = Alignment.CenterHorizontally,
+        horizontalPadding = 16.dp,
         topBar = {
-            ProfileTopBar {
-                onAction(ProfileAction.SwitchToEditMode)
-            }
+            ProfileTopBar(
+                onClickEdit = if (state.isEditable) {
+                    { onAction(ProfileAction.SwitchToEditMode) }
+                } else {
+                    null
+                }
+            )
         }
     ) {
         when (state) {
@@ -71,6 +82,21 @@ private fun ProfileScreenContent(
             }
 
             is ProfileState.Authenticated -> {
+                AuthenticatedProfileContent(state, onAction)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AuthenticatedProfileContent(
+    state: ProfileState.Authenticated,
+    onAction: (ProfileAction) -> Unit
+) {
+    FlippableCard(
+        isFlipped = state.isEdited,
+        front = {
+            CommonProfileColumn {
                 40.dp.VerticalSpacer()
                 LabelWithDescription(
                     label = state.userFirstName,
@@ -96,8 +122,32 @@ private fun ProfileScreenContent(
                 }
                 24.dp.VerticalSpacer()
             }
+        },
+        back = {
+            CommonProfileColumn {
+                40.dp.VerticalSpacer()
+                LabelWithDescription(
+                    label = "Back",
+                    description = stringResource(AppRes.string.user_first_name)
+                )
+                32.dp.VerticalSpacer()
+            }
         }
-    }
+    )
+}
+
+@Composable
+private inline fun CommonProfileColumn(
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(LocalSportsRadarTheme.colors.surfaceVariant)
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        content = content
+    )
 }
 
 @Composable

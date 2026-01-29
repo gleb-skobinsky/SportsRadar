@@ -3,6 +3,7 @@ package org.sportsradar.uiKit.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,6 +31,7 @@ import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 private val DefaultPaddings = PaddingValues(8.dp)
 
 private val TitlePaddings = 8.dp
+private val DefaultMinHeight = 52.dp
 
 @Composable
 fun SportsRadarTopBar(
@@ -104,6 +106,7 @@ fun SportsRadarTopBar(
     Layout(
         modifier = modifier
             .background(backgroundColor)
+            .defaultMinSize(minHeight = DefaultMinHeight)
             .fillMaxWidth()
             .padding(contentPaddings),
         measurePolicy = TopBarMeasurePolicy,
