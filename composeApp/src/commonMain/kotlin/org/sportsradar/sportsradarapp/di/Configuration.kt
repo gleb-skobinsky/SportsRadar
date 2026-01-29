@@ -9,11 +9,12 @@ import org.koin.dsl.module
 import org.sportsradar.sportsradarapp.auth.authModule
 import org.sportsradar.sportsradarapp.auth.data.UserSecureStorage
 import org.sportsradar.sportsradarapp.auth.data.UserSecureStorageImpl
-import org.sportsradar.sportsradarapp.profile.presentation.ProfileViewModel
 import org.sportsradar.sportsradarapp.common.network.ApiNetworkClient
 import org.sportsradar.sportsradarapp.common.network.ConnectivityStatus
 import org.sportsradar.sportsradarapp.common.network.KtorClientAuthConfig
 import org.sportsradar.sportsradarapp.common.network.configureKtorClient
+import org.sportsradar.sportsradarapp.profile.presentation.ProfileViewModel
+import org.sportsradar.sportsradarapp.profile.profileModule
 import org.sportsradar.sportsradarapp.storage.Storage
 import org.sportsradar.sportsradarapp.storage.getStorage
 
@@ -45,7 +46,7 @@ private val coreModule = module {
         )
     }
     single<ConnectivityStatus> { getConnectivityStatus() }
-    single(named(MAIN_API_CLIENT_NAME)) {
+    single {
         ApiNetworkClient(
             ktorClient = configureKtorClient(
                 json = get(),
@@ -66,12 +67,13 @@ private val coreModule = module {
             connectivityStatus = get()
         )
     }
-    viewModel { ProfileViewModel(get()) }
+    viewModel { ProfileViewModel(get(), get()) }
 }
 
 fun KoinApplication.configureModules() {
     modules(
         coreModule,
         authModule,
+        profileModule
     )
 }

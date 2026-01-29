@@ -9,10 +9,16 @@ import org.sportsradar.sportsradarapp.common.mvi.BaseAction
 import org.sportsradar.sportsradarapp.common.mvi.BaseEffect
 import org.sportsradar.sportsradarapp.common.mvi.BaseState
 import org.sportsradar.sportsradarapp.common.mvi.BaseViewModel
+import org.sportsradar.sportsradarapp.common.network.onSuccess
+import org.sportsradar.sportsradarapp.profile.data.ProfileRepository
+import org.sportsradar.sportsradarapp.profile.presentation.model.UiUserData
+import org.sportsradar.sportsradarapp.profile.presentation.model.toUserUpdate
+import kotlin.jvm.JvmInline
 
 @Stable
 internal class ProfileViewModel(
     private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository,
 ) :
     BaseViewModel<ProfileState, ProfileAction, BaseEffect>(ProfileState.Loading) {
 
@@ -26,11 +32,16 @@ internal class ProfileViewModel(
             authRepository.subscribeToUserData().collectLatest { user ->
                 setState {
                     if (user != null) {
-                        ProfileState.Authenticated(
-                            userFirstName = user.firstName,
-                            userLastName = user.lastName,
+                        val user = UiUserData(
+                            firstName = user.firstName,
+                            lastName = user.lastName,
                             email = user.email,
-                            isEdited = false
+                        )
+                        ProfileState.Authenticated(
+                            userData = user,
+                            tempData = user,
+                            isEdited = false,
+                            userSaveLoading = false,
                         )
                     } else {
                         ProfileState.Anonymous
@@ -55,9 +66,30 @@ internal class ProfileViewModel(
             ProfileAction.SwitchToEditMode -> {
                 setStateAuthenticated { oldState ->
                     oldState.copy(
-                        isEdited = !oldState.isEdited
+                        isEdited = !oldState.isEdited,
+                        tempData = oldState.userData
                     )
                 }
+            }
+
+            is ProfileAction.UpdateLastName -> {
+                setStateAuthenticated { oldState ->
+                    oldState.copy(
+                        tempData = oldState.tempData.copy(lastName = action.value)
+                    )
+                }
+            }
+
+            is ProfileAction.UpdateFirstName -> {
+                setStateAuthenticated { oldState ->
+                    oldState.copy(
+                        tempData = oldState.tempData.copy(firstName = action.value)
+                    )
+                }
+            }
+
+            ProfileAction.SaveChanges -> {
+                saveProfile()
             }
         }
     }
@@ -79,6 +111,23 @@ internal class ProfileViewModel(
         setState { ProfileState.Loading }
         authRepository.logout()
     }
+
+    private suspend fun saveProfile() {
+        val currentState = (state.value as? ProfileState.Authenticated) ?: return
+        val tempData = currentState.tempData
+        setStateAuthenticated {
+            it.copy(userSaveLoading = true)
+        }
+        profileRepository.updateUserData(user = tempData.toUserUpdate())
+            .onSuccess {
+                setStateAuthenticated {
+                    it.copy(userData = tempData)
+                }
+            }
+        setStateAuthenticated {
+            it.copy(userSaveLoading = false)
+        }
+    }
 }
 
 internal sealed interface ProfileState : BaseState {
@@ -89,10 +138,10 @@ internal sealed interface ProfileState : BaseState {
     object Anonymous : ProfileState
 
     data class Authenticated(
-        val userFirstName: String,
-        val userLastName: String,
-        val email: String,
+        val userData: UiUserData,
+        val tempData: UiUserData,
         val isEdited: Boolean,
+        val userSaveLoading: Boolean,
     ) : ProfileState {
         override val isEditable: Boolean = true
     }
@@ -101,4 +150,16 @@ internal sealed interface ProfileState : BaseState {
 internal sealed interface ProfileAction : BaseAction {
     object Logout : ProfileAction
     object SwitchToEditMode : ProfileAction
+
+    @JvmInline
+    value class UpdateFirstName(
+        val value: String,
+    ) : ProfileAction
+
+    @JvmInline
+    value class UpdateLastName(
+        val value: String,
+    ) : ProfileAction
+
+    object SaveChanges : ProfileAction
 }

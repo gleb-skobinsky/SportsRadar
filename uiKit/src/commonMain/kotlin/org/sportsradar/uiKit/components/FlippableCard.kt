@@ -37,7 +37,6 @@ fun FlippableCard(
         } else {
             Box(
                 Modifier
-                    .fillMaxSize()
                     .graphicsLayer {
                         rotationY = 180f
                     }

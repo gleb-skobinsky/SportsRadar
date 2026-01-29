@@ -17,7 +17,11 @@ interface AuthRepository {
 
     suspend fun checkOtp(login: String, code: String): RequestResult<String>
 
-    suspend fun resetPassword(login: String, password: String, otpToken: String): RequestResult<Unit>
+    suspend fun resetPassword(
+        login: String,
+        password: String,
+        otpToken: String
+    ): RequestResult<Unit>
 
     suspend fun checkSession(): RequestResult<Unit>
 

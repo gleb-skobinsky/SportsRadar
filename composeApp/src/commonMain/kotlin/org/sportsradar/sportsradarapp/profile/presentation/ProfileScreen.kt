@@ -21,8 +21,8 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 import org.sportsradar.sportsradarapp.common.navigation.Screens
-import org.sportsradar.sportsradarapp.common.presentation.components.FullHeightSpacer
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppButton
+import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppTextField
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
 import org.sportsradar.sportsradarapp.resources.AppRes
@@ -30,6 +30,7 @@ import org.sportsradar.sportsradarapp.resources.email
 import org.sportsradar.sportsradarapp.resources.log_in
 import org.sportsradar.sportsradarapp.resources.log_out
 import org.sportsradar.sportsradarapp.resources.profile_screen_header
+import org.sportsradar.sportsradarapp.resources.save_profile
 import org.sportsradar.sportsradarapp.resources.user_first_name
 import org.sportsradar.sportsradarapp.resources.user_last_name
 import org.sportsradar.uiKit.components.FlippableCard
@@ -99,20 +100,19 @@ private fun AuthenticatedProfileContent(
             CommonProfileColumn {
                 40.dp.VerticalSpacer()
                 LabelWithDescription(
-                    label = state.userFirstName,
+                    label = state.userData.firstName,
                     description = stringResource(AppRes.string.user_first_name)
                 )
                 20.dp.VerticalSpacer()
                 LabelWithDescription(
-                    label = state.userLastName,
+                    label = state.userData.lastName,
                     description = stringResource(AppRes.string.user_last_name)
                 )
                 20.dp.VerticalSpacer()
                 LabelWithDescription(
-                    label = state.email,
+                    label = state.userData.email,
                     description = stringResource(AppRes.string.email)
                 )
-                FullHeightSpacer()
                 32.dp.VerticalSpacer()
                 SportsRadarAppButton(
                     label = stringResource(AppRes.string.log_out),
@@ -126,11 +126,32 @@ private fun AuthenticatedProfileContent(
         back = {
             CommonProfileColumn {
                 40.dp.VerticalSpacer()
-                LabelWithDescription(
-                    label = "Back",
-                    description = stringResource(AppRes.string.user_first_name)
+                SportsRadarAppTextField(
+                    placeholder = stringResource(AppRes.string.user_first_name),
+                    backgroundColor = LocalSportsRadarTheme.colors.surface,
+                    value = state.tempData.firstName,
+                    onValueChange = {
+                        onAction(ProfileAction.UpdateFirstName(it))
+                    }
+                )
+                20.dp.VerticalSpacer()
+                SportsRadarAppTextField(
+                    placeholder = stringResource(AppRes.string.user_last_name),
+                    backgroundColor = LocalSportsRadarTheme.colors.surface,
+                    value = state.tempData.lastName,
+                    onValueChange = {
+                        onAction(ProfileAction.UpdateLastName(it))
+                    }
                 )
                 32.dp.VerticalSpacer()
+                SportsRadarAppButton(
+                    label = stringResource(AppRes.string.save_profile),
+                    modifier = Modifier.fillMaxWidth(),
+                    isLoading = state.userSaveLoading,
+                ) {
+                    onAction(ProfileAction.SaveChanges)
+                }
+                24.dp.VerticalSpacer()
             }
         }
     )
@@ -143,7 +164,7 @@ private inline fun CommonProfileColumn(
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
-            .background(LocalSportsRadarTheme.colors.surfaceVariant)
+            .background(LocalSportsRadarTheme.colors.tertiary)
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         content = content
