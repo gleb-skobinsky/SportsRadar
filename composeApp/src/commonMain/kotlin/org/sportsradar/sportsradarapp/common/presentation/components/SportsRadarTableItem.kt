@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
-import org.sportsradar.sportsradarapp.common.icons.Copy
+import org.sportsradar.uiKit.icons.Copy
 import org.sportsradar.sportsradarapp.common.presentation.modifiers.noRippleClickable
 
 @Composable

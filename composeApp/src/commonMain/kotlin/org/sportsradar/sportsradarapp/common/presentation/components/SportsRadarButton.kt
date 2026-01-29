@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sportsradar.sportsradarapp.common.icons.ArrowRight
+import org.sportsradar.uiKit.icons.ArrowRight
 import org.sportsradar.uiKit.theme.dangerGradient
 import org.sportsradar.uiKit.theme.primaryGradient
 

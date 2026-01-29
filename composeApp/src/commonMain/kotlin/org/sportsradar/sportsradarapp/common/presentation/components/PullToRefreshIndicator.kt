@@ -20,7 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sportsradar.sportsradarapp.common.icons.ArrowDown
+import org.sportsradar.uiKit.icons.ArrowDown
 
 @Composable
 fun PullToRefreshIndicator(

@@ -1,0 +1,196 @@
+package org.sportsradar.uiKit.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasurePolicy
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.sportsradar.uiKit.icons.ArrowLeft
+import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
+
+private val DefaultPaddings = PaddingValues(8.dp)
+
+private val TitlePaddings = 8.dp
+
+@Composable
+fun SportsRadarTopBar(
+    title: String,
+    backButton: ImageVector = ArrowLeft,
+    onBackClick: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    action: ImageVector? = null,
+    onActionClick: (() -> Unit)? = null,
+    backgroundColor: Color = Color.Transparent,
+    contentPaddings: PaddingValues = DefaultPaddings,
+) = SportsRadarTopBar(
+    title = {
+        Text(
+            text = title,
+            style = LocalSportsRadarTheme.typography.headlineLarge,
+            fontSize = 24.sp,
+            color = LocalSportsRadarTheme.colors.secondary,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+    },
+    modifier = modifier,
+    backButton = {
+        TopBarButton(
+            icon = backButton,
+            onIconClick = onBackClick
+        )
+    },
+    actions = {
+        TopBarButton(
+            icon = action,
+            onIconClick = onActionClick
+        )
+    },
+    backgroundColor = backgroundColor,
+    contentPaddings = contentPaddings,
+)
+
+@Composable
+private fun TopBarButton(
+    icon: ImageVector?,
+    onIconClick: (() -> Unit)?
+) {
+    icon?.let { ic ->
+        IconButton(
+            shape = CircleShape,
+            onClick = {
+                onIconClick?.invoke()
+            },
+            enabled = onIconClick != null
+        ) {
+            Icon(
+                imageVector = ic,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = LocalSportsRadarTheme.colors.secondary
+            )
+        }
+    }
+}
+
+@Composable
+fun SportsRadarTopBar(
+    title: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    backButton: (@Composable () -> Unit)? = null,
+    actions: (@Composable () -> Unit)? = null,
+    backgroundColor: Color = Color.Transparent,
+    contentPaddings: PaddingValues = DefaultPaddings,
+) {
+    Layout(
+        modifier = modifier
+            .background(backgroundColor)
+            .fillMaxWidth()
+            .padding(contentPaddings),
+        measurePolicy = TopBarMeasurePolicy,
+        content = {
+            backButton?.let {
+                Box(Modifier.layoutId(TopBarLayoutId.BACK_BUTTON)) {
+                    it.invoke()
+                }
+            }
+            Box(Modifier.layoutId(TopBarLayoutId.TITLE)) {
+                title()
+            }
+            actions?.let {
+                Box(Modifier.layoutId(TopBarLayoutId.ACTIONS)) {
+                    it.invoke()
+                }
+            }
+        }
+    )
+}
+
+private enum class TopBarLayoutId {
+    BACK_BUTTON,
+    TITLE,
+    ACTIONS
+}
+
+private object TopBarMeasurePolicy : MeasurePolicy {
+    override fun MeasureScope.measure(
+        measurables: List<Measurable>,
+        constraints: Constraints,
+    ): MeasureResult {
+        var backButton: Measurable? = null
+        var title: Measurable? = null
+        var actions: Measurable? = null
+
+        for (measurable in measurables) {
+            when (measurable.layoutId) {
+                TopBarLayoutId.BACK_BUTTON -> {
+                    backButton = measurable
+                }
+
+                TopBarLayoutId.TITLE -> {
+                    title = measurable
+                }
+
+                TopBarLayoutId.ACTIONS -> {
+                    actions = measurable
+                }
+            }
+        }
+        val relaxedConstraints = constraints.copy(minWidth = 0)
+        val backButtonPlaceable = backButton?.measure(relaxedConstraints)
+        val actionsPlaceable = actions?.measure(relaxedConstraints)
+        val backWidth = backButtonPlaceable?.measuredWidth ?: 0
+        val actionsWidth = actionsPlaceable?.measuredWidth ?: 0
+        val titlePaddingsPx = TitlePaddings.roundToPx()
+
+        val width = constraints.maxWidth
+        val halfWidth = width / 2
+        val titleSpaceOnLeft = (halfWidth - backWidth - titlePaddingsPx).coerceAtLeast(0)
+        val titleSpaceOnRight = (halfWidth - actionsWidth - titlePaddingsPx).coerceAtLeast(0)
+        val finalTitleSpace = minOf(titleSpaceOnLeft, titleSpaceOnRight)
+        val titleMaxWidth = finalTitleSpace * 2
+
+        val titlePlaceable = title?.measure(
+            relaxedConstraints.copy(
+                maxWidth = titleMaxWidth
+            )
+        )
+
+        val height = maxOf(
+            backButtonPlaceable?.height ?: 0,
+            titlePlaceable?.height ?: 0,
+            actionsPlaceable?.height ?: 0
+        )
+
+        return layout(width, height) {
+            backButtonPlaceable?.placeRelative(0, 0)
+            titlePlaceable?.placeRelative(
+                (width - titlePlaceable.width) / 2,
+                (height - titlePlaceable.height) / 2
+            )
+            actionsPlaceable?.placeRelative(
+                width - actionsPlaceable.width,
+                (height - actionsPlaceable.height) / 2
+            )
+        }
+    }
+}

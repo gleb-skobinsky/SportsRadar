@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import org.sportsradar.sportsradarapp.common.icons.ArrowLeft
+import org.sportsradar.uiKit.icons.ArrowLeft
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 
 data class IconData(

@@ -23,8 +23,8 @@ import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.sportsradar.sportsradarapp.profile.presentation.ProfileTopBar
-import org.sportsradar.sportsradarapp.common.icons.Lock
-import org.sportsradar.sportsradarapp.common.icons.Sms
+import org.sportsradar.uiKit.icons.Lock
+import org.sportsradar.uiKit.icons.Sms
 import org.sportsradar.sportsradarapp.common.mvi.CollectEffects
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator.Companion.PreviewNavigator

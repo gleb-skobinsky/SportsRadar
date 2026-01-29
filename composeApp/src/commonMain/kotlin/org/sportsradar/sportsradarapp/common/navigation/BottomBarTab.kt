@@ -2,9 +2,9 @@ package org.sportsradar.sportsradarapp.common.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
-import org.sportsradar.sportsradarapp.common.icons.Favorites
-import org.sportsradar.sportsradarapp.common.icons.Home
-import org.sportsradar.sportsradarapp.common.icons.Profile
+import org.sportsradar.uiKit.icons.Favorites
+import org.sportsradar.uiKit.icons.Home
+import org.sportsradar.uiKit.icons.Profile
 
 @Serializable
 enum class BottomBarTab(

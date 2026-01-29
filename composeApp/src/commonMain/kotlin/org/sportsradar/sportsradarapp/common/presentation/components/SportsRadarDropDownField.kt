@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import org.sportsradar.sportsradarapp.common.icons.ArrowDown
+import org.sportsradar.uiKit.icons.ArrowDown
 
 @Composable
 fun SportsRadarAppDropDownField(

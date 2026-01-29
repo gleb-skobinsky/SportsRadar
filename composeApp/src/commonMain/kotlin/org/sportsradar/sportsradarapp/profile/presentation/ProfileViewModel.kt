@@ -27,8 +27,8 @@ internal class ProfileViewModel(
                 setState {
                     if (user != null) {
                         ProfileState.Authenticated(
-                            userFirstName = "",
-                            userLastName = "",
+                            userFirstName = user.firstName,
+                            userLastName = user.lastName,
                             email = user.email
                         )
                     } else {
@@ -50,6 +50,8 @@ internal class ProfileViewModel(
             is ProfileAction.Logout -> {
                 performLogout()
             }
+
+            ProfileAction.SwitchToEditMode -> Unit
         }
     }
 
@@ -74,4 +76,5 @@ internal sealed interface ProfileState : BaseState {
 
 internal sealed interface ProfileAction : BaseAction {
     object Logout : ProfileAction
+    object SwitchToEditMode : ProfileAction
 }

@@ -16,9 +16,9 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.AuthTopTwoButtons
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.SportsRadarAppLogo
 import org.sportsradar.sportsradarapp.profile.presentation.ProfileTopBar
-import org.sportsradar.sportsradarapp.common.icons.Lock
-import org.sportsradar.sportsradarapp.common.icons.LockHidden
-import org.sportsradar.sportsradarapp.common.icons.Sms
+import org.sportsradar.uiKit.icons.Lock
+import org.sportsradar.uiKit.icons.LockHidden
+import org.sportsradar.uiKit.icons.Sms
 import org.sportsradar.sportsradarapp.common.mvi.CollectEffects
 import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator

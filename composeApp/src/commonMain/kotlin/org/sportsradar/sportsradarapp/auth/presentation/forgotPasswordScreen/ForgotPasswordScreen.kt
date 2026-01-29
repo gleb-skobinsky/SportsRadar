@@ -19,10 +19,10 @@ import org.sportsradar.sportsradarapp.auth.domain.entities.OtpMessageType
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.BigAuthText
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.SportsRadarAppLogo
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.PasswordConditions
-import org.sportsradar.sportsradarapp.common.icons.Lock
-import org.sportsradar.sportsradarapp.common.icons.LockHidden
-import org.sportsradar.sportsradarapp.common.icons.Message
-import org.sportsradar.sportsradarapp.common.icons.Sms
+import org.sportsradar.uiKit.icons.Lock
+import org.sportsradar.uiKit.icons.LockHidden
+import org.sportsradar.uiKit.icons.Message
+import org.sportsradar.uiKit.icons.Sms
 import org.sportsradar.sportsradarapp.common.mvi.CollectEffects
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 import org.sportsradar.sportsradarapp.common.navigation.Screens

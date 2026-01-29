@@ -62,4 +62,6 @@
     <string name="delete_link_description">Вы уверены, что хотите удалить ссылку? Восстановить ее будет нвозможно.</string>
     <string name="link_successfully_updated">Ссылка успешно обновлена</string>
     <string name="profile_screen_header">Профиль</string>
+    <string name="user_first_name">Имя</string>
+    <string name="user_last_name">Фамилия</string>
 </resources>

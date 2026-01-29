@@ -1,4 +1,4 @@
-package org.sportsradar.sportsradarapp.common.icons
+package org.sportsradar.uiKit.icons
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
