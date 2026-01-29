@@ -17,7 +17,6 @@ import org.sportsradar.sportsradarapp.common.network.ServerResponse
 import org.sportsradar.sportsradarapp.common.network.mapOnError
 import org.sportsradar.sportsradarapp.common.network.mapOnSuccess
 import org.sportsradar.sportsradarapp.common.network.onError
-import org.sportsradar.sportsradarapp.profile.domain.UserUpdate
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.email
 import org.sportsradar.sportsradarapp.resources.failed_to_send_otp

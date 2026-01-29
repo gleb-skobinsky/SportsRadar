@@ -21,7 +21,6 @@ import org.sportsradar.sportsradarapp.storage.getStorage
 expect fun Scope.getConnectivityStatus(): ConnectivityStatus
 
 private const val PREFS_CHILD_DIR = ".sportsradarapp"
-internal const val MAIN_API_CLIENT_NAME = "mainApiClient"
 internal const val AUTH_API_CLIENT_NAME = "authApiClient"
 
 private val coreModule = module {
