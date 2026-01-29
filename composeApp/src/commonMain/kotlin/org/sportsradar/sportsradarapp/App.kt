@@ -27,7 +27,7 @@ import dev.chrisbanes.haze.hazeSource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.ForgotPasswordScreen
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
-import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileScreen
+import org.sportsradar.sportsradarapp.profile.presentation.ProfileScreen
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
 import org.sportsradar.sportsradarapp.common.navigation.ProvideCommonNavigation
 import org.sportsradar.sportsradarapp.common.navigation.Screens

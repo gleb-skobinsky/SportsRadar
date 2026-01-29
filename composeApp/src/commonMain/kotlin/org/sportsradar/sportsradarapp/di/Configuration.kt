@@ -9,7 +9,7 @@ import org.koin.dsl.module
 import org.sportsradar.sportsradarapp.auth.authModule
 import org.sportsradar.sportsradarapp.auth.data.UserSecureStorage
 import org.sportsradar.sportsradarapp.auth.data.UserSecureStorageImpl
-import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileViewModel
+import org.sportsradar.sportsradarapp.profile.presentation.ProfileViewModel
 import org.sportsradar.sportsradarapp.common.network.ApiNetworkClient
 import org.sportsradar.sportsradarapp.common.network.ConnectivityStatus
 import org.sportsradar.sportsradarapp.common.network.KtorClientAuthConfig

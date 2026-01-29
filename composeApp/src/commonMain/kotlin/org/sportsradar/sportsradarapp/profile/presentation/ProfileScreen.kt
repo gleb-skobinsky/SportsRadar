@@ -1,4 +1,4 @@
-package org.sportsradar.sportsradarapp.auth.presentation.profileScreen
+package org.sportsradar.sportsradarapp.profile.presentation
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -22,7 +22,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileTopBar
+import org.sportsradar.sportsradarapp.profile.presentation.ProfileTopBar
 import org.sportsradar.sportsradarapp.common.icons.Lock
 import org.sportsradar.sportsradarapp.common.icons.Sms
 import org.sportsradar.sportsradarapp.common.mvi.CollectEffects

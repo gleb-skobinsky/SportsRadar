@@ -1,4 +1,4 @@
-package org.sportsradar.sportsradarapp.auth.presentation.profileScreen
+package org.sportsradar.sportsradarapp.profile.presentation
 
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope

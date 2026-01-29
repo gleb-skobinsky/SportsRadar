@@ -15,7 +15,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.AuthTopTwoButtons
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.SportsRadarAppLogo
-import org.sportsradar.sportsradarapp.auth.presentation.profileScreen.ProfileTopBar
+import org.sportsradar.sportsradarapp.profile.presentation.ProfileTopBar
 import org.sportsradar.sportsradarapp.common.icons.Lock
 import org.sportsradar.sportsradarapp.common.icons.LockHidden
 import org.sportsradar.sportsradarapp.common.icons.Sms
