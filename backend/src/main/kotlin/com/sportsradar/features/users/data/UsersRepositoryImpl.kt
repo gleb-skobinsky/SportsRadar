@@ -16,7 +16,10 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import kotlin.time.Clock
 
-class UsersRepositoryImpl(database: Database) : UsersRepository,
+class UsersRepositoryImpl(
+    database: Database,
+    private val hasher: PasswordHasher,
+) : UsersRepository,
     BaseRepository() {
 
     init {
@@ -28,7 +31,7 @@ class UsersRepositoryImpl(database: Database) : UsersRepository,
     override suspend fun create(user: NewUser): String = dbQuery {
         UsersTable.insert {
             it[email] = user.email
-            it[password] = user.password
+            it[password] = hasher.hash(user.password)
             it[verified] = user.verified
             it[createdAt] = Clock.System.now()
             it[updatedAt] = Clock.System.now()
@@ -44,7 +47,7 @@ class UsersRepositoryImpl(database: Database) : UsersRepository,
                     ExistingUser(
                         id = row[UsersTable.id].toString(),
                         email = row[UsersTable.email],
-                        password = row[UsersTable.password],
+                        hashedPassword = row[UsersTable.password],
                         verified = row[UsersTable.verified],
                         firstName = row[UsersTable.firstName],
                         lastName = row[UsersTable.lastName]
@@ -61,7 +64,7 @@ class UsersRepositoryImpl(database: Database) : UsersRepository,
                     ExistingUser(
                         id = row[UsersTable.id].toString(),
                         email = row[UsersTable.email],
-                        password = row[UsersTable.password],
+                        hashedPassword = row[UsersTable.password],
                         verified = row[UsersTable.verified],
                         firstName = row[UsersTable.firstName],
                         lastName = row[UsersTable.lastName]
@@ -75,10 +78,8 @@ class UsersRepositoryImpl(database: Database) : UsersRepository,
     override suspend fun update(id: String, user: UpdatedUser) {
         dbQuery {
             UsersTable.update({ UsersTable.id eq id.uuid() }) {
-                // it[email] = user.email
                 it[firstName] = user.firstName
                 it[lastName] = user.lastName
-                // it[password] = user.password
                 it[updatedAt] = Clock.System.now()
             }
         }

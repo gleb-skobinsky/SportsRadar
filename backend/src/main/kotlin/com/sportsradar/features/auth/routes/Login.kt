@@ -1,7 +1,6 @@
 package com.sportsradar.features.auth.routes
 
-import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
-import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginRequest
+import com.sportsradar.features.users.data.PasswordHasher
 import com.sportsradar.features.users.data.UsersRepository
 import com.sportsradar.features.users.domain.toUserData
 import com.sportsradar.jwt.JWTConfig
@@ -10,7 +9,6 @@ import com.sportsradar.jwt.JWTConfig.Companion.REFRESH_EXPIRATION_TIMEOUT
 import com.sportsradar.jwt.TokenType
 import com.sportsradar.jwt.createToken
 import com.sportsradar.shared.RepositoriesTags
-import org.sportsradar.sportsradarapp.shared.common.data.Endpoints
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.HttpStatusCode
@@ -19,10 +17,14 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
+import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginRequest
 import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginResponse
+import org.sportsradar.sportsradarapp.shared.common.data.Endpoints
 
 internal fun Routing.loginRoute(
     usersRepository: UsersRepository,
+    hasher: PasswordHasher,
     jwtConfig: JWTConfig
 ) {
     route(Endpoints.Auth.Login) {
@@ -48,7 +50,7 @@ internal fun Routing.loginRoute(
                 call.respond(HttpStatusCode.NotFound, "User name not found")
                 return@post
             }
-            if (user.password != dbUser.password) {
+            if (!hasher.verify(user.password, dbUser.hashedPassword)) {
                 call.respond(
                     HttpStatusCode.Unauthorized,
                     "Password is incorrect"

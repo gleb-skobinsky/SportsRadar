@@ -11,6 +11,7 @@ import com.sportsradar.features.auth.routes.logoutRoute
 import com.sportsradar.features.auth.routes.refreshTokenRoute
 import com.sportsradar.features.auth.routes.signupRoute
 import com.sportsradar.features.auth.data.TokenRepository
+import com.sportsradar.features.users.data.PasswordHasher
 import com.sportsradar.features.users.data.UsersRepository
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.JWTConfig.Companion.JWT_AUTH_ID
@@ -41,6 +42,7 @@ private fun AppSecrets.toJwtConfig(): JWTConfig = JWTConfig(
 fun Application.configureAuth(
     secrets: AppSecrets,
     usersRepository: UsersRepository,
+    hasher: PasswordHasher,
     tokenRepository: TokenRepository,
     emailService: EmailService
 ) {
@@ -91,7 +93,11 @@ fun Application.configureAuth(
                 call.respondRedirect("/hello")
             }
         }
-        loginRoute(usersRepository, jwtConfig)
+        loginRoute(
+            usersRepository = usersRepository,
+            hasher = hasher,
+            jwtConfig = jwtConfig
+        )
         logoutRoute(tokenRepository)
         refreshTokenRoute(jwtConfig)
         signupRoute(usersRepository, secrets, emailService)

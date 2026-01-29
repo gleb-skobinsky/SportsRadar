@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.ktor.serialization.json)
     implementation(libs.ktor.server.neg)
     implementation(libs.postgres)
+    implementation(libs.bcrypt)
     implementation(libs.h2)
     implementation(libs.exposed.core)
     implementation(libs.exposed.datetime)

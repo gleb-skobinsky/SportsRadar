@@ -13,7 +13,7 @@ object UsersTable : IdTable<Uuid>("users") {
         EntityID(Uuid.random(), UsersTable)
     }
     val email = varchar("email", length = 50)
-    val password = varchar("password", length = 50)
+    val password = varchar("password", length = 100)
     val verified = bool("verified")
 
     val firstName = varchar("first_name", length = 100).default("")

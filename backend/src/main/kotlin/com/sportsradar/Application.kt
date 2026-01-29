@@ -1,6 +1,5 @@
 package com.sportsradar
 
-import com.sportsradar.db.MIGRATIONS_DIRECTORY
 import com.sportsradar.db.applyDatabaseMigrations
 import com.sportsradar.di.configureKoin
 import com.sportsradar.email.data.AppSecrets
@@ -20,7 +19,6 @@ import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.cors.routing.CORS
-import org.flywaydb.core.Flyway
 import org.koin.ktor.ext.get
 
 fun main() {
@@ -41,6 +39,7 @@ fun Application.module() {
     configureSerialization()
     configureAuth(
         secrets = secrets,
+        hasher = get(),
         usersRepository = get(),
         tokenRepository = get(),
         emailService = get()
