@@ -24,15 +24,15 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.ForgotPasswordScreen
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
-import org.sportsradar.sportsradarapp.profile.presentation.ProfileScreen
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
 import org.sportsradar.sportsradarapp.common.navigation.ProvideCommonNavigation
+import org.sportsradar.sportsradarapp.common.navigation.RegisterTabVisitedAndBackHandler
 import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
-import org.sportsradar.sportsradarapp.common.navigation.RegisterTabVisitedAndBackHandler
 import org.sportsradar.sportsradarapp.common.navigation.rememberController
 import org.sportsradar.sportsradarapp.common.navigation.rememberKmpNavigator
 import org.sportsradar.sportsradarapp.common.presentation.LocalScreenSize
@@ -41,6 +41,11 @@ import org.sportsradar.sportsradarapp.common.presentation.components.SnackbarSca
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppNavBarWrapper
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.handleWebDeepLinkOnStart
+import org.sportsradar.sportsradarapp.profile.presentation.ProfileScreen
+import org.sportsradar.sportsradarapp.resources.AppRes
+import org.sportsradar.sportsradarapp.resources.favorites_screen_header
+import org.sportsradar.sportsradarapp.resources.home_screen_header
+import org.sportsradar.uiKit.components.SportsRadarTopBar
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import org.sportsradar.uiKit.theme.SportsRadarTheme
 
@@ -89,7 +94,14 @@ fun App() {
                             startDestination = Screens.HomeScreen,
                         ) {
                             screensComposable<Screens.HomeScreen> {
-                                SportsRadarScaffold {}
+                                SportsRadarScaffold(
+                                    topBar = {
+                                        SportsRadarTopBar(
+                                            title = stringResource(AppRes.string.home_screen_header),
+                                            onBackClick = navigator::goBack,
+                                        )
+                                    }
+                                ) {}
                             }
                         }
                         screensNavigation<Screens.ProfileTabScreen>(
@@ -113,7 +125,14 @@ fun App() {
                             startDestination = Screens.FavoritesScreen,
                         ) {
                             screensComposable<Screens.FavoritesScreen> {
-                                SportsRadarScaffold {}
+                                SportsRadarScaffold(
+                                    topBar = {
+                                        SportsRadarTopBar(
+                                            title = stringResource(AppRes.string.favorites_screen_header),
+                                            onBackClick = navigator::goBack,
+                                        )
+                                    }
+                                ) {}
                             }
                         }
                     }

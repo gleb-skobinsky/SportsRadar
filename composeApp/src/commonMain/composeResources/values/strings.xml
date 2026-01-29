@@ -64,4 +64,6 @@
     <string name="profile_screen_header">Профиль</string>
     <string name="user_first_name">Имя</string>
     <string name="user_last_name">Фамилия</string>
+    <string name="home_screen_header">Карта</string>
+    <string name="favorites_screen_header">Избранное</string>
 </resources>
