@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +26,7 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
+import io.github.themeanimator.theme.isDark
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.ForgotPasswordScreen
@@ -45,8 +48,8 @@ import org.sportsradar.sportsradarapp.profile.presentation.ProfileScreen
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.favorites_screen_header
 import org.sportsradar.sportsradarapp.resources.home_screen_header
-import org.sportsradar.sportsradarapp.screensComposable
 import org.sportsradar.sportsradarapp.settings.presentation.SettingsScreen
+import org.sportsradar.sportsradarapp.settings.presentation.sportsRadarThemeViewModel
 import org.sportsradar.uiKit.components.SportsRadarTopBar
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import org.sportsradar.uiKit.theme.SportsRadarTheme
@@ -65,7 +68,9 @@ private const val MAIN_HOST = "http://localhost:3000"
 @Preview
 @NonRestartableComposable
 fun App() {
-    SportsRadarTheme {
+    val themeViewModel = sportsRadarThemeViewModel()
+    val theme by themeViewModel.currentTheme.collectAsState()
+    SportsRadarTheme(theme.isDark()) {
         val navController = rememberController()
         val navigator = rememberKmpNavigator(navController)
 

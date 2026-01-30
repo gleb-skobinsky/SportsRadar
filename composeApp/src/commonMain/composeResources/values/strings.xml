@@ -68,4 +68,5 @@
     <string name="favorites_screen_header">Избранное</string>
     <string name="save_profile">Сохранить</string>
     <string name="settings">Настройки</string>
+    <string name="theme_setting">Тема оформления</string>
 </resources>

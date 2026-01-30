@@ -180,7 +180,7 @@ fun BigAuthText(
 @Composable
 @Preview
 fun LoginScreenPreview() {
-    SportsRadarTheme {
+    SportsRadarTheme(false) {
         LoginScreenContent(
             state = LoginState(),
             onAction = {},

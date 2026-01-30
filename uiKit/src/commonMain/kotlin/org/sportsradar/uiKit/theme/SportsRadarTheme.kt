@@ -21,7 +21,7 @@ object LocalSportsRadarTheme {
         @Composable @ReadOnlyComposable get() = LocalSportsRadarTypography.current
 }
 
-val LocalSportsRadarColors = staticCompositionLocalOf { SportsRadarAppColorScheme }
+val LocalSportsRadarColors = staticCompositionLocalOf { SportsRadarDarkColorScheme }
 val LocalSportsRadarTypography = staticCompositionLocalOf<Typography> {
     error("No typography provided")
 }
@@ -43,12 +43,17 @@ fun rememberTextSelectionColors(colorScheme: SportsRadarColors): TextSelectionCo
 
 @Composable
 fun SportsRadarTheme(
+    isDark: Boolean,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = SportsRadarAppColorScheme
+    val colorScheme = if (isDark) {
+        SportsRadarDarkColorScheme
+    } else {
+        SportsRadarLightColorScheme
+    }
     CompositionLocalProvider(
         LocalSportsRadarTypography provides sportsradarAppTypography,
-        LocalSportsRadarColors provides SportsRadarAppColorScheme,
+        LocalSportsRadarColors provides colorScheme,
         LocalIndication provides opacityRipple(300, 300),
         LocalTextSelectionColors provides rememberTextSelectionColors(
             colorScheme

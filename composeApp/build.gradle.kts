@@ -91,6 +91,8 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(projects.uiKit)
             implementation(libs.kmp.bundle)
+            implementation(libs.themeanimator)
+            implementation(libs.themeanimator.storage)
         }
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
