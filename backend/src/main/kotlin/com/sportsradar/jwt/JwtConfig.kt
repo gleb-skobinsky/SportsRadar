@@ -26,9 +26,6 @@ data class JWTConfig(
     }
 }
 
-val JWTPrincipal.email: String
-    get() = payload.getClaim(EMAIL_CLAIM_KEY).asString()
-
 fun JWTConfig.createToken(
     email: String,
     type: TokenType,

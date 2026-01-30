@@ -54,7 +54,6 @@ fun Application.configureUsersRoutes(
                     usersRepository.updateByEmail(userEmail, user.toUpdatedUser())
                     call.respond(HttpStatusCode.OK)
                 }
-
             }
             route("/users/{id}") {
                 usersEndpointDescription()

@@ -147,6 +147,7 @@ private fun AuthenticatedProfileContent(
                 SportsRadarAppButton(
                     label = stringResource(AppRes.string.save_profile),
                     modifier = Modifier.fillMaxWidth(),
+                    rightIcon = null,
                     isLoading = state.userSaveLoading,
                 ) {
                     onAction(ProfileAction.SaveChanges)

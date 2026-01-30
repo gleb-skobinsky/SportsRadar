@@ -53,7 +53,7 @@ internal class ProfileViewModel(
 
     private fun checkSession() {
         viewModelScope.launch {
-            authRepository.checkSession()
+            profileRepository.checkSession()
         }
     }
 

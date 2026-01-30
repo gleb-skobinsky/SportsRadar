@@ -5,5 +5,5 @@ import org.sportsradar.sportsradarapp.profile.data.ProfileRepository
 import org.sportsradar.sportsradarapp.profile.data.ProfileRepositoryImpl
 
 internal val profileModule = module {
-    single<ProfileRepository> { ProfileRepositoryImpl(get()) }
+    single<ProfileRepository> { ProfileRepositoryImpl(get(), get()) }
 }

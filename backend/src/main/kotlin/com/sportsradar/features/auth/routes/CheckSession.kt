@@ -1,22 +1,20 @@
 package com.sportsradar.features.auth.routes
 
-import org.sportsradar.sportsradarapp.shared.auth.data.UserData
-import com.sportsradar.features.users.domain.toUserData
 import com.sportsradar.features.users.data.UsersRepository
+import com.sportsradar.features.users.domain.toUserData
 import com.sportsradar.jwt.JWTConfig
-import com.sportsradar.jwt.email
+import com.sportsradar.jwt.emailByAuth
 import com.sportsradar.shared.RepositoriesTags
-import org.sportsradar.sportsradarapp.shared.common.data.Endpoints
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.authenticate
-import io.ktor.server.auth.jwt.JWTPrincipal
-import io.ktor.server.auth.principal
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
+import org.sportsradar.sportsradarapp.shared.auth.data.UserData
+import org.sportsradar.sportsradarapp.shared.common.data.Endpoints
 
 internal fun Routing.checkSessionRoute(
     usersRepository: UsersRepository
@@ -36,7 +34,7 @@ internal fun Routing.checkSessionRoute(
                 }
             }
             get {
-                val email = call.principal<JWTPrincipal>()?.email ?: run {
+                val email = call.emailByAuth() ?: run {
                     call.respond(
                         HttpStatusCode.Unauthorized,
                         "Request authentication failed"

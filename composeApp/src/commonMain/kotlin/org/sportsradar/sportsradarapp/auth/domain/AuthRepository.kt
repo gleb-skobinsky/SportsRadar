@@ -23,8 +23,6 @@ interface AuthRepository {
         otpToken: String
     ): RequestResult<Unit>
 
-    suspend fun checkSession(): RequestResult<Unit>
-
     suspend fun refresh(): RequestResult<Tokens>
 
     suspend fun logout(): RequestResult<Unit>

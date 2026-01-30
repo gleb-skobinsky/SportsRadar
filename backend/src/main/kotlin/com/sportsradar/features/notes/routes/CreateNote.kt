@@ -1,22 +1,20 @@
 package com.sportsradar.features.notes.routes
 
-import com.sportsradar.features.notes.data.dto.CreateNoteRequest
 import com.sportsradar.features.notes.data.NotesRepository
+import com.sportsradar.features.notes.data.dto.CreateNoteRequest
 import com.sportsradar.jwt.JWTConfig
-import com.sportsradar.jwt.email
+import com.sportsradar.jwt.emailByAuth
 import com.sportsradar.shared.RepositoriesTags
-import org.sportsradar.sportsradarapp.shared.common.data.Endpoints.Notes.CreateNote
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.authenticate
-import io.ktor.server.auth.jwt.JWTPrincipal
-import io.ktor.server.auth.principal
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import org.sportsradar.sportsradarapp.shared.common.data.Endpoints.Notes.CreateNote
 
 internal fun Routing.createNoteRoute(
     repository: NotesRepository,
@@ -40,7 +38,7 @@ internal fun Routing.createNoteRoute(
                 }
             }
             post {
-                val email = call.principal<JWTPrincipal>()?.email ?: run {
+                val email = call.emailByAuth() ?: run {
                     call.respond(
                         HttpStatusCode.Unauthorized,
                         "Request authentication failed"

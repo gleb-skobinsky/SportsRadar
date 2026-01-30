@@ -230,12 +230,4 @@ class AuthRepositoryImpl(
             }
         }
     }
-
-    override suspend fun checkSession(): RequestResult<Unit> {
-        return client.get<UserData>(
-            urlPath = Endpoints.Auth.CheckSession
-        ).mapOnSuccess {
-            RequestResult.Success(Unit)
-        }
-    }
 }
