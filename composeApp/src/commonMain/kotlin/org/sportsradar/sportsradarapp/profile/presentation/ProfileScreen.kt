@@ -95,7 +95,7 @@ private fun AuthenticatedProfileContent(
     onAction: (ProfileAction) -> Unit
 ) {
     FlippableCard(
-        isFlipped = state.isEdited,
+        isFlipped = state.isBeingEdited,
         front = {
             CommonProfileColumn {
                 40.dp.VerticalSpacer()
@@ -147,6 +147,7 @@ private fun AuthenticatedProfileContent(
                 SportsRadarAppButton(
                     label = stringResource(AppRes.string.save_profile),
                     modifier = Modifier.fillMaxWidth(),
+                    enabled = state.canSave,
                     rightIcon = null,
                     isLoading = state.userSaveLoading,
                 ) {

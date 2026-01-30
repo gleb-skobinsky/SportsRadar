@@ -15,13 +15,16 @@ class ProfileRepositoryImpl(
     private val storage: UserSecureStorage,
 ) : ProfileRepository {
     override suspend fun updateUserData(user: UserUpdate): RequestResult<Unit> {
-        return client.put<UpdateProfileRequest, Unit>(
+        return client.put<UpdateProfileRequest, UserData>(
             urlPath = Endpoints.Profile.UpdateProfile,
             body = UpdateProfileRequest(
                 firstName = user.firstName,
                 lastname = user.lastName
             )
-        )
+        ).mapOnSuccess { user ->
+            storage.saveUserData(user.toUser())
+            RequestResult.Success(Unit)
+        }
     }
 
     override suspend fun checkSession(): RequestResult<Unit> {

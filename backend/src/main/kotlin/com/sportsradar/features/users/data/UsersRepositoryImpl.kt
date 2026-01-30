@@ -5,6 +5,7 @@ import com.sportsradar.features.users.domain.NewUser
 import com.sportsradar.features.users.domain.UpdatedUser
 import com.sportsradar.shared.BaseRepository
 import com.sportsradar.shared.uuid
+import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
@@ -13,7 +14,7 @@ import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
-import org.jetbrains.exposed.v1.jdbc.update
+import org.jetbrains.exposed.v1.jdbc.updateReturning
 import kotlin.time.Clock
 
 class UsersRepositoryImpl(
@@ -44,14 +45,7 @@ class UsersRepositoryImpl(
             UsersTable.selectAll()
                 .andWhere { UsersTable.id eq id.uuid() }
                 .map { row ->
-                    ExistingUser(
-                        id = row[UsersTable.id].toString(),
-                        email = row[UsersTable.email],
-                        hashedPassword = row[UsersTable.password],
-                        verified = row[UsersTable.verified],
-                        firstName = row[UsersTable.firstName],
-                        lastName = row[UsersTable.lastName]
-                    )
+                    rowToExistingUser(row)
                 }
                 .singleOrNull()
         }
@@ -61,39 +55,46 @@ class UsersRepositoryImpl(
         return dbQuery {
             UsersTable.selectAll().andWhere { UsersTable.email eq email }
                 .map { row ->
-                    ExistingUser(
-                        id = row[UsersTable.id].toString(),
-                        email = row[UsersTable.email],
-                        hashedPassword = row[UsersTable.password],
-                        verified = row[UsersTable.verified],
-                        firstName = row[UsersTable.firstName],
-                        lastName = row[UsersTable.lastName]
-                    )
+                    rowToExistingUser(row)
                 }
                 .singleOrNull()
         }
     }
 
 
-    override suspend fun update(id: String, user: UpdatedUser) {
-        dbQuery {
-            UsersTable.update({ UsersTable.id eq id.uuid() }) {
+    override suspend fun update(id: String, user: UpdatedUser): ExistingUser? {
+        return dbQuery {
+            UsersTable.updateReturning(where = { UsersTable.id eq id.uuid() }) {
                 it[firstName] = user.firstName
                 it[lastName] = user.lastName
                 it[updatedAt] = Clock.System.now()
-            }
+            }.map { row ->
+                rowToExistingUser(row)
+            }.singleOrNull()
         }
     }
 
-    override suspend fun updateByEmail(email: String, user: UpdatedUser) {
-        dbQuery {
-            UsersTable.update({ UsersTable.email eq email }) {
-                it[firstName] = user.firstName
-                it[lastName] = user.lastName
-                it[updatedAt] = Clock.System.now()
-            }
-        }
+    override suspend fun updateByEmail(email: String, user: UpdatedUser): ExistingUser? = dbQuery {
+        UsersTable.updateReturning(
+            returning = UsersTable.columns,
+            where = { UsersTable.email eq email }
+        ) {
+            it[firstName] = user.firstName
+            it[lastName] = user.lastName
+            it[updatedAt] = Clock.System.now()
+        }.map { row ->
+            rowToExistingUser(row)
+        }.singleOrNull()
     }
+
+    private fun rowToExistingUser(row: ResultRow): ExistingUser = ExistingUser(
+        id = row[UsersTable.id].toString(),
+        email = row[UsersTable.email],
+        hashedPassword = row[UsersTable.password],
+        verified = row[UsersTable.verified],
+        firstName = row[UsersTable.firstName],
+        lastName = row[UsersTable.lastName]
+    )
 
     override suspend fun delete(id: String) {
         dbQuery {

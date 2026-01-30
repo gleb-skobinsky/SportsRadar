@@ -2,6 +2,7 @@ package com.sportsradar.features.users
 
 import com.sportsradar.features.users.data.UsersRepository
 import com.sportsradar.features.users.domain.toUpdatedUser
+import com.sportsradar.features.users.domain.toUserData
 import com.sportsradar.jwt.JWTConfig.Companion.JWT_AUTH_ID
 import com.sportsradar.jwt.emailByAuth
 import com.sportsradar.shared.RepositoriesTags
@@ -40,7 +41,7 @@ fun Application.configureUsersRoutes(
                         response {
                             description("User successfully logged in")
                             responseCode(HttpStatusCode.Created)
-                            responseType<Unit>()
+                            responseType<UserData>()
                         }
                     }
                 }
@@ -50,8 +51,14 @@ fun Application.configureUsersRoutes(
                         call.respond(HttpStatusCode.Unauthorized)
                         return@put
                     }
-                    usersRepository.updateByEmail(userEmail, user.toUpdatedUser())
-                    call.respond(HttpStatusCode.OK)
+                    println("Updating by email in DB")
+                    val newUser = usersRepository.updateByEmail(userEmail, user.toUpdatedUser())
+                    println("Updated by email in DB: $newUser")
+                    if (newUser != null) {
+                        call.respond(HttpStatusCode.OK, newUser.toUserData())
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
                 }
             }
             route("/users/{id}") {

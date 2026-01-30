@@ -30,19 +30,26 @@ internal class ProfileViewModel(
     private fun subscribeToUserData() {
         viewModelScope.launch {
             authRepository.subscribeToUserData().collectLatest { user ->
-                setState {
+                setState { oldState ->
                     if (user != null) {
                         val user = UiUserData(
                             firstName = user.firstName,
                             lastName = user.lastName,
                             email = user.email,
                         )
-                        ProfileState.Authenticated(
-                            userData = user,
-                            tempData = user,
-                            isEdited = false,
-                            userSaveLoading = false,
-                        )
+                        if (oldState is ProfileState.Authenticated) {
+                            oldState.copy(
+                                userData = user,
+                                tempData = user,
+                            )
+                        } else {
+                            ProfileState.Authenticated(
+                                userData = user,
+                                tempData = user,
+                                isBeingEdited = false,
+                                userSaveLoading = false,
+                            )
+                        }
                     } else {
                         ProfileState.Anonymous
                     }
@@ -66,7 +73,7 @@ internal class ProfileViewModel(
             ProfileAction.SwitchToEditMode -> {
                 setStateAuthenticated { oldState ->
                     oldState.copy(
-                        isEdited = !oldState.isEdited,
+                        isBeingEdited = !oldState.isBeingEdited,
                         tempData = oldState.userData
                     )
                 }
@@ -140,10 +147,11 @@ internal sealed interface ProfileState : BaseState {
     data class Authenticated(
         val userData: UiUserData,
         val tempData: UiUserData,
-        val isEdited: Boolean,
+        val isBeingEdited: Boolean,
         val userSaveLoading: Boolean,
     ) : ProfileState {
         override val isEditable: Boolean = true
+        val canSave: Boolean = userData != tempData
     }
 }
 
