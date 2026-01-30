@@ -98,7 +98,7 @@ private fun AuthenticatedProfileContent(
         isFlipped = state.isBeingEdited,
         front = {
             CommonProfileColumn {
-                40.dp.VerticalSpacer()
+                20.dp.VerticalSpacer()
                 LabelWithDescription(
                     label = state.userData.firstName,
                     description = stringResource(AppRes.string.user_first_name)
@@ -182,7 +182,7 @@ private fun LabelWithDescription(
     Column(
         modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
             text = description,
