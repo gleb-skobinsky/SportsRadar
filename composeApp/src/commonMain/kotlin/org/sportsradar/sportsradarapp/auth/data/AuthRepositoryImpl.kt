@@ -29,7 +29,6 @@ import org.sportsradar.sportsradarapp.shared.auth.data.RefreshTokenRequest
 import org.sportsradar.sportsradarapp.shared.auth.data.SignupRequest
 import org.sportsradar.sportsradarapp.shared.auth.data.SignupResponse
 import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
-import org.sportsradar.sportsradarapp.shared.auth.data.UserData
 import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginRequest
 import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginResponse
 import org.sportsradar.sportsradarapp.shared.auth.data.UserLogoutRequest

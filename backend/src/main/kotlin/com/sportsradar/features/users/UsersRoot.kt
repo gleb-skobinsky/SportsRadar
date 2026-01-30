@@ -18,7 +18,6 @@ import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import org.sportsradar.sportsradarapp.shared.auth.data.UserData
-import org.sportsradar.sportsradarapp.shared.auth.data.UserLoginRequest
 import org.sportsradar.sportsradarapp.shared.common.data.Endpoints
 import org.sportsradar.sportsradarapp.shared.profile.data.UpdateProfileRequest
 
