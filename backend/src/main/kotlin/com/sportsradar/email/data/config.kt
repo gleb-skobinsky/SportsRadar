@@ -5,10 +5,11 @@ import com.sportsradar.email.data.EnvKeys.DB_PASSWORD
 import com.sportsradar.email.data.EnvKeys.DB_PORT
 import com.sportsradar.email.data.EnvKeys.DB_USER
 import com.sportsradar.email.data.EnvKeys.DEBUG_MODE
+import com.sportsradar.email.data.EnvKeys.JWT_ACCESS_SECRET
 import com.sportsradar.email.data.EnvKeys.JWT_AUDIENCE
 import com.sportsradar.email.data.EnvKeys.JWT_ISSUER
 import com.sportsradar.email.data.EnvKeys.JWT_REALM
-import com.sportsradar.email.data.EnvKeys.JWT_SECRET
+import com.sportsradar.email.data.EnvKeys.JWT_REFRESH_SECRET
 import com.sportsradar.email.data.EnvKeys.SMTP_EMAIL_SENDER
 import com.sportsradar.email.data.EnvKeys.SMTP_HOST
 import com.sportsradar.email.data.EnvKeys.SMTP_PASSWORD
@@ -31,7 +32,8 @@ private object EnvKeys {
     const val JWT_AUDIENCE = "JWT_AUDIENCE"
     const val JWT_ISSUER = "JWT_ISSUER"
     const val JWT_REALM = "JWT_REALM"
-    const val JWT_SECRET = "JWT_SECRET"
+    const val JWT_ACCESS_SECRET = "JWT_ACCESS_SECRET"
+    const val JWT_REFRESH_SECRET = "JWT_REFRESH_SECRET"
     const val DEBUG_MODE = "DEBUG_MODE"
 }
 
@@ -48,7 +50,8 @@ data class AppSecrets(
     val jwtAudience: String,
     val jwtIssuer: String,
     val jwtRealm: String,
-    val jwtSecret: String,
+    val jwtAccessSecret: String,
+    val jwtRefreshSecret: String,
     val isDebug: Boolean,
     val smtpSupported: Boolean
 ) {
@@ -70,13 +73,12 @@ data class AppSecrets(
                 jwtAudience = dotenv.getEnvString(JWT_AUDIENCE),
                 jwtIssuer = dotenv.getEnvString(JWT_ISSUER),
                 jwtRealm = dotenv.getEnvString(JWT_REALM),
-                jwtSecret = dotenv.getEnvString(JWT_SECRET),
+                jwtAccessSecret = dotenv.getEnvString(JWT_ACCESS_SECRET),
+                jwtRefreshSecret = dotenv.getEnvString(JWT_REFRESH_SECRET),
                 isDebug = dotenv.getEnvBool(DEBUG_MODE),
                 smtpSupported = dotenv.getEnvBool(SMTP_SUPPORTED)
             )
         }
-
-
     }
 }
 
@@ -89,8 +91,10 @@ private class Dotenv(
         val envFile = File(path)
         val envMap = if (envFile.exists()) {
             envFile.readLines()
-                .associate { it.split('=')
-                    .run { first() to last() } }
+                .associate {
+                    it.substringBefore('=') to
+                            it.substringAfter('=').trim('\"')
+                }
         } else emptyMap()
         dotEnvMap.putAll(envMap)
     }

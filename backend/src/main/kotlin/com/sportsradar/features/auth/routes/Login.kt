@@ -7,7 +7,6 @@ import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.JWTConfig.Companion.ACCESS_EXPIRATION_TIMEOUT
 import com.sportsradar.jwt.JWTConfig.Companion.REFRESH_EXPIRATION_TIMEOUT
 import com.sportsradar.jwt.TokenType
-import com.sportsradar.jwt.createToken
 import com.sportsradar.shared.RepositoriesTags
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
@@ -58,14 +57,14 @@ internal fun Routing.loginRoute(
                 return@post
             }
             val accessToken = jwtConfig.createToken(
-                user.email,
-                TokenType.AccessToken,
-                ACCESS_EXPIRATION_TIMEOUT
+                email = user.email,
+                type = TokenType.AccessToken,
+                expiration = ACCESS_EXPIRATION_TIMEOUT
             )
             val refreshToken = jwtConfig.createToken(
-                user.email,
-                TokenType.RefreshToken,
-                REFRESH_EXPIRATION_TIMEOUT
+                email = user.email,
+                type = TokenType.RefreshToken,
+                expiration = REFRESH_EXPIRATION_TIMEOUT
             )
             call.respond(
                 UserLoginResponse(

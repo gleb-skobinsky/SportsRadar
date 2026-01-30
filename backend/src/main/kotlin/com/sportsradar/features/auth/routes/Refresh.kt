@@ -1,15 +1,10 @@
 package com.sportsradar.features.auth.routes
 
-import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
-import org.sportsradar.sportsradarapp.shared.auth.data.RefreshTokenRequest
 import com.sportsradar.jwt.JWTConfig
 import com.sportsradar.jwt.JWTConfig.Companion.ACCESS_EXPIRATION_TIMEOUT
 import com.sportsradar.jwt.JWTConfig.Companion.REFRESH_EXPIRATION_TIMEOUT
 import com.sportsradar.jwt.TokenType
-import com.sportsradar.jwt.createToken
-import com.sportsradar.jwt.verifyToken
 import com.sportsradar.shared.RepositoriesTags
-import org.sportsradar.sportsradarapp.shared.common.data.Endpoints
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.HttpStatusCode
@@ -18,6 +13,9 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import org.sportsradar.sportsradarapp.shared.auth.data.RefreshTokenRequest
+import org.sportsradar.sportsradarapp.shared.auth.data.TokenData
+import org.sportsradar.sportsradarapp.shared.common.data.Endpoints
 
 internal fun Routing.refreshTokenRoute(jwtConfig: JWTConfig) {
     route(Endpoints.Auth.RefreshToken) {
