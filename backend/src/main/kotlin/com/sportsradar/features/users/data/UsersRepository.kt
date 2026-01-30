@@ -3,7 +3,6 @@ package com.sportsradar.features.users.data
 import com.sportsradar.features.users.domain.ExistingUser
 import com.sportsradar.features.users.domain.NewUser
 import com.sportsradar.features.users.domain.UpdatedUser
-import org.sportsradar.sportsradarapp.shared.auth.data.UserData
 
 interface UsersRepository {
 
