@@ -26,6 +26,8 @@ data class SportsRadarColors(
     val error: Color,
     val onError: Color,
     val surfaceContainerHigh: Color,
+    val secondaryButton: Color,
+    val secondaryButtonBorder: Color,
 )
 
 val SportsRadarAppColorScheme = SportsRadarColors(
@@ -45,7 +47,9 @@ val SportsRadarAppColorScheme = SportsRadarColors(
     surfaceTint = Color(0x80000000),
     error = Color(255, 60, 99),
     onError = Color.White,
-    surfaceContainerHigh = Color(64f, 64f, 64f, 0.8f)
+    surfaceContainerHigh = Color(64f, 64f, 64f, 0.8f),
+    secondaryButton = Color(82, 82, 82, 255),
+    secondaryButtonBorder = Color(102, 102, 102, 255)
 )
 
 private val primaryGradientColors = listOf(

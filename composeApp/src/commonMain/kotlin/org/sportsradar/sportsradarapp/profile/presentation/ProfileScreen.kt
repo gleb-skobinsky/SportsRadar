@@ -22,6 +22,7 @@ import org.sportsradar.sportsradarapp.common.navigation.KMPNavigator
 import org.sportsradar.sportsradarapp.common.navigation.LocalKmpNavigator
 import org.sportsradar.sportsradarapp.common.navigation.Screens
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppButton
+import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppButtonType
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppTextField
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.VerticalSpacer
@@ -31,11 +32,14 @@ import org.sportsradar.sportsradarapp.resources.log_in
 import org.sportsradar.sportsradarapp.resources.log_out
 import org.sportsradar.sportsradarapp.resources.profile_screen_header
 import org.sportsradar.sportsradarapp.resources.save_profile
+import org.sportsradar.sportsradarapp.resources.settings
 import org.sportsradar.sportsradarapp.resources.user_first_name
 import org.sportsradar.sportsradarapp.resources.user_last_name
+import org.sportsradar.uiKit.components.ActionButton
 import org.sportsradar.uiKit.components.FlippableCard
 import org.sportsradar.uiKit.components.SportsRadarTopBar
 import org.sportsradar.uiKit.icons.IcEdit
+import org.sportsradar.uiKit.icons.Settings
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 
 @Composable
@@ -61,11 +65,8 @@ private fun ProfileScreenContent(
         horizontalPadding = 16.dp,
         topBar = {
             ProfileTopBar(
-                onClickEdit = if (state.isEditable) {
-                    { onAction(ProfileAction.SwitchToEditMode) }
-                } else {
-                    null
-                }
+                ActionButton(IcEdit) { onAction(ProfileAction.SwitchToEditMode) },
+                ActionButton(Settings) { navigator.goTo(Screens.SettingsScreen) }
             )
         }
     ) {
@@ -83,7 +84,11 @@ private fun ProfileScreenContent(
             }
 
             is ProfileState.Authenticated -> {
-                AuthenticatedProfileContent(state, onAction)
+                AuthenticatedProfileContent(
+                    state = state,
+                    navigator = navigator,
+                    onAction = onAction
+                )
             }
         }
     }
@@ -92,6 +97,7 @@ private fun ProfileScreenContent(
 @Composable
 private fun AuthenticatedProfileContent(
     state: ProfileState.Authenticated,
+    navigator: KMPNavigator,
     onAction: (ProfileAction) -> Unit
 ) {
     FlippableCard(
@@ -114,6 +120,15 @@ private fun AuthenticatedProfileContent(
                     description = stringResource(AppRes.string.email)
                 )
                 32.dp.VerticalSpacer()
+                SportsRadarAppButton(
+                    label = stringResource(AppRes.string.settings),
+                    rightIcon = Settings,
+                    modifier = Modifier.fillMaxWidth(),
+                    type = SportsRadarAppButtonType.Secondary
+                ) {
+                    navigator.goTo(Screens.SettingsScreen)
+                }
+                24.dp.VerticalSpacer()
                 SportsRadarAppButton(
                     label = stringResource(AppRes.string.log_out),
                     modifier = Modifier.fillMaxWidth()
@@ -201,14 +216,12 @@ private fun LabelWithDescription(
 
 @Composable
 internal fun ProfileTopBar(
-    onClickEdit: (() -> Unit)? = null,
+    vararg actions: ActionButton,
 ) {
-    val iconEdit = onClickEdit?.let { IcEdit }
     val navigator = LocalKmpNavigator.current
     SportsRadarTopBar(
         title = stringResource(AppRes.string.profile_screen_header),
         onBackClick = navigator::goBack,
-        action = iconEdit,
-        onActionClick = onClickEdit
+        actions = actions
     )
 }

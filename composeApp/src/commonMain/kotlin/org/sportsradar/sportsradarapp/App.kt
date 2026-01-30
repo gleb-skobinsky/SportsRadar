@@ -45,6 +45,8 @@ import org.sportsradar.sportsradarapp.profile.presentation.ProfileScreen
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.favorites_screen_header
 import org.sportsradar.sportsradarapp.resources.home_screen_header
+import org.sportsradar.sportsradarapp.screensComposable
+import org.sportsradar.sportsradarapp.settings.presentation.SettingsScreen
 import org.sportsradar.uiKit.components.SportsRadarTopBar
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import org.sportsradar.uiKit.theme.SportsRadarTheme
@@ -109,6 +111,9 @@ fun App() {
                         ) {
                             screensComposable<Screens.ProfileScreen> {
                                 ProfileScreen()
+                            }
+                            screensComposable<Screens.SettingsScreen> {
+                                SettingsScreen()
                             }
                             screensNavigation<Screens.AuthGraph>(
                                 startDestination = Screens.LoginScreen

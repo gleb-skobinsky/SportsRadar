@@ -3,6 +3,7 @@ package org.sportsradar.uiKit.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,14 +35,19 @@ private val DefaultPaddings = PaddingValues(8.dp)
 private val TitlePaddings = 8.dp
 private val DefaultMinHeight = 52.dp
 
+@Immutable
+data class ActionButton(
+    val icon: ImageVector,
+    val onClick: () -> Unit,
+)
+
 @Composable
 fun SportsRadarTopBar(
     title: String,
     backButton: ImageVector = ArrowLeft,
     onBackClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
-    action: ImageVector? = null,
-    onActionClick: (() -> Unit)? = null,
+    vararg actions: ActionButton,
     backgroundColor: Color = Color.Transparent,
     contentPaddings: PaddingValues = DefaultPaddings,
 ) = SportsRadarTopBar(
@@ -61,11 +68,19 @@ fun SportsRadarTopBar(
             onIconClick = onBackClick
         )
     },
-    actions = {
-        TopBarButton(
-            icon = action,
-            onIconClick = onActionClick
-        )
+    actions = if (actions.isNotEmpty()) {
+        {
+            Row {
+                actions.forEach { action ->
+                    TopBarButton(
+                        icon = action.icon,
+                        onIconClick = action.onClick
+                    )
+                }
+            }
+        }
+    } else {
+        null
     },
     backgroundColor = backgroundColor,
     contentPaddings = contentPaddings,

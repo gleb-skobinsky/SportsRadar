@@ -47,6 +47,7 @@ composeHotReload = "v1.0.0-beta08"
 androidx-lifecycle = "2.9.6"
 flyway = "11.20.3"
 bcrypt = "0.10.2"
+themeanimator = "0.0.14"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
@@ -134,6 +135,7 @@ bcrypt = { module = "at.favre.lib:bcrypt", version.ref = "bcrypt" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinx-browser" }
+themeanimator = { module = "io.github.gleb-skobinsky:themeanimator", version.ref = "themeanimator" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

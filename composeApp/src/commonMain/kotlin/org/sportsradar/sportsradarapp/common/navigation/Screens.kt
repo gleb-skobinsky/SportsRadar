@@ -64,6 +64,11 @@ enum class ScreensMeta(
         argsClass = Screens.FavoritesScreen::class,
         deeplink = "/favorites",
         isTabRoot = true,
+    ),
+    Settings(
+        tab = BottomBarTab.ProfileTab,
+        argsClass = Screens.SettingsScreen::class,
+        deeplink = "/settings",
     );
 
     fun navDeeplink(hostWithScheme: String): NavDeepLink? {
@@ -126,4 +131,7 @@ sealed interface Screens {
 
     @Serializable
     data object FavoritesScreen : Screens
+
+    @Serializable
+    data object SettingsScreen : Screens
 }

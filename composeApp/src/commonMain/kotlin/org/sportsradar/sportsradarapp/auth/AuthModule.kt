@@ -10,7 +10,7 @@ import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginViewMod
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupViewModel
 import org.sportsradar.sportsradarapp.di.AUTH_API_CLIENT_NAME
 
-val authModule = module {
+internal val authModule = module {
     single<AuthRepository> {
         AuthRepositoryImpl(get(named(AUTH_API_CLIENT_NAME)), get())
     }

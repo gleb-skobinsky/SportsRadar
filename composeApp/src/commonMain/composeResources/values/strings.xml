@@ -67,4 +67,5 @@
     <string name="home_screen_header">Карта</string>
     <string name="favorites_screen_header">Избранное</string>
     <string name="save_profile">Сохранить</string>
+    <string name="settings">Настройки</string>
 </resources>
