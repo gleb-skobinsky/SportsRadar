@@ -48,7 +48,7 @@ fun JWTConfig.verifyToken(token: String, type: TokenType): String? =
             .build()
             .verify(token)
         jwt.getClaim(EMAIL_CLAIM_KEY).asString()
-    } catch (e: JWTVerificationException) {
+    } catch (_: JWTVerificationException) {
         null
     }
 
