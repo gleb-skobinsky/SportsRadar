@@ -4,4 +4,5 @@ object RepositoriesTags {
     const val AUTH = "Auth repository"
     const val USERS = "Users repository"
     const val NOTES = "Notes repository"
+    const val PROFILE = "Profile repository"
 }

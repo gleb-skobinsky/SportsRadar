@@ -3,8 +3,10 @@ package com.sportsradar.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
-import io.ktor.server.auth.jwt.*
-import java.util.*
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
+import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
@@ -52,3 +54,8 @@ fun JWTConfig.verifyToken(token: String, type: TokenType): String? =
     } catch (e: JWTVerificationException) {
         null
     }
+
+fun ApplicationCall.emailByAuth(): String? = principal<JWTPrincipal>()
+    ?.payload
+    ?.getClaim(EMAIL_CLAIM_KEY)
+    ?.asString()

@@ -85,6 +85,16 @@ class UsersRepositoryImpl(
         }
     }
 
+    override suspend fun updateByEmail(email: String, user: UpdatedUser) {
+        dbQuery {
+            UsersTable.update({ UsersTable.email eq email }) {
+                it[firstName] = user.firstName
+                it[lastName] = user.lastName
+                it[updatedAt] = Clock.System.now()
+            }
+        }
+    }
+
     override suspend fun delete(id: String) {
         dbQuery {
             UsersTable.deleteWhere { UsersTable.id eq id.uuid() }

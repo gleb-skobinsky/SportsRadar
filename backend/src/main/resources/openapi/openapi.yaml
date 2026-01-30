@@ -187,6 +187,27 @@ paths:
       security:
       - matchme-jwt-auth: []
     parameters: []
+  /api/v1/update-profile:
+    post:
+      tags:
+      - "Profile repository"
+      summary: "Profile update"
+      description: "Update profile of the authenticated user"
+      parameters: []
+      requestBody:
+        description: "Update a user profile"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLoginRequest"
+        required: true
+      responses:
+        "201":
+          description: "User successfully logged in"
+      deprecated: false
+      security:
+      - matchme-jwt-auth: []
+    parameters: []
   /users/{id}:
     get:
       tags:

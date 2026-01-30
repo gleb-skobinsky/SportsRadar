@@ -14,5 +14,7 @@ interface UsersRepository {
 
     suspend fun update(id: String, user: UpdatedUser)
 
+    suspend fun updateByEmail(email: String, user: UpdatedUser)
+
     suspend fun delete(id: String)
 }
