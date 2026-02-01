@@ -10,8 +10,16 @@ import java.util.Locale
 internal actual fun ObserveLocaleUpdates(locale: StateFlow<SportsRadarLocale>) {
     LaunchedEffect(Unit) {
         locale.collect { lang ->
-            val jvmLocale = Locale.forLanguageTag(lang.isoCode)
-            Locale.setDefault(jvmLocale)
+            setDesktopLocale(lang)
         }
     }
+}
+
+internal fun setDesktopLocale(lang: SportsRadarLocale) {
+    val jvmLocale = Locale.forLanguageTag(lang.isoCode)
+    Locale.setDefault(jvmLocale)
+}
+
+internal actual fun getDefaultLocale(): SportsRadarLocale {
+    return SportsRadarLocale.fromIsoCode(Locale.getDefault().language)
 }

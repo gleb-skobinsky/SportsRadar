@@ -9,8 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.sportsradar.sportsradarapp.common.localization.updateAndroidLocale
+import org.sportsradar.sportsradarapp.settings.presentation.LocaleStorage
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), KoinComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +25,9 @@ class MainActivity : ComponentActivity() {
             }
         }
         enableEdgeToEdge()
+
+        val localeStorage: LocaleStorage = get()
+        updateAndroidLocale(localeStorage.getLocale())
 
         WindowInsetsControllerCompat(window, window.decorView).apply {
             isAppearanceLightStatusBars = false

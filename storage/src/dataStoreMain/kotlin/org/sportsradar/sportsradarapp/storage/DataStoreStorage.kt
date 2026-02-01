@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import okio.Path.Companion.toPath
 
@@ -55,6 +56,10 @@ internal class DataStoreStorage(
         return internalStore.data.firstOrNull()?.get(stringPreferencesKey(key))
     }
 
+    override fun getStringBlocking(key: String): String? {
+        return runBlocking { getString(key) }
+    }
+
     override fun subscribeToInt(key: String): Flow<Int?> {
         return internalStore.data.map {
             it[intPreferencesKey(key)]
@@ -63,6 +68,10 @@ internal class DataStoreStorage(
 
     override suspend fun getInt(key: String): Int? {
         return internalStore.data.firstOrNull()?.get(intPreferencesKey(key))
+    }
+
+    override fun getIntBlocking(key: String): Int? {
+        return runBlocking { getInt(key) }
     }
 
     override suspend fun setInt(key: String, value: Int?) {
@@ -79,6 +88,10 @@ internal class DataStoreStorage(
         return internalStore.data.firstOrNull()?.get(floatPreferencesKey(key))
     }
 
+    override fun getFloatBlocking(key: String): Float? {
+        return runBlocking { getFloat(key) }
+    }
+
     override suspend fun setFloat(key: String, value: Float?) {
         editByKey(value, floatPreferencesKey(key))
     }
@@ -91,6 +104,10 @@ internal class DataStoreStorage(
 
     override suspend fun getLong(key: String): Long? {
         return internalStore.data.firstOrNull()?.get(longPreferencesKey(key))
+    }
+
+    override fun getLongBlocking(key: String): Long? {
+        return runBlocking { getLong(key) }
     }
 
     override suspend fun setLong(key: String, value: Long?) {
@@ -107,6 +124,10 @@ internal class DataStoreStorage(
         return internalStore.data.firstOrNull()?.get(doublePreferencesKey(key))
     }
 
+    override fun getDoubleBlocking(key: String): Double? {
+        return runBlocking { getDouble(key) }
+    }
+
     override suspend fun setDouble(key: String, value: Double?) {
         editByKey(value, doublePreferencesKey(key))
     }
@@ -119,6 +140,10 @@ internal class DataStoreStorage(
 
     override suspend fun getBoolean(key: String): Boolean? {
         return internalStore.data.firstOrNull()?.get(booleanPreferencesKey(key))
+    }
+
+    override fun getBooleanBlocking(key: String): Boolean? {
+        return runBlocking { getBoolean(key) }
     }
 
     override suspend fun setBoolean(key: String, value: Boolean?) {
@@ -134,6 +159,8 @@ internal class DataStoreStorage(
             }
         }
     }
+
+
 
     override suspend fun clearAll() {
         internalStore.edit { it.clear() }

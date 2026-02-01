@@ -18,11 +18,15 @@ interface Storage {
 
     suspend fun getString(key: String): String?
 
+    fun getStringBlocking(key: String): String?
+
     suspend fun setString(key: String, value: String?)
 
     fun subscribeToInt(key: String): Flow<Int?>
 
     suspend fun getInt(key: String): Int?
+
+    fun getIntBlocking(key: String): Int?
 
     suspend fun setInt(key: String, value: Int?)
 
@@ -30,11 +34,15 @@ interface Storage {
 
     suspend fun getFloat(key: String): Float?
 
+    fun getFloatBlocking(key: String): Float?
+
     suspend fun setFloat(key: String, value: Float?)
 
     fun subscribeToDouble(key: String): Flow<Double?>
 
     suspend fun getDouble(key: String): Double?
+
+    fun getDoubleBlocking(key: String): Double?
 
     suspend fun setDouble(key: String, value: Double?)
 
@@ -42,11 +50,15 @@ interface Storage {
 
     suspend fun getLong(key: String): Long?
 
+    fun getLongBlocking(key: String): Long?
+
     suspend fun setLong(key: String, value: Long?)
 
     fun subscribeToBoolean(key: String): Flow<Boolean?>
 
     suspend fun getBoolean(key: String): Boolean?
+
+    fun getBooleanBlocking(key: String): Boolean?
 
     suspend fun setBoolean(key: String, value: Boolean?)
 
@@ -78,6 +90,18 @@ suspend inline operator fun <reified T : Any> Storage.get(key: String): T? {
     }
 }
 
+inline fun <reified T : Any> Storage.getBlocking(key: String): T? {
+    return when (T::class) {
+        String::class -> getStringBlocking(key) as T?
+        Int::class -> getIntBlocking(key) as T?
+        Float::class -> getFloatBlocking(key) as T?
+        Long::class -> getLongBlocking(key) as T?
+        Double::class -> getDoubleBlocking(key) as T?
+        Boolean::class -> getBooleanBlocking(key) as T?
+        else -> getSerializableBlocking<T>(key)
+    }
+}
+
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T : Any> Storage.subscribe(key: String): Flow<T?> {
     return when (T::class) {
@@ -89,6 +113,13 @@ inline fun <reified T : Any> Storage.subscribe(key: String): Flow<T?> {
         Boolean::class -> subscribeToBoolean(key) as Flow<T?>
         else -> subscribeToSerializable<T>(key)
     }
+}
+
+inline fun <reified T : Any> Storage.subscribeOrDefault(
+    key: String,
+    crossinline default: () -> T,
+): Flow<T> {
+    return subscribe<T>(key).map { it ?: default() }
 }
 
 @PublishedApi
@@ -108,6 +139,16 @@ internal suspend inline fun <reified T : Any> Storage.getSerializable(key: Strin
         json.decodeFromString<T>(stringValue)
     } catch (_: Exception) {
         currentCoroutineContext().ensureActive()
+        null
+    }
+}
+
+@PublishedApi
+internal inline fun <reified T : Any> Storage.getSerializableBlocking(key: String): T? {
+    val stringValue = getStringBlocking(key) ?: return null
+    return try {
+        json.decodeFromString<T>(stringValue)
+    } catch (_: Exception) {
         null
     }
 }

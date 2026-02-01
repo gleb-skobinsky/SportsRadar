@@ -13,9 +13,7 @@ internal fun ReactiveLocaleScope(
     content: @Composable () -> Unit,
 ) {
     val currentLocale by localeProvider.locale.collectAsStateWithLifecycle()
-
     ObserveLocaleUpdates(localeProvider.locale)
-
     key(currentLocale) {
         content()
     }
@@ -24,3 +22,4 @@ internal fun ReactiveLocaleScope(
 @Composable
 internal expect fun ObserveLocaleUpdates(locale: StateFlow<SportsRadarLocale>)
 
+internal expect fun getDefaultLocale(): SportsRadarLocale

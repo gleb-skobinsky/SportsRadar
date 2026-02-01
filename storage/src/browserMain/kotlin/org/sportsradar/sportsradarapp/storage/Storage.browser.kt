@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import org.koin.core.scope.Scope
 import org.w3c.dom.CustomEvent
@@ -21,13 +20,6 @@ import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.unsafeCast
 import org.w3c.dom.Storage as WebStorage
 
-/**
- * A browser-specific [Storage] implementation using localStorage.
- *
- * This implementation provides theme storage for web environments using the browser's
- * localStorage API. It includes reactive change notifications through custom DOM events,
- * enabling multiple tabs or components to stay synchronized.
- */
 @OptIn(ExperimentalWasmJsInterop::class)
 internal class JsStorage(
     private val useSession: Boolean,
@@ -46,6 +38,10 @@ internal class JsStorage(
         observeKey(key).distinctUntilChanged()
 
     override suspend fun getString(key: String): String? {
+        return getStringBlocking(key)
+    }
+
+    override fun getStringBlocking(key: String): String? {
         return webStorage[key]
     }
 
@@ -58,6 +54,10 @@ internal class JsStorage(
     }
 
     override suspend fun getInt(key: String): Int? {
+        return getIntBlocking(key)
+    }
+
+    override fun getIntBlocking(key: String): Int? {
         return webStorage[key]?.toIntOrNull()
     }
 
@@ -70,6 +70,10 @@ internal class JsStorage(
     }
 
     override suspend fun getFloat(key: String): Float? {
+        return getFloatBlocking(key)
+    }
+
+    override fun getFloatBlocking(key: String): Float? {
         return webStorage[key]?.toFloatOrNull()
     }
 
@@ -82,6 +86,10 @@ internal class JsStorage(
     }
 
     override suspend fun getDouble(key: String): Double? {
+        return getDoubleBlocking(key)
+    }
+
+    override fun getDoubleBlocking(key: String): Double? {
         return webStorage[key]?.toDoubleOrNull()
     }
 
@@ -94,6 +102,10 @@ internal class JsStorage(
     }
 
     override suspend fun getLong(key: String): Long? {
+        return getLongBlocking(key)
+    }
+
+    override fun getLongBlocking(key: String): Long? {
         return webStorage[key]?.toLongOrNull()
     }
 
@@ -106,6 +118,10 @@ internal class JsStorage(
     }
 
     override suspend fun getBoolean(key: String): Boolean? {
+        return getBooleanBlocking(key)
+    }
+
+    override fun getBooleanBlocking(key: String): Boolean? {
         return webStorage[key]?.toBooleanStrictOrNull()
     }
 

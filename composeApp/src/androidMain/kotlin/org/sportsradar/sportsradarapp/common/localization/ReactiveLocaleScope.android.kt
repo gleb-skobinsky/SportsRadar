@@ -35,3 +35,17 @@ private fun Context.updateConfiguration(
     val resources = resources
     resources.updateConfiguration(configuration, resources.displayMetrics)
 }
+
+fun Context.updateAndroidLocale(locale: SportsRadarLocale) {
+    val cfg = resources.configuration
+    val newLocale = Locale.forLanguageTag(locale.isoCode)
+    Locale.setDefault(newLocale)
+    val newConfig = Configuration(cfg).apply {
+        setLocale(newLocale)
+    }
+    this.updateConfiguration(newConfig)
+}
+
+internal actual fun getDefaultLocale(): SportsRadarLocale {
+    return SportsRadarLocale.fromIsoCode(Locale.getDefault().language)
+}
