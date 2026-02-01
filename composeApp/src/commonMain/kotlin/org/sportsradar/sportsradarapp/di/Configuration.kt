@@ -9,7 +9,6 @@ import org.koin.dsl.module
 import org.sportsradar.sportsradarapp.auth.authModule
 import org.sportsradar.sportsradarapp.auth.data.UserSecureStorage
 import org.sportsradar.sportsradarapp.auth.data.UserSecureStorageImpl
-import org.sportsradar.sportsradarapp.common.localization.LocaleInitializer
 import org.sportsradar.sportsradarapp.common.localization.initializeLocale
 import org.sportsradar.sportsradarapp.common.network.ApiNetworkClient
 import org.sportsradar.sportsradarapp.common.network.ConnectivityStatus
