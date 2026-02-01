@@ -1,9 +1,16 @@
 package org.sportsradar.sportsradarapp.settings.presentation
 
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.github.themeanimator.ThemeAnimationFormat
 import io.github.themeanimator.ThemeAnimationScope
 import io.github.themeanimator.ThemeAnimationState
@@ -34,7 +41,7 @@ internal fun SettingsScreen() {
         animationState = rememberThemeAnimationState(
             themeProvider = themeViewModel,
             format = ThemeAnimationFormat.CircularAroundPress,
-            animationSpec = tween(700)
+            animationSpec = tween(600)
         ),
         navigator = LocalKmpNavigator.current
     )
@@ -57,15 +64,35 @@ private fun SettingsScreenContent(
             }
         ) {
             40.dp.VerticalSpacer()
-            Text(
-                text = stringResource(AppRes.string.theme_setting),
-                style = LocalSportsRadarTheme.typography.bodySmall,
-                color = LocalSportsRadarTheme.colors.secondary
-            )
-            ThemeSwitchButton(
-                animationState = animationState,
-                iconTint = LocalSportsRadarTheme.colors.secondary
-            )
+            SettingsRow(
+                stringResource(AppRes.string.theme_setting)
+            ) {
+                ThemeSwitchButton(
+                    animationState = animationState,
+                    iconTint = LocalSportsRadarTheme.colors.secondary
+                )
+            }
         }
     }
+}
+
+@Composable
+private inline fun SettingsRow(
+    label: String,
+    content: @Composable RowScope.() -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        content = {
+            Text(
+                text = label,
+                style = LocalSportsRadarTheme.typography.bodySmall,
+                color = LocalSportsRadarTheme.colors.secondary,
+                fontSize = 20.sp
+            )
+            content()
+        }
+    )
 }
