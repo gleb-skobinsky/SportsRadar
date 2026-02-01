@@ -15,6 +15,7 @@ import org.sportsradar.sportsradarapp.common.network.KtorClientAuthConfig
 import org.sportsradar.sportsradarapp.common.network.configureKtorClient
 import org.sportsradar.sportsradarapp.profile.presentation.ProfileViewModel
 import org.sportsradar.sportsradarapp.profile.profileModule
+import org.sportsradar.sportsradarapp.settings.settingsModule
 import org.sportsradar.sportsradarapp.storage.Storage
 import org.sportsradar.sportsradarapp.storage.getStorage
 
@@ -73,6 +74,7 @@ fun KoinApplication.configureModules() {
     modules(
         coreModule,
         authModule,
-        profileModule
+        profileModule,
+        settingsModule,
     )
 }
