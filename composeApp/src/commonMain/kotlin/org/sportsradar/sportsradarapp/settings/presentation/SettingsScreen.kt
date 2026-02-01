@@ -90,7 +90,7 @@ private fun SettingsScreenContent(
                 ) {
                     Box {
                         Text(
-                            text = locale.isoCode,
+                            text = stringResource(locale.label),
                             style = LocalSportsRadarTheme.typography.bodySmall,
                             color = LocalSportsRadarTheme.colors.secondary,
                             fontSize = 20.sp,
@@ -107,7 +107,7 @@ private fun SettingsScreenContent(
                             SportsRadarLocale.entries.forEach { lang ->
                                 DropdownMenuItem(
                                     text = {
-                                        Text(text = lang.isoCode)
+                                        Text(text = stringResource(lang.label))
                                     },
                                     onClick = {
                                         menuExpanded = false
