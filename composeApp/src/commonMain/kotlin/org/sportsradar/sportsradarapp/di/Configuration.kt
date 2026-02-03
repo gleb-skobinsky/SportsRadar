@@ -14,6 +14,7 @@ import org.sportsradar.sportsradarapp.common.network.ApiNetworkClient
 import org.sportsradar.sportsradarapp.common.network.ConnectivityStatus
 import org.sportsradar.sportsradarapp.common.network.KtorClientAuthConfig
 import org.sportsradar.sportsradarapp.common.network.configureKtorClient
+import org.sportsradar.sportsradarapp.common.utils.ResourcesCleaner
 import org.sportsradar.sportsradarapp.profile.presentation.ProfileViewModel
 import org.sportsradar.sportsradarapp.profile.profileModule
 import org.sportsradar.sportsradarapp.settings.settingsModule
@@ -47,6 +48,7 @@ private val coreModule = module {
         )
     }
     single<ConnectivityStatus> { getConnectivityStatus() }
+    single { ResourcesCleaner(get()) }
     single {
         ApiNetworkClient(
             ktorClient = configureKtorClient(

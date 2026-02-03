@@ -28,7 +28,7 @@ import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
-import org.sportsradar.sportsradarapp.GlobalScaffoldPadding
+import org.sportsradar.sportsradarapp.common.presentation.GlobalScaffoldPadding
 import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 
 @Composable

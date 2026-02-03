@@ -10,6 +10,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.retain.RetainedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,7 @@ import dev.chrisbanes.haze.hazeSource
 import io.github.themeanimator.theme.isDark
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.ForgotPasswordScreen
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
@@ -34,6 +36,7 @@ import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadar
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.handleWebDeepLinkOnStart
 import org.sportsradar.sportsradarapp.common.presentation.rememberHazeState
+import org.sportsradar.sportsradarapp.common.utils.ResourcesCleaner
 import org.sportsradar.sportsradarapp.profile.presentation.ProfileScreen
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.favorites_screen_header
@@ -130,6 +133,17 @@ fun App() {
                     }
                 }
             }
+        }
+    }
+    RegisterResourcesCleaner()
+}
+
+@Composable
+private fun RegisterResourcesCleaner() {
+    val resourcesCleaner: ResourcesCleaner = koinInject()
+    RetainedEffect(Unit) {
+        onRetire {
+            resourcesCleaner.cleanup()
         }
     }
 }
