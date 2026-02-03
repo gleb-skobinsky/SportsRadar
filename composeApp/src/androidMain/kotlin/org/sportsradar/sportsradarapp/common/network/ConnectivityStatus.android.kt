@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AndroidConnectivityStatus(
-    private val context: Context
+    context: Context
 ) : ConnectivityStatus {
     private val _networkStateFlow = MutableStateFlow(ConnectivityStatusState.UNKNOWN)
     override val networkStateFlow = _networkStateFlow.asStateFlow()
