@@ -1,30 +1,19 @@
 package org.sportsradar.sportsradarapp
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavDestinationDsl
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 import io.github.themeanimator.theme.isDark
 import org.jetbrains.compose.resources.stringResource
@@ -33,17 +22,18 @@ import org.sportsradar.sportsradarapp.auth.presentation.forgotPasswordScreen.For
 import org.sportsradar.sportsradarapp.auth.presentation.loginScreen.LoginScreen
 import org.sportsradar.sportsradarapp.auth.presentation.signupScreen.SignupScreen
 import org.sportsradar.sportsradarapp.common.navigation.ProvideCommonNavigation
-import org.sportsradar.sportsradarapp.common.navigation.RegisterTabVisitedAndBackHandler
 import org.sportsradar.sportsradarapp.common.navigation.Screens
-import org.sportsradar.sportsradarapp.common.navigation.ScreensMeta
 import org.sportsradar.sportsradarapp.common.navigation.rememberController
 import org.sportsradar.sportsradarapp.common.navigation.rememberKmpNavigator
-import org.sportsradar.sportsradarapp.common.presentation.LocalScreenSize
+import org.sportsradar.sportsradarapp.common.navigation.screensComposable
+import org.sportsradar.sportsradarapp.common.navigation.screensNavigation
+import org.sportsradar.sportsradarapp.common.presentation.GlobalScaffoldPadding
 import org.sportsradar.sportsradarapp.common.presentation.RootSnackbarController
 import org.sportsradar.sportsradarapp.common.presentation.components.SnackbarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarAppNavBarWrapper
 import org.sportsradar.sportsradarapp.common.presentation.components.SportsRadarScaffold
 import org.sportsradar.sportsradarapp.common.presentation.handleWebDeepLinkOnStart
+import org.sportsradar.sportsradarapp.common.presentation.rememberHazeState
 import org.sportsradar.sportsradarapp.profile.presentation.ProfileScreen
 import org.sportsradar.sportsradarapp.resources.AppRes
 import org.sportsradar.sportsradarapp.resources.favorites_screen_header
@@ -55,14 +45,6 @@ import org.sportsradar.uiKit.theme.LocalSportsRadarTheme
 import org.sportsradar.uiKit.theme.SportsRadarTheme
 
 private const val FAST_NAV_ANIMATION = 300
-
-@PublishedApi
-internal val GlobalScaffoldPadding = compositionLocalOf {
-    PaddingValues(0.dp)
-}
-
-// TODO: Move to build config
-private const val MAIN_HOST = "http://localhost:3000"
 
 @Composable
 @Preview
@@ -150,34 +132,4 @@ fun App() {
             }
         }
     }
-}
-
-@Composable
-private fun rememberHazeState(): HazeState {
-    return remember(LocalScreenSize.current) { HazeState() }
-}
-
-@NavDestinationDsl
-private inline fun <reified S : Screens> NavGraphBuilder.screensNavigation(
-    startDestination: Any,
-    noinline builder: NavGraphBuilder.() -> Unit,
-) {
-    navigation<S>(
-        startDestination = startDestination,
-        builder = builder
-    )
-}
-
-@NavDestinationDsl
-private inline fun <reified S : Screens> NavGraphBuilder.screensComposable(
-    noinline content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
-) {
-    val meta = ScreensMeta.getByKClass(S::class)
-    composable<S>(
-        deepLinks = listOfNotNull(meta?.navDeeplink(MAIN_HOST)),
-        content = {
-            RegisterTabVisitedAndBackHandler(meta?.tab)
-            content(it)
-        }
-    )
 }

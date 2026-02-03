@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.w3c.dom.events.Event
 
+private const val ONLINE_EVENT_KEY = "online"
+private const val OFFLINE_EVENT_KEY = "offline"
+
 class WasmConnectivityStatus : ConnectivityStatus {
     private val _networkStateFlow = MutableStateFlow(
         if (window.navigator.onLine) {
@@ -26,8 +29,19 @@ class WasmConnectivityStatus : ConnectivityStatus {
         _networkStateFlow.value = ConnectivityStatusState.DISCONNECTED
     }
 
+    private var isMonitoring = false
+
     init {
-        window.addEventListener("online", onlineListener)
-        window.addEventListener("offline", offlineListener)
+        isMonitoring = true
+        window.addEventListener(ONLINE_EVENT_KEY, onlineListener)
+        window.addEventListener(OFFLINE_EVENT_KEY, offlineListener)
+    }
+
+    override fun cleanup() {
+        if (isMonitoring) {
+            window.removeEventListener(ONLINE_EVENT_KEY, onlineListener)
+            window.removeEventListener(OFFLINE_EVENT_KEY, offlineListener)
+            isMonitoring = false
+        }
     }
 }

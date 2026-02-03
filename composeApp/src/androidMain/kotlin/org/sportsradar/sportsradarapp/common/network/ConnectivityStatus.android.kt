@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AndroidConnectivityStatus(
-    context: Context
+    private val context: Context
 ) : ConnectivityStatus {
     private val _networkStateFlow = MutableStateFlow(ConnectivityStatusState.UNKNOWN)
     override val networkStateFlow = _networkStateFlow.asStateFlow()
@@ -26,9 +26,11 @@ class AndroidConnectivityStatus(
         }
     }
 
+    private var connectivityManager: ConnectivityManager? = null
+
     init {
         try {
-            val connectivityManager =
+            connectivityManager =
                 context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val request = NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
@@ -37,7 +39,7 @@ class AndroidConnectivityStatus(
                 .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                 .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
                 .build()
-            connectivityManager.requestNetwork(request, networkCallback)
+            connectivityManager?.requestNetwork(request, networkCallback)
 
             // For the first app start
             if (isNetworkAvailable(connectivityManager)) {
@@ -51,9 +53,9 @@ class AndroidConnectivityStatus(
     }
 
     private fun isNetworkAvailable(
-        connectivityManager: ConnectivityManager,
+        connectivityManager: ConnectivityManager?,
     ): Boolean {
-        val network = connectivityManager.activeNetwork ?: return false
+        val network = connectivityManager?.activeNetwork ?: return false
         val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
 
         return with(activeNetwork) {
@@ -64,5 +66,10 @@ class AndroidConnectivityStatus(
                             hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
                     )
         }
+    }
+
+    override fun cleanup() {
+        connectivityManager?.unregisterNetworkCallback(networkCallback)
+        connectivityManager = null
     }
 }
